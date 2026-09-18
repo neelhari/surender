@@ -574,6 +574,47 @@ async function renderAboutView() {
         </div>
       </div>
 
+      <!-- PARTNER INSTITUTIONS SPOTLIGHT CAROUSEL (Also in About Us) -->
+      <section class="partner-schools-spotlight-section" style="border-radius: var(--radius-md); margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+        <div class="partner-schools-header">
+          <span class="schools-kicker">Trusted by 20+ Schools</span>
+          <h3 class="schools-title">Partner Institutions Across Telangana</h3>
+        </div>
+
+        <div class="schools-spotlight-carousel" id="aboutSchoolsSpotlightCarousel">
+          <div class="school-spotlight-item active" data-index="0" data-name="Samskar The Life School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_1.png" alt="Samskar The Life School" loading="lazy">
+            </div>
+          </div>
+          <div class="school-spotlight-item" data-index="1" data-name="Arka International School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_2.png" alt="Arka International School" loading="lazy">
+            </div>
+          </div>
+          <div class="school-spotlight-item" data-index="2" data-name="Sri Veda The Universe School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_3.png" alt="Sri Veda The Universe School" loading="lazy">
+            </div>
+          </div>
+          <div class="school-spotlight-item" data-index="3" data-name="Mount Carmel Global School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_4.png" alt="Mount Carmel Global School" loading="lazy">
+            </div>
+          </div>
+          <div class="school-spotlight-item" data-index="4" data-name="Samartha School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_5.png" alt="Samartha School" loading="lazy">
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic active school label -->
+        <div class="school-active-indicator" id="aboutSchoolActiveName">
+          <span class="school-active-badge">✓ Samskar The Life School</span>
+        </div>
+      </section>
+
       <!-- MISSION CARD -->
       <div class="detail-card">
         <h3 class="detail-card-title">🎯 Our Mission</h3>
@@ -628,6 +669,8 @@ async function renderAboutView() {
       </section>
     </div>
   `;
+
+  initSchoolsSpotlight('aboutSchoolsSpotlightCarousel', 'aboutSchoolActiveName');
 }
 
 // --------------------------------------------------------------------------
@@ -1386,10 +1429,12 @@ async function renderContactView() {
 // SCHOOLS SPOTLIGHT CAROUSEL ANIMATION (Image 2 + Image 3 Reference)
 // --------------------------------------------------------------------------
 let schoolsSpotlightTimer = null;
-function initSchoolsSpotlight() {
+function initSchoolsSpotlight(carouselId = 'schoolsSpotlightCarousel', labelId = 'schoolActiveName') {
   if (schoolsSpotlightTimer) clearInterval(schoolsSpotlightTimer);
-  const items = document.querySelectorAll('.school-spotlight-item');
-  const label = document.getElementById('schoolActiveName');
+  const container = document.getElementById(carouselId);
+  const label = document.getElementById(labelId);
+  if (!container) return;
+  const items = container.querySelectorAll('.school-spotlight-item');
   if (!items || items.length === 0) return;
 
   let currentIndex = 0;
