@@ -602,29 +602,118 @@ async function renderHomeView() {
         `}
       </section>
 
-      <!-- IMPACT METRICS (Brochure & Screen 3) -->
-      <section class="section-spacing" style="background: #ffffff; border-radius: var(--radius-lg); padding: 24px 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
-        <div style="text-align: center; margin-bottom: 20px;">
-          <span class="section-badge">Demonstrated Impact</span>
-          <h2 class="section-title">Inspiring Innovation Across India</h2>
-          <p class="section-subtitle" style="margin: 0 auto;">Pioneering component-based robotics and tech labs from 3rd standard.</p>
-        </div>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-number">${settings?.stats?.studentsTrained || '5000+'}</div>
-            <div class="stat-label">Students Trained</div>
+      <!-- EXACT REFERENCE 2x2 STATISTIC CARDS (No Heading, No Badge, Clean White on Soft Mint/Teal) -->
+      <section class="edueme-stats-section">
+        <div class="edueme-stats-shape-1"></div>
+        <div class="edueme-stats-shape-2"></div>
+
+        <div class="edueme-stats-grid">
+          <!-- Card 1: 75+ Students Enrolled -->
+          <div class="edueme-stat-card">
+            <div class="edueme-stat-icon-wrap">
+              <svg class="edueme-stat-icon" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Hair (Teal accent) -->
+                <path d="M19 19c0-6 4-9 8-9s8 3 8 9c0 1-2 2-3 2-2 0-3-2-5-2s-3 2-5 2c-1 0-3-1-3-2z" fill="#00d4aa" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Face -->
+                <path d="M21 21v3c0 3.3 2.7 6 6 6s6-2.7 6-6v-3" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+                <!-- Ears -->
+                <path d="M21 22c-1 0-2 1-2 2s1 2 2 2M33 22c1 0 2 1 2 2s-1 2-2 2" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                <!-- Collar & Tie (Blue accent) -->
+                <path d="M24 30l3 5 3-5" fill="#0284c7" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M27 35v5l-1.5 2 1.5 1 1.5-1-1.5-2" fill="#0284c7" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Shoulders & Coat -->
+                <path d="M18 42c-2-2-5 0-7 2-2 2-2 4-2 4h36s0-2-2-4c-2-2-5-4-7-2l-7-8-7 8z" fill="#ffffff" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Lapel -->
+                <path d="M19 36l5-6M35 36l-5-6" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="edueme-stat-data">
+              <span class="edueme-stat-num" data-target="75" data-suffix="+">75+</span>
+              <span class="edueme-stat-label">Students<br>Enrolled</span>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-number">${settings?.stats?.workshops || '200+'}</div>
-            <div class="stat-label">Workshops Delivered</div>
+
+          <!-- Card 2: 100+ Teachers -->
+          <div class="edueme-stat-card">
+            <div class="edueme-stat-icon-wrap">
+              <svg class="edueme-stat-icon" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Hair & Head -->
+                <path d="M23 18c-3 0-5 3-5 7 0 2 1 4 1 6M31 18c3 0 5 3 5 7 0 2-1 4-1 6" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="27" cy="20" r="5" stroke="#1e293b" stroke-width="2.2" fill="#ffffff"/>
+                <!-- Face Details -->
+                <circle cx="25.5" cy="20" r="0.8" fill="#e11d48"/>
+                <circle cx="28.5" cy="20" r="0.8" fill="#e11d48"/>
+                <path d="M25.5 22.5c.8.6 2.2.6 3 0" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Body / Dress -->
+                <path d="M24 25l-4 6v13h14V31l-4-6" fill="#ffffff" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Left Hand Gesturing -->
+                <path d="M20 31l-6-2c-1 0-1.5-1-1.5-2s.5-2 1.5-1l4 3" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Right Arm Holding Teal Book -->
+                <path d="M30 31l3 4" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                <!-- Open Book in Teal -->
+                <path d="M33 30l4-2 5 2v10l-5-2-4 2V30z" fill="#00d4aa" stroke="#1e293b" stroke-width="2" stroke-linejoin="round"/>
+                <line x1="37" y1="28" x2="37" y2="38" stroke="#1e293b" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <div class="edueme-stat-data">
+              <span class="edueme-stat-num" data-target="100" data-suffix="+">100+</span>
+              <span class="edueme-stat-label">Teachers</span>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-number">${settings?.stats?.schools || '50+'}</div>
-            <div class="stat-label">Partner Schools</div>
+
+          <!-- Card 3: 50+ Schools Registered -->
+          <div class="edueme-stat-card">
+            <div class="edueme-stat-icon-wrap">
+              <svg class="edueme-stat-icon" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Ground Line -->
+                <line x1="8" y1="44" x2="46" y2="44" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+                <!-- Main Building -->
+                <path d="M12 44V20l8-4 8 4v24H12z" fill="#ffffff" stroke="#1e293b" stroke-width="2.2" stroke-linejoin="round"/>
+                <!-- Roof Detail -->
+                <circle cx="20" cy="18" r="1.5" fill="#00d4aa"/>
+                <!-- Windows Matrix on Main Building -->
+                <rect x="15" y="24" width="3" height="3" rx="0.5" fill="#1e293b"/>
+                <rect x="22" y="24" width="3" height="3" rx="0.5" fill="#1e293b"/>
+                <rect x="15" y="30" width="3" height="3" rx="0.5" fill="#1e293b"/>
+                <rect x="22" y="30" width="3" height="3" rx="0.5" fill="#1e293b"/>
+                <rect x="15" y="36" width="3" height="3" rx="0.5" fill="#1e293b"/>
+                <rect x="22" y="36" width="3" height="3" rx="0.5" fill="#1e293b"/>
+                <!-- Main Door in Teal/Blue -->
+                <rect x="18" y="40" width="4" height="4" fill="#0284c7" stroke="#1e293b" stroke-width="1.5"/>
+                <!-- Side Annex Building with Teal Facade -->
+                <path d="M28 44V26h14v18H28z" fill="#00d4aa" stroke="#1e293b" stroke-width="2.2" stroke-linejoin="round"/>
+                <rect x="31" y="29" width="3" height="3" rx="0.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.2"/>
+                <rect x="36" y="29" width="3" height="3" rx="0.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.2"/>
+                <rect x="31" y="35" width="3" height="3" rx="0.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.2"/>
+                <rect x="36" y="35" width="3" height="3" rx="0.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <div class="edueme-stat-data">
+              <span class="edueme-stat-num" data-target="50" data-suffix="+">50+</span>
+              <span class="edueme-stat-label">Schools<br>Registered</span>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-number">${settings?.stats?.yearsExp || '10+'}</div>
-            <div class="stat-label">Years of Experience</div>
+
+          <!-- Card 4: 30+ Courses -->
+          <div class="edueme-stat-card">
+            <div class="edueme-stat-icon-wrap">
+              <svg class="edueme-stat-icon" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Laptop Screen Frame -->
+                <rect x="11" y="22" width="32" height="18" rx="3" fill="#ffffff" stroke="#1e293b" stroke-width="2.2"/>
+                <!-- Laptop Keyboard Base -->
+                <path d="M7 40h40l-3 4H10l-3-4z" fill="#ffffff" stroke="#1e293b" stroke-width="2.2" stroke-linejoin="round"/>
+                <line x1="23" y1="41.5" x2="31" y2="41.5" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Open Book in Teal emerging from Laptop Screen -->
+                <path d="M27 16c-3-2-7-2-10 0v14c3-1.5 7-1.5 10 0 3-1.5 7-1.5 10 0V16c-3-2-7-2-10 0z" fill="#00d4aa" stroke="#1e293b" stroke-width="2.2" stroke-linejoin="round"/>
+                <line x1="27" y1="16" x2="27" y2="30" stroke="#1e293b" stroke-width="2"/>
+                <!-- Book Page Lines -->
+                <path d="M20 20c2-.5 4-.5 5 0M20 24c2-.5 4-.5 5 0M34 20c-2-.5-4-.5-5 0M34 24c-2-.5-4-.5-5 0" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="edueme-stat-data">
+              <span class="edueme-stat-num" data-target="30" data-suffix="+">30+</span>
+              <span class="edueme-stat-label">Courses</span>
+            </div>
           </div>
         </div>
       </section>
@@ -741,6 +830,7 @@ async function renderHomeView() {
   `;
 
   initSchoolsSpotlight();
+  initStatsCounter();
 }
 
 // --------------------------------------------------------------------------
@@ -1647,6 +1737,60 @@ function initSchoolsSpotlight(carouselId = 'schoolsSpotlightCarousel', labelId =
   schoolsSpotlightTimer = setInterval(() => {
     setSpotlight(currentIndex + 1);
   }, 2600);
+}
+
+// --------------------------------------------------------------------------
+// 2x2 STATISTIC CARDS COUNTING ANIMATION
+// --------------------------------------------------------------------------
+function initStatsCounter() {
+  const statElements = document.querySelectorAll('.edueme-stat-num[data-target]');
+  if (!statElements || statElements.length === 0) return;
+
+  let hasAnimated = false;
+
+  function runCounters() {
+    if (hasAnimated) return;
+    hasAnimated = true;
+
+    statElements.forEach(el => {
+      const target = parseInt(el.getAttribute('data-target'), 10) || 0;
+      const suffix = el.getAttribute('data-suffix') || '+';
+      const duration = 1400; // 1.4s
+      const startTime = performance.now();
+
+      function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Smooth easeOutExpo
+        const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const current = Math.floor(ease * target);
+        el.textContent = `${current}${suffix}`;
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.textContent = `${target}${suffix}`;
+        }
+      }
+
+      requestAnimationFrame(update);
+    });
+  }
+
+  const section = document.querySelector('.edueme-stats-section');
+  if (section && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          runCounters();
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.15 });
+    observer.observe(section);
+  } else {
+    runCounters();
+  }
 }
 
 // --------------------------------------------------------------------------
