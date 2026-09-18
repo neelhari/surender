@@ -368,8 +368,8 @@ function updateActiveNav(path) {
   } else if (path.startsWith('/services')) {
     const b = document.getElementById('bnav-services');
     if (b) b.classList.add('active');
-  } else if (path.startsWith('/gallery')) {
-    const b = document.getElementById('bnav-gallery');
+  } else if (path.startsWith('/about')) {
+    const b = document.getElementById('bnav-about');
     if (b) b.classList.add('active');
   } else if (path.startsWith('/contact')) {
     const b = document.getElementById('bnav-contact');
@@ -438,9 +438,10 @@ async function handleRouting() {
   else if (pathname === '/services') {
     await renderServicesView();
   }
-  // Route: Gallery
+  // Route: Gallery (Redirects to About Us Photos Showcase)
   else if (pathname === '/gallery') {
-    await renderGalleryView();
+    window.history.replaceState(null, '', '/about');
+    await renderAboutView();
   }
   // Route: Contact & Unified Enquiry
   else if (pathname === '/contact') {
@@ -871,10 +872,20 @@ async function renderHomeView() {
 // --------------------------------------------------------------------------
 async function renderAboutView() {
   const root = document.getElementById('app-root');
-  const [settings, team] = await Promise.all([
+  const [settings, team, gallery] = await Promise.all([
     fetchSettings(),
-    fetch('/api/team').then(r => r.json()).catch(() => [])
+    fetch('/api/team').then(r => r.json()).catch(() => []),
+    fetch('/api/gallery').then(r => r.json()).catch(() => [])
   ]);
+
+  const displayPhotos = (gallery && gallery.length > 0) ? gallery.slice(0, 6) : [
+    { title: 'Autonomous Mobile Robot Assembly', imageUrl: '/assets/hero_robotics.jpg' },
+    { title: 'Prayogshala Sensor Workbench', imageUrl: '/assets/srv_prayogshala.jpg' },
+    { title: 'Hands-on Hardware Workshops', imageUrl: '/assets/srv_workshop.jpg' },
+    { title: 'National Tech Summit Delegation', imageUrl: '/assets/srv_anveshana.jpg' },
+    { title: 'Annual Robotics Championship', imageUrl: '/assets/srv_competition.jpg' },
+    { title: 'Mechatronics & Drone Testing', imageUrl: '/assets/course_mechatronics.jpg' }
+  ];
 
   root.innerHTML = `
     <div class="app-container" style="padding-top: 0;">
@@ -1028,6 +1039,25 @@ async function renderAboutView() {
             `).join('')}
           </div>
         `}
+      </section>
+
+      <!-- CAMPUS & LAB MOMENTS (Photos Showcase) -->
+      <section class="section-spacing" style="margin-bottom: 28px;">
+        <div class="section-header">
+          <span class="section-eyebrow">Campus & Lab Moments</span>
+          <h2 class="section-title">Moments of Innovation</h2>
+          <p class="section-subtitle">Hands-on robotics workshops, tech labs, and student exhibitions.</p>
+        </div>
+        <p class="section-intro-text">Students at Edueme Research Labs work directly with real electronic components, breadboards, and microcontrollers, turning classroom concepts into working engineering inventions.</p>
+
+        <div class="gallery-grid" style="margin-top: 14px;">
+          ${displayPhotos.map(photo => `
+            <div class="gallery-card" onclick="openLightbox('${photo.imageUrl}', '${(photo.title || '').replace(/'/g, "\\'")}')" title="Click to view full size">
+              <img src="${photo.imageUrl}" alt="${photo.title}" loading="lazy">
+              <div class="gallery-caption">${photo.title}</div>
+            </div>
+          `).join('')}
+        </div>
       </section>
     </div>
   `;
