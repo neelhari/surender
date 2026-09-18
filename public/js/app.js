@@ -743,29 +743,80 @@ async function renderHomeView() {
         </div>
       </section>
 
-      <!-- NURTURED SKILLS (Brochure Page 3) -->
-      <section class="section-spacing" style="background: var(--bg-card); border-radius: var(--radius-lg); padding: 24px 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
-        <div class="section-header">
-          <span class="section-badge">Holistic Development</span>
-          <h2 class="section-title">Nurtured Skills</h2>
-          <p class="section-subtitle">Real life competencies students gain through experiential robotics.</p>
+      <!-- NURTURED SKILLS (Exact Reference Image 1 Match: Lavender BG, Robot Illustration & Medium White Card) -->
+      <section class="nurtured-skills-reference-section">
+        <!-- Decorative organic wave SVG in bottom left -->
+        <svg class="nurtured-decor-wave" viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M-30 220C20 180 50 140 10 90C-10 65 30 30 80 50C130 70 170 30 190 -20L-30 -20Z" fill="#ded4fc" opacity="0.45"/>
+        </svg>
+
+        <!-- Header Row: Title & Subtitle on left, Robot on right -->
+        <div class="nurtured-header-row">
+          <div class="nurtured-header-text">
+            <span class="nurtured-kicker">Nurtured Skills</span>
+            <div class="nurtured-kicker-bar"></div>
+            <p class="nurtured-subtitle">Real life competencies students gain through experiential robotics.</p>
+          </div>
+
+          <!-- Robot Character with Sparks -->
+          <div class="nurtured-robot-wrap">
+            <!-- Sparks above robot head -->
+            <svg class="nurtured-sparks-robot" viewBox="0 0 32 32" fill="none">
+              <line x1="8" y1="24" x2="3" y2="12" stroke="#8b7bc9" stroke-width="2.8" stroke-linecap="round"/>
+              <line x1="22" y1="24" x2="22" y2="8" stroke="#8b7bc9" stroke-width="2.8" stroke-linecap="round"/>
+            </svg>
+            <img src="/assets/robot_nurtured.png" alt="Edueme Robot" class="nurtured-robot-img" loading="lazy">
+          </div>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
-          <div style="padding: 14px; background: var(--bg-main); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <div style="font-weight: 700; color: var(--primary-navy); margin-bottom: 4px;">🌟 Build Confidence</div>
-            <div style="font-size: 13px; color: var(--text-muted);">Children learn to bring their ideas to light, realize their power to invent, and believe in themselves.</div>
+
+        <!-- Single Medium-Sized White Rounded Card -->
+        <div class="nurtured-white-card" id="nurturedCard">
+          <div class="nurtured-card-top">
+            <div class="nurtured-step-counter">
+              <span class="nurtured-step-current" id="nurturedStepNum">01</span>
+              <span class="nurtured-step-total">/ 04</span>
+            </div>
+            <!-- Spark accents on top right of white card -->
+            <div class="nurtured-card-sparks">
+              <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+                <line x1="8" y1="8" x2="3" y2="2" stroke="#a594e0" stroke-width="2.8" stroke-linecap="round"/>
+                <line x1="16" y1="12" x2="25" y2="6" stroke="#a594e0" stroke-width="2.8" stroke-linecap="round"/>
+                <line x1="20" y1="20" x2="26" y2="22" stroke="#a594e0" stroke-width="2.8" stroke-linecap="round"/>
+              </svg>
+            </div>
           </div>
-          <div style="padding: 14px; background: var(--bg-main); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <div style="font-weight: 700; color: var(--primary-navy); margin-bottom: 4px;">💪 Encourage Perseverance</div>
-            <div style="font-size: 13px; color: var(--text-muted);">Robotics projects rarely work on the first try. Students develop tenacity and never give up.</div>
+
+          <!-- Skill Icon Pill -->
+          <div class="nurtured-icon-box" id="nurturedIconBox">
+            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="16" y1="3" x2="16" y2="6" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="6" y1="7" x2="8.5" y2="9.5" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="26" y1="7" x2="23.5" y2="9.5" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="2" y1="17" x2="5" y2="17" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="27" y1="17" x2="30" y2="17" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M11 17c0-2.8 2.2-5 5-5s5 2.2 5 5c0 2-1 3.5-2 4.5v1.5h-6V21.5C12 20.5 11 19 11 17z" fill="#f59e0b"/>
+              <path d="M14 26h4" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
+            </svg>
           </div>
-          <div style="padding: 14px; background: var(--bg-main); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <div style="font-weight: 700; color: var(--primary-navy); margin-bottom: 4px;">🤝 Accept Criticism & Teamwork</div>
-            <div style="font-size: 13px; color: var(--text-muted);">Learning to embrace feedback and collaborate productively with peer teammates for collective success.</div>
-          </div>
-          <div style="padding: 14px; background: var(--bg-main); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <div style="font-weight: 700; color: var(--primary-navy); margin-bottom: 4px;">💻 Programming & Logic</div>
-            <div style="font-size: 13px; color: var(--text-muted);">Mastering algorithmic thinking, hardware control, and multi-sensor coordination.</div>
+
+          <!-- Skill Title & Description -->
+          <h3 class="nurtured-card-title" id="nurturedCardTitle">Build Confidence</h3>
+          <p class="nurtured-card-desc" id="nurturedCardDesc">Children learn to bring their ideas to light, realize their power to invent, and believe in themselves.</p>
+
+          <!-- Card Footer Controls -->
+          <div class="nurtured-card-footer">
+            <div class="nurtured-dots" id="nurturedDots">
+              <span class="nurtured-dot active" data-index="0" aria-label="Skill 1"></span>
+              <span class="nurtured-dot" data-index="1" aria-label="Skill 2"></span>
+              <span class="nurtured-dot" data-index="2" aria-label="Skill 3"></span>
+              <span class="nurtured-dot" data-index="3" aria-label="Skill 4"></span>
+            </div>
+            <button class="nurtured-next-btn" id="nurturedNextBtn" aria-label="Next Skill">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2e1065" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
           </div>
         </div>
       </section>
@@ -786,6 +837,7 @@ async function renderHomeView() {
   `;
 
   initStatsCounter();
+  initNurturedSkills();
 }
 
 // --------------------------------------------------------------------------
@@ -1746,6 +1798,157 @@ function initStatsCounter() {
   } else {
     runCounters();
   }
+}
+
+// --------------------------------------------------------------------------
+// NURTURED SKILLS REFERENCE CAROUSEL (Image 1 Reference)
+// --------------------------------------------------------------------------
+const nurturedSkillsData = [
+  {
+    step: '01',
+    title: 'Build Confidence',
+    desc: 'Children learn to bring their ideas to light, realize their power to invent, and believe in themselves.',
+    iconSvg: `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="16" y1="3" x2="16" y2="6" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="6" y1="7" x2="8.5" y2="9.5" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="26" y1="7" x2="23.5" y2="9.5" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="2" y1="17" x2="5" y2="17" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="27" y1="17" x2="30" y2="17" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M11 17c0-2.8 2.2-5 5-5s5 2.2 5 5c0 2-1 3.5-2 4.5v1.5h-6V21.5C12 20.5 11 19 11 17z" fill="#f59e0b"/>
+      <path d="M14 26h4" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
+    </svg>`,
+    iconBg: '#eff3fe'
+  },
+  {
+    step: '02',
+    title: 'Encourage Perseverance',
+    desc: 'Robotics projects rarely work on the first try. Students develop tenacity and never give up.',
+    iconSvg: `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 4c3 3 7 9 7 15l-3 2-2-2-2 2-2-2-2 2-3-2c0-6 4-12 7-15z" fill="#f97316"/>
+      <circle cx="16" cy="13" r="2.5" fill="#ffffff"/>
+      <path d="M16 23v5M12 26l4 2 4-2" stroke="#ea580c" stroke-width="2" stroke-linecap="round"/>
+    </svg>`,
+    iconBg: '#fff7ed'
+  },
+  {
+    step: '03',
+    title: 'Accept Criticism & Teamwork',
+    desc: 'Learning to embrace feedback and collaborate productively with peer teammates for collective success.',
+    iconSvg: `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 18l5-4 4 3 6-5 5 4-5 5-5-2-4 3-6-4z" fill="#8b5cf6"/>
+      <circle cx="11" cy="11" r="3" fill="#ec4899"/>
+      <circle cx="21" cy="11" r="3" fill="#6366f1"/>
+    </svg>`,
+    iconBg: '#faf5ff'
+  },
+  {
+    step: '04',
+    title: 'Programming & Logic',
+    desc: 'Mastering algorithmic thinking, hardware control, and multi-sensor coordination.',
+    iconSvg: `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="7" y="7" width="18" height="18" rx="4" fill="#0284c7"/>
+      <rect x="11" y="11" width="10" height="10" rx="2" fill="#ffffff"/>
+      <path d="M4 12h3M4 16h3M4 20h3M25 12h3M25 16h3M25 20h3M12 4v3M16 4v3M20 4v3M12 25v3M16 25v3M20 25v3" stroke="#0369a1" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>`,
+    iconBg: '#f0f9ff'
+  }
+];
+
+let nurturedSkillsTimer = null;
+function initNurturedSkills() {
+  if (nurturedSkillsTimer) clearInterval(nurturedSkillsTimer);
+
+  const card = document.getElementById('nurturedCard');
+  if (!card) return;
+
+  const stepEl = document.getElementById('nurturedStepNum');
+  const iconBox = document.getElementById('nurturedIconBox');
+  const titleEl = document.getElementById('nurturedCardTitle');
+  const descEl = document.getElementById('nurturedCardDesc');
+  const dots = document.querySelectorAll('.nurtured-dot');
+  const nextBtn = document.getElementById('nurturedNextBtn');
+
+  let currentIndex = 0;
+
+  function setSkill(idx) {
+    currentIndex = (idx + nurturedSkillsData.length) % nurturedSkillsData.length;
+    const item = nurturedSkillsData[currentIndex];
+
+    if (titleEl && descEl && iconBox) {
+      titleEl.classList.remove('nurtured-anim-fade');
+      descEl.classList.remove('nurtured-anim-fade');
+      iconBox.classList.remove('nurtured-anim-fade');
+      void titleEl.offsetWidth; // trigger reflow
+      titleEl.textContent = item.title;
+      descEl.textContent = item.desc;
+      iconBox.innerHTML = item.iconSvg;
+      iconBox.style.backgroundColor = item.iconBg;
+      titleEl.classList.add('nurtured-anim-fade');
+      descEl.classList.add('nurtured-anim-fade');
+      iconBox.classList.add('nurtured-anim-fade');
+    }
+
+    if (stepEl) {
+      stepEl.textContent = item.step;
+    }
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.onclick = () => {
+      setSkill(currentIndex + 1);
+      resetAutoCycle();
+    };
+  }
+
+  dots.forEach(dot => {
+    dot.onclick = () => {
+      const idx = parseInt(dot.getAttribute('data-index'), 10) || 0;
+      setSkill(idx);
+      resetAutoCycle();
+    };
+  });
+
+  // Mobile touch swipe support
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  card.addEventListener('touchstart', (e) => {
+    if (e.changedTouches && e.changedTouches[0]) {
+      touchStartX = e.changedTouches[0].screenX;
+    }
+  }, { passive: true });
+
+  card.addEventListener('touchend', (e) => {
+    if (e.changedTouches && e.changedTouches[0]) {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 35) {
+        if (diff > 0) {
+          setSkill(currentIndex + 1);
+        } else {
+          setSkill(currentIndex - 1);
+        }
+        resetAutoCycle();
+      }
+    }
+  }, { passive: true });
+
+  function startAutoCycle() {
+    nurturedSkillsTimer = setInterval(() => {
+      setSkill(currentIndex + 1);
+    }, 4500);
+  }
+
+  function resetAutoCycle() {
+    if (nurturedSkillsTimer) clearInterval(nurturedSkillsTimer);
+    startAutoCycle();
+  }
+
+  startAutoCycle();
 }
 
 // --------------------------------------------------------------------------
