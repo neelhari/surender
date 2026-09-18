@@ -538,17 +538,16 @@ async function renderHomeView() {
         </div>
       </section>
 
-      <!-- POPULAR COURSES SECTION (Direct Access - No Quote Banner) -->
-      <section class="popular-courses-tinted-wrap">
-        <div class="section-header section-header-split">
-          <div class="section-header-main">
-            <span class="section-eyebrow">Skill-First Programs</span>
-            <h2 class="section-title">Our Popular Courses</h2>
-            <p class="section-subtitle">Hands-on robotics and STEM programs for learners.</p>
-          </div>
-          <a href="/courses" class="section-header-link" onclick="navigate(event, '/courses')">View All &rarr;</a>
+      <!-- POPULAR COURSES SECTION (Style matching reference: centered heading, subheading, quote, light tint) -->
+      <section class="home-courses-section">
+        <div class="section-center-group">
+          <h2 class="section-title">Popular Courses</h2>
+          <p class="section-subtitle">Hands-on robotics and STEM programs for learners.</p>
+          <p class="section-quote-text">
+            &ldquo;Unlock your child&rsquo;s inner innovator with our empowering courses! We believe every child has the potential to create something amazing, and our programs develop the skills and mindset to do so.&rdquo;
+            <span class="section-quote-author">— [Edueme Research Labs]</span>
+          </p>
         </div>
-        <p class="section-intro-text">Designed for grades 2 to 10+, our curriculum introduces physical computing and coding through real microcontrollers. Students progress from circuit basics to autonomous systems with mentor guidance.</p>
 
         ${courses.length === 0 ? `
           <div class="empty-state">
@@ -559,6 +558,11 @@ async function renderHomeView() {
         ` : `
           <div class="cards-grid">
             ${popularCourses.map(renderCourseCard).join('')}
+          </div>
+          <div style="text-align: center; margin-top: 20px;">
+            <a href="/courses" class="header-cta-btn" style="padding: 10px 24px; font-size: 13.5px; display: inline-flex;" onclick="navigate(event, '/courses')">
+              <span>View All Courses &rarr;</span>
+            </a>
           </div>
         `}
       </section>
@@ -743,17 +747,24 @@ async function renderHomeView() {
         </div>
       </section>
 
-      <!-- CORE PROGRAMS & SERVICES HIGHLIGHT -->
-      <section class="section-spacing">
-        <div class="section-header">
-          <span class="section-eyebrow">Institutional Solutions</span>
-          <h2 class="section-title">Our Programs & Services</h2>
+      <!-- PROGRAMS & SERVICES SECTION (Style matching reference: centered heading, subheading, quote, light tint) -->
+      <section class="home-services-section">
+        <div class="section-center-group">
+          <h2 class="section-title">Programs & Services</h2>
           <p class="section-subtitle">Turnkey labs, teacher training, and university tech tours.</p>
+          <p class="section-quote-text">
+            &ldquo;Empowering schools and colleges with end-to-end innovation infrastructure, from dedicated Prayogshala tech labs to certified STEM educator mentorship.&rdquo;
+            <span class="section-quote-author">— [Edueme Research Labs]</span>
+          </p>
         </div>
-        <p class="section-intro-text">From establishing dedicated Prayogshala tech labs in schools to conducting immersive national university tours, we partner with institutions to deliver comprehensive, year-round experiential STEM education.</p>
 
         <div class="cards-grid">
           ${featuredServices.map(renderServiceCard).join('')}
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <a href="/services" class="header-cta-btn" style="padding: 10px 24px; font-size: 13.5px; display: inline-flex;" onclick="navigate(event, '/services')">
+            <span>Explore All Programs &rarr;</span>
+          </a>
         </div>
       </section>
 

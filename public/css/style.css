@@ -1290,10 +1290,103 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   POPULAR COURSES: SOFT-TINTED WRAPPER WITH DEPTH & WAVE FEEL
+   HOMEPAGE COURSES & SERVICES: CENTERED SECTIONS WITH LIGHT PREMIUM TINTS
+   Style matching reference image: centered heading, subheading, quote block
    ========================================================================== */
+.home-courses-section {
+  background: #f6f8fd;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  width: calc(100% + 32px);
+  margin-left: -16px;
+  margin-right: -16px;
+  margin-top: 20px;
+  margin-bottom: 24px;
+  padding: 26px 16px 28px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.025);
+  position: relative;
+}
+
+.home-services-section {
+  background: #f8f7fd;
+  border-top: 1px solid #e5e8f2;
+  border-bottom: 1px solid #e5e8f2;
+  width: calc(100% + 32px);
+  margin-left: -16px;
+  margin-right: -16px;
+  margin-top: 24px;
+  margin-bottom: 28px;
+  padding: 26px 16px 28px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.025);
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .home-courses-section,
+  .home-services-section {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: 36px;
+    margin-bottom: 40px;
+    padding: 38px calc((100vw - 1100px) / 2) 40px;
+  }
+}
+
+/* Centered Visual Group for Courses & Services */
+.section-center-group {
+  text-align: center;
+  max-width: 580px;
+  margin: 0 auto 22px auto;
+  padding: 0 6px;
+}
+
+.section-center-group .section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(23px, 5.5vw, 26px);
+  font-weight: 800;
+  color: var(--primary-navy);
+  line-height: 1.2;
+  margin: 0 0 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.section-center-group .section-subtitle {
+  font-size: 13.5px;
+  color: var(--accent-blue);
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 8px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.section-center-group .section-quote-text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #475569;
+  font-style: italic;
+  margin: 0 auto;
+  max-width: 480px;
+}
+
+.section-center-group .section-quote-author {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-navy);
+  font-style: normal;
+  display: block;
+  margin-top: 4px;
+}
+
 .popular-courses-tinted-wrap {
-  background: #f0f4fa;
+  background: #f6f8fd;
   margin: 18px -16px 24px;
   padding: 24px 16px 28px;
   border-top: 1px solid #e2e8f0;
