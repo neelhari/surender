@@ -236,6 +236,58 @@ function renderServiceCard(service) {
 }
 
 // --------------------------------------------------------------------------
+// REUSABLE IMAGE-LED INNER-PAGE HERO SYSTEM
+// --------------------------------------------------------------------------
+function renderInnerHero({
+  kicker = '',
+  title = '',
+  subtitle = '',
+  breadcrumbs = [],
+  imageUrl = '/assets/hero_robotics.jpg',
+  objectPosition = 'center 30%',
+  fallbackImage = '/assets/hero_robotics.jpg'
+}) {
+  const breadcrumbsHtml = (breadcrumbs && breadcrumbs.length > 0) ? `
+    <nav class="inner-hero-breadcrumb" aria-label="Breadcrumb">
+      ${breadcrumbs.map((b, i) => {
+        const isLast = i === breadcrumbs.length - 1;
+        if (isLast) {
+          return `<span class="breadcrumb-current" aria-current="page">${b.label}</span>`;
+        }
+        return `
+          <a href="${b.url || '/'}" onclick="navigate(event, '${b.url || '/'}')">${b.label}</a>
+          <span class="breadcrumb-sep">/</span>
+        `;
+      }).join('')}
+    </nav>
+  ` : '';
+
+  return `
+    <header class="inner-page-hero">
+      <div class="inner-hero-media">
+        <img src="${imageUrl || fallbackImage}" 
+             alt="${title}" 
+             class="inner-hero-img" 
+             loading="eager"
+             style="object-position: ${objectPosition};"
+             onerror="this.onerror=null; this.src='${fallbackImage}';">
+        <div class="inner-hero-scrim"></div>
+      </div>
+      <div class="inner-hero-content">
+        <div class="inner-hero-top">
+          ${breadcrumbsHtml}
+        </div>
+        <div class="inner-hero-bottom">
+          ${kicker ? `<div class="inner-hero-kicker">${kicker}</div>` : ''}
+          <h1 class="inner-hero-title">${title}</h1>
+          ${subtitle ? `<p class="inner-hero-subtitle">${subtitle}</p>` : ''}
+        </div>
+      </div>
+    </header>
+  `;
+}
+
+// --------------------------------------------------------------------------
 // LIGHTBOX VIEWER
 // --------------------------------------------------------------------------
 function openLightbox(imgUrl, caption) {
@@ -702,25 +754,25 @@ async function renderAboutView() {
   ]);
 
   root.innerHTML = `
-    <div class="app-container section-spacing">
-      <div class="breadcrumbs">
-        <a href="/" onclick="navigate(event, '/')">Home</a>
-        <span>&rsaquo;</span>
-        <span>About Us</span>
-      </div>
+    <div class="app-container" style="padding-top: 0;">
+      ${renderInnerHero({
+        kicker: 'OUR LEGACY & MISSION',
+        title: 'About Edueme Research Labs',
+        subtitle: 'Inspiring Innovation. Building Future. — Learn . Practice . Achieve',
+        breadcrumbs: [
+          { label: 'Home', url: '/' },
+          { label: 'About Us' }
+        ],
+        imageUrl: '/assets/about_hero.jpg',
+        objectPosition: 'center 40%'
+      })}
 
-      <div class="detail-hero">
-        <div class="detail-img-wrap">
-          <img src="/assets/brochure/img_7.jpg" alt="About Edueme Research Labs" class="detail-img">
-        </div>
-        <div class="detail-header-body">
-          <span class="section-badge">Our Legacy & Mission</span>
-          <h1 class="detail-title">About Edueme Research Labs</h1>
-          <p class="detail-tagline">Inspiring Innovation. Building Future. — Learn . Practice . Achieve</p>
-          <p style="font-size: 14px; color: #334155; line-height: 1.6; margin-bottom: 16px; white-space: pre-line;">
-            ${settings?.aboutStory || ''}
-          </p>
-        </div>
+      <!-- ABOUT STORY HIGHLIGHT CARD -->
+      <div class="detail-card" style="margin-top: 4px; margin-bottom: 20px;">
+        <h3 class="detail-card-title">🔬 Inspiring 21st Century Innovators</h3>
+        <p style="font-size: 14px; color: #334155; line-height: 1.6; white-space: pre-line;">
+          ${settings?.aboutStory || ''}
+        </p>
       </div>
 
       <!-- STATS COUNTER CARDS (Screen 3 Reference) -->
@@ -882,21 +934,21 @@ async function renderCoursesView() {
   }
 
   root.innerHTML = `
-    <div class="app-container section-spacing">
-      <div class="breadcrumbs">
-        <a href="/" onclick="navigate(event, '/')">Home</a>
-        <span>&rsaquo;</span>
-        <span>Our Courses</span>
-      </div>
-
-      <div class="section-header">
-        <span class="section-badge">Skill-First Programs</span>
-        <h1 class="section-title">Our Courses</h1>
-        <p class="section-subtitle">Gain future-ready skills with our industry-relevant STEM programs.</p>
-      </div>
+    <div class="app-container" style="padding-top: 0;">
+      ${renderInnerHero({
+        kicker: 'SKILL-FIRST PROGRAMS',
+        title: 'Our Courses',
+        subtitle: "Gain future-ready skills through Edueme's industry-relevant STEM programs.",
+        breadcrumbs: [
+          { label: 'Home', url: '/' },
+          { label: 'Our Courses' }
+        ],
+        imageUrl: '/assets/hero_robotics.jpg',
+        objectPosition: 'center 35%'
+      })}
 
       <!-- SEARCH INPUT -->
-      <div class="search-input-wrap">
+      <div class="search-input-wrap" style="margin-top: 4px;">
         <span class="search-icon">🔍</span>
         <input type="text" id="course-search-input" class="search-input" placeholder="Search courses (e.g. Robotics, Python, IoT)..." value="${courseSearchQuery}">
       </div>
@@ -950,36 +1002,32 @@ async function renderCourseDetailView(slug) {
   }
 
   root.innerHTML = `
-    <div class="app-container section-spacing">
-      <div class="breadcrumbs">
-        <a href="/" onclick="navigate(event, '/')">Home</a>
-        <span>&rsaquo;</span>
-        <a href="/courses" onclick="navigate(event, '/courses')">Courses</a>
-        <span>&rsaquo;</span>
-        <span>${course.title}</span>
-      </div>
+    <div class="app-container" style="padding-top: 0;">
+      ${renderInnerHero({
+        kicker: `${(course.category || 'STEM').toUpperCase()} PROGRAM`,
+        title: course.title,
+        subtitle: course.shortDescription || 'Build . Program . Innovate',
+        breadcrumbs: [
+          { label: 'Home', url: '/' },
+          { label: 'Courses', url: '/courses' },
+          { label: course.title }
+        ],
+        imageUrl: course.image || '/assets/hero_robotics.jpg',
+        objectPosition: 'center 35%'
+      })}
 
-      <div class="detail-hero">
-        <div class="detail-img-wrap">
-          <img src="${course.image || '/assets/brochure/img_7.jpg'}" alt="${course.title}" class="detail-img">
+      <!-- QUICK ACTION STRIP (Metadata & Direct CTA) -->
+      <div class="detail-action-bar">
+        <div class="detail-pills-row">
+          <span class="detail-info-pill">⏱️ ${course.duration || '3 – 6 Months'}</span>
+          <span class="detail-info-pill">📊 ${course.level || 'Beginner to Advanced'}</span>
+          <span class="detail-info-pill">📍 ${course.mode || 'Offline / Online'}</span>
         </div>
-        <div class="detail-header-body">
-          <span class="section-badge">${course.category}</span>
-          <h1 class="detail-title">${course.title}</h1>
-          <p class="detail-tagline">Build . Program . Innovate</p>
 
-          <div class="detail-badges">
-            <span class="detail-badge-pill">⏱️ ${course.duration}</span>
-            <span class="detail-badge-pill">📊 ${course.level}</span>
-            <span class="detail-badge-pill">📍 ${course.mode}</span>
-          </div>
-
-          <!-- ENROLL NOW CTA -> Unified Enquiry Form with Pre-Tagged Course -->
-          <a href="/contact?type=course&id=${course.id}" class="detail-cta-btn" onclick="navigate(event, '/contact?type=course&id=${course.id}')">
-            <span>Enroll Now</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
+        <a href="/contact?type=course&id=${course.id}" class="detail-primary-cta" onclick="navigate(event, '/contact?type=course&id=${course.id}')">
+          <span>Enroll Now</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
 
       <div class="detail-card">
@@ -1016,18 +1064,18 @@ async function renderServicesView() {
   const services = await fetch('/api/services').then(r => r.json()).catch(() => []);
 
   root.innerHTML = `
-    <div class="app-container section-spacing">
-      <div class="breadcrumbs">
-        <a href="/" onclick="navigate(event, '/')">Home</a>
-        <span>&rsaquo;</span>
-        <span>Services & Programs</span>
-      </div>
-
-      <div class="section-header">
-        <span class="section-badge">Institutional & Student Solutions</span>
-        <h1 class="section-title">Workshops & Programs</h1>
-        <p class="section-subtitle">Hands-on technology workshops, Prayogshala tech labs, and immersion tours for schools and colleges.</p>
-      </div>
+    <div class="app-container" style="padding-top: 0;">
+      ${renderInnerHero({
+        kicker: 'INSTITUTIONAL & STUDENT SOLUTIONS',
+        title: 'Workshops & Programs',
+        subtitle: 'Hands-on technology workshops, Prayogshala tech labs, and immersion tours for schools and colleges.',
+        breadcrumbs: [
+          { label: 'Home', url: '/' },
+          { label: 'Services & Programs' }
+        ],
+        imageUrl: '/assets/services_hero.jpg',
+        objectPosition: 'center 35%'
+      })}
 
       ${services.length === 0 ? `
         <div class="empty-state">
@@ -1056,29 +1104,31 @@ async function renderServiceDetailView(slug) {
   }
 
   root.innerHTML = `
-    <div class="app-container section-spacing">
-      <div class="breadcrumbs">
-        <a href="/" onclick="navigate(event, '/')">Home</a>
-        <span>&rsaquo;</span>
-        <a href="/services" onclick="navigate(event, '/services')">Services</a>
-        <span>&rsaquo;</span>
-        <span>${service.title}</span>
-      </div>
+    <div class="app-container" style="padding-top: 0;">
+      ${renderInnerHero({
+        kicker: 'PROGRAM OFFERING',
+        title: service.title,
+        subtitle: service.shortDescription || `Comprehensive STEM, robotics and experiential curriculum for institutions.`,
+        breadcrumbs: [
+          { label: 'Home', url: '/' },
+          { label: 'Services', url: '/services' },
+          { label: service.title }
+        ],
+        imageUrl: service.image || '/assets/services_hero.jpg',
+        objectPosition: 'center 35%'
+      })}
 
-      <div class="detail-hero">
-        <div class="detail-img-wrap">
-          <img src="${service.image || '/assets/brochure/img_8.jpg'}" alt="${service.title}" class="detail-img">
+      <!-- QUICK ACTION STRIP -->
+      <div class="detail-action-bar">
+        <div class="detail-pills-row">
+          <span class="detail-info-pill">⏱️ Typical Duration: ${service.duration || 'Flexible'}</span>
+          ${service.subServices && service.subServices.length > 0 ? `<span class="detail-info-pill">📦 ${service.subServices.length} Specialized Sub-Modules</span>` : ''}
         </div>
-        <div class="detail-header-body">
-          <span class="section-badge">Program Offering</span>
-          <h1 class="detail-title">${service.title}</h1>
-          <p class="detail-tagline">⏱️ Typical Duration: ${service.duration}</p>
 
-          <a href="/contact?type=service&id=${service.id}" class="detail-cta-btn" onclick="navigate(event, '/contact?type=service&id=${service.id}')">
-            <span>Enquire Now</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
+        <a href="/contact?type=service&id=${service.id}" class="detail-primary-cta" onclick="navigate(event, '/contact?type=service&id=${service.id}')">
+          <span>Enquire Now</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
 
       <div class="detail-card">
@@ -1144,32 +1194,32 @@ async function renderSubServiceDetailView(serviceSlug, subServiceSlug) {
   const { subService, parentService } = res;
 
   root.innerHTML = `
-    <div class="app-container section-spacing">
-      <div class="breadcrumbs">
-        <a href="/" onclick="navigate(event, '/')">Home</a>
-        <span>&rsaquo;</span>
-        <a href="/services" onclick="navigate(event, '/services')">Services</a>
-        <span>&rsaquo;</span>
-        <a href="/services/${parentService.slug}" onclick="navigate(event, '/services/${parentService.slug}')">${parentService.title}</a>
-        <span>&rsaquo;</span>
-        <span>${subService.title}</span>
-      </div>
+    <div class="app-container" style="padding-top: 0;">
+      ${renderInnerHero({
+        kicker: `${(parentService.title || 'Service').toUpperCase()} SUB-MODULE`,
+        title: subService.title,
+        subtitle: subService.description,
+        breadcrumbs: [
+          { label: 'Home', url: '/' },
+          { label: 'Services', url: '/services' },
+          { label: parentService.title, url: `/services/${parentService.slug}` },
+          { label: subService.title }
+        ],
+        imageUrl: subService.image || parentService.image || '/assets/services_hero.jpg',
+        objectPosition: 'center 35%'
+      })}
 
-      <div class="detail-hero">
-        <div class="detail-img-wrap">
-          <img src="${subService.image || '/assets/brochure/img_8.jpg'}" alt="${subService.title}" class="detail-img">
+      <!-- QUICK ACTION STRIP -->
+      <div class="detail-action-bar">
+        <div class="detail-pills-row">
+          <span class="detail-info-pill">🔬 ${parentService.title}</span>
+          ${subService.modules && subService.modules.length > 0 ? `<span class="detail-info-pill">🛠️ ${subService.modules.length} Included Activities</span>` : ''}
         </div>
-        <div class="detail-header-body">
-          <span class="section-badge">${parentService.title} Sub-Module</span>
-          <h1 class="detail-title">${subService.title}</h1>
-          <p class="detail-tagline">${subService.description}</p>
 
-          <!-- DEDICATED ENQUIRY CTA PRE-TAGGED WITH SUB-SERVICE -->
-          <a href="/contact?type=sub-service&id=${subService.id}" class="detail-cta-btn" onclick="navigate(event, '/contact?type=sub-service&id=${subService.id}')">
-            <span>Enquire for ${subService.title}</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
+        <a href="/contact?type=sub-service&id=${subService.id}" class="detail-primary-cta" onclick="navigate(event, '/contact?type=sub-service&id=${subService.id}')">
+          <span>Enquire for ${subService.title}</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
 
       <div class="detail-card">
@@ -1239,20 +1289,20 @@ async function renderGalleryView() {
   }
 
   root.innerHTML = `
-    <div class="app-container section-spacing">
-      <div class="breadcrumbs">
-        <a href="/" onclick="navigate(event, '/')">Home</a>
-        <span>&rsaquo;</span>
-        <span>Moments of Learning</span>
-      </div>
+    <div class="app-container" style="padding-top: 0;">
+      ${renderInnerHero({
+        kicker: 'PHOTO SHOWCASE',
+        title: 'Moments of Learning',
+        subtitle: 'Hands-on experiments, robotics championships, and school tech labs in action.',
+        breadcrumbs: [
+          { label: 'Home', url: '/' },
+          { label: 'Gallery' }
+        ],
+        imageUrl: '/assets/gallery_hero.jpg',
+        objectPosition: 'center 40%'
+      })}
 
-      <div class="section-header">
-        <span class="section-badge">Photo Showcase</span>
-        <h1 class="section-title">Gallery</h1>
-        <p class="section-subtitle">Moments of Learning, Innovation and Fun across school labs and university tours.</p>
-      </div>
-
-      <div class="filter-pills" id="gallery-filter-pills">
+      <div class="filter-pills" id="gallery-filter-pills" style="margin-top: 4px;">
         ${categories.map(cat => `
           <button class="filter-pill ${cat === activeGalleryCategory ? 'active' : ''}" data-cat="${cat}">
             ${cat}
@@ -1295,20 +1345,20 @@ async function renderContactView() {
   let currentTab = (paramType === 'service' || paramType === 'sub-service') ? 'service' : 'course';
 
   root.innerHTML = `
-    <div class="app-container section-spacing">
-      <div class="breadcrumbs">
-        <a href="/" onclick="navigate(event, '/')">Home</a>
-        <span>&rsaquo;</span>
-        <span>Contact Us</span>
-      </div>
+    <div class="app-container" style="padding-top: 0;">
+      ${renderInnerHero({
+        kicker: 'GET IN TOUCH',
+        title: 'Contact & Enquiry',
+        subtitle: 'Visit our Madhapur Innovation Lab or speak with our academic counselors.',
+        breadcrumbs: [
+          { label: 'Home', url: '/' },
+          { label: 'Contact Us' }
+        ],
+        imageUrl: '/assets/contact_hero.jpg',
+        objectPosition: 'center 40%'
+      })}
 
-      <div class="section-header">
-        <span class="section-badge">Get In Touch</span>
-        <h1 class="section-title">Contact & Enquiry</h1>
-        <p class="section-subtitle">Send us a message and our team will get back to you immediately.</p>
-      </div>
-
-      <div class="contact-grid">
+      <div class="contact-grid" style="margin-top: 4px;">
         <!-- UNIFIED ENQUIRY CARD (Screen 8) -->
         <div class="enquiry-card">
           <h3 style="font-family: var(--font-heading); font-size: 19px; font-weight: 800; color: var(--primary-navy); margin-bottom: 6px;">Enquiry Form</h3>
