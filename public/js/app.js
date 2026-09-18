@@ -687,9 +687,9 @@ async function renderHomeView() {
           <img src="/assets/robot_nurtured.png" alt="Edueme Mascot" class="testimonials-floating-robot" loading="lazy">
         </div>
 
-        <!-- Shorter, Compact Floating Layered Cards -->
-        <div class="testimonials-carousel-wrap" id="testimonialsCarousel">
-          <div class="testimonial-card-item">
+        <!-- Shorter, Compact Center-Focused Coverflow Stacked Cards -->
+        <div class="testimonials-coverflow-stage" id="testimonialsStage">
+          <div class="testimonial-card-item card-active" data-index="0">
             <div class="testimonial-card-header">
               <span class="testimonial-stars">★★★★★</span>
               <span class="testimonial-quote-icon">&ldquo;</span>
@@ -704,7 +704,7 @@ async function renderHomeView() {
             </div>
           </div>
 
-          <div class="testimonial-card-item">
+          <div class="testimonial-card-item card-next" data-index="1">
             <div class="testimonial-card-header">
               <span class="testimonial-stars">★★★★★</span>
               <span class="testimonial-quote-icon">&ldquo;</span>
@@ -719,7 +719,7 @@ async function renderHomeView() {
             </div>
           </div>
 
-          <div class="testimonial-card-item">
+          <div class="testimonial-card-item card-prev" data-index="2">
             <div class="testimonial-card-header">
               <span class="testimonial-stars">★★★★★</span>
               <span class="testimonial-quote-icon">&ldquo;</span>
@@ -2057,52 +2057,127 @@ function initNurturedSkills() {
 }
 
 // --------------------------------------------------------------------------
-// FLOATING LAYERED TESTIMONIALS ANIMATION CONTROLLER
+// FLOATING LAYERED TESTIMONIALS ANIMATION CONTROLLER (Center-Focused Coverflow)
 // --------------------------------------------------------------------------
+let testimonialAutoTimer = null;
+
 function initFloatingTestimonials() {
   const section = document.getElementById('testimonialsSection');
-  const carousel = document.getElementById('testimonialsCarousel');
+  const stage = document.getElementById('testimonialsStage');
   const dots = document.querySelectorAll('#testimonialsDots .testimonials-dot');
-  if (!section || !carousel) return;
+  if (!section || !stage) return;
 
-  // 1. Scroll-triggered reveal using IntersectionObserver
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          section.classList.add('revealed');
-          obs.disconnect();
-        }
-      });
-    }, { threshold: 0.12 });
-    observer.observe(section);
-  } else {
-    section.classList.add('revealed');
+  const cards = Array.from(stage.querySelectorAll('.testimonial-card-item'));
+  const totalCards = cards.length;
+  if (totalCards === 0) return;
+
+  let currentIndex = 0;
+
+  function updateCoverflow(newIndex) {
+    currentIndex = (newIndex + totalCards) % totalCards;
+
+    cards.forEach((card, i) => {
+      card.classList.remove('card-active', 'card-prev', 'card-next', 'card-hidden');
+
+      const diff = (i - currentIndex + totalCards) % totalCards;
+
+      if (diff === 0) {
+        card.classList.add('card-active');
+      } else if (diff === 1 || (totalCards === 2 && diff === 1)) {
+        card.classList.add('card-next');
+      } else if (diff === totalCards - 1) {
+        card.classList.add('card-prev');
+      } else {
+        card.classList.add('card-hidden');
+      }
+    });
+
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentIndex);
+    });
   }
 
-  // 2. Carousel scroll snapping and dot indicator updates
-  const cards = carousel.querySelectorAll('.testimonial-card-item');
-  carousel.addEventListener('scroll', () => {
-    const scrollLeft = carousel.scrollLeft;
-    const cardWidth = cards[0] ? cards[0].offsetWidth + 12 : 265;
-    const activeIndex = Math.min(Math.round(scrollLeft / cardWidth), dots.length - 1);
+  // Initial arrangement
+  updateCoverflow(0);
 
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === activeIndex);
+  // Click on side cards to advance/rewind
+  cards.forEach((card) => {
+    card.addEventListener('click', () => {
+      if (card.classList.contains('card-prev')) {
+        updateCoverflow(currentIndex - 1);
+        resetAutoTimer();
+      } else if (card.classList.contains('card-next')) {
+        updateCoverflow(currentIndex + 1);
+        resetAutoTimer();
+      }
     });
-  }, { passive: true });
+  });
 
   // Dot click navigation
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
       const idx = parseInt(dot.getAttribute('data-index'), 10) || 0;
-      if (cards[idx]) {
-        cards[idx].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
-      }
+      updateCoverflow(idx);
+      resetAutoTimer();
     });
   });
 
-  // 3. Subtle Parallax Effect on Scroll
+  // Mobile Touch Swipe Handling
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  stage.addEventListener('touchstart', (e) => {
+    if (e.touches && e.touches[0]) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      pauseAutoTimer();
+    }
+  }, { passive: true });
+
+  stage.addEventListener('touchend', (e) => {
+    if (e.changedTouches && e.changedTouches[0]) {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      const diffX = touchStartX - touchEndX;
+      const diffY = touchStartY - touchEndY;
+
+      // Ensure horizontal swipe is dominant and exceeds threshold
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 28) {
+        if (diffX > 0) {
+          // Swipe left -> Next card
+          updateCoverflow(currentIndex + 1);
+        } else {
+          // Swipe right -> Previous card
+          updateCoverflow(currentIndex - 1);
+        }
+      }
+      resetAutoTimer();
+    }
+  }, { passive: true });
+
+  // Auto-Slide Timer (every 4.5s)
+  function startAutoTimer() {
+    if (testimonialAutoTimer) clearInterval(testimonialAutoTimer);
+    testimonialAutoTimer = setInterval(() => {
+      updateCoverflow(currentIndex + 1);
+    }, 4500);
+  }
+
+  function pauseAutoTimer() {
+    if (testimonialAutoTimer) clearInterval(testimonialAutoTimer);
+  }
+
+  function resetAutoTimer() {
+    pauseAutoTimer();
+    startAutoTimer();
+  }
+
+  stage.addEventListener('mouseenter', pauseAutoTimer);
+  stage.addEventListener('mouseleave', startAutoTimer);
+
+  startAutoTimer();
+
+  // Scroll Parallax Effect on Mascot
   let ticking = false;
   window.addEventListener('scroll', () => {
     if (!ticking) {

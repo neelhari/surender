@@ -1315,20 +1315,20 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   FLOATING LAYERED TESTIMONIALS (Soft Light Blue Gradient + Mascot)
-   No section headers, edge-to-edge light blue canvas, compact cards
+   FLOATING LAYERED TESTIMONIALS (Deeper Soft Blue Gradient + Coverflow Stacked Cards)
+   Center-focused Coverflow carousel with 3D stacked depth, mascot animation
    ========================================================================== */
 .testimonials-mobile-section {
   position: relative;
-  background: linear-gradient(168deg, #eaf4fd 0%, #f2f9ff 50%, #e2f0fc 100%);
-  border-top: 1px solid rgba(2, 132, 199, 0.12);
-  border-bottom: 1px solid rgba(2, 132, 199, 0.12);
+  background: linear-gradient(168deg, #b8d7f7 0%, #cbe4fb 48%, #afcff2 100%);
+  border-top: 1px solid rgba(2, 132, 199, 0.28);
+  border-bottom: 1px solid rgba(2, 132, 199, 0.28);
   width: calc(100% + 32px);
   margin-left: -16px;
   margin-right: -16px;
   margin-top: 24px;
   margin-bottom: 24px;
-  padding: 22px 16px 18px;
+  padding: 20px 16px 16px;
   overflow: hidden;
 }
 
@@ -1340,9 +1340,9 @@ button, input, select, textarea {
     right: 50%;
     margin-left: -50vw;
     margin-right: -50vw;
-    margin-top: 36px;
-    margin-bottom: 36px;
-    padding: 32px calc((100vw - 1100px) / 2) 26px;
+    margin-top: 34px;
+    margin-bottom: 34px;
+    padding: 28px calc((100vw - 1100px) / 2) 22px;
   }
 }
 
@@ -1351,8 +1351,8 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
-  padding: 0 4px;
+  margin-bottom: 10px;
+  padding: 0 6px;
   position: relative;
   z-index: 2;
 }
@@ -1361,12 +1361,12 @@ button, input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(2, 132, 199, 0.18);
+  border: 1px solid rgba(2, 132, 199, 0.24);
   border-radius: 999px;
-  padding: 4px 12px;
-  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.08);
+  padding: 3.5px 12px;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.12);
 }
 
 .testimonials-mascot-stars {
@@ -1378,7 +1378,7 @@ button, input, select, textarea {
 .testimonials-mascot-text {
   font-size: 11.5px;
   font-weight: 700;
-  color: #0369a1;
+  color: #0284c7;
   letter-spacing: 0.02em;
 }
 
@@ -1388,7 +1388,7 @@ button, input, select, textarea {
   height: 44px;
   flex-shrink: 0;
   animation: floatMascot 3.2s ease-in-out infinite;
-  filter: drop-shadow(0 6px 12px rgba(2, 132, 199, 0.18));
+  filter: drop-shadow(0 6px 12px rgba(2, 132, 199, 0.22));
   object-fit: contain;
 }
 
@@ -1401,109 +1401,129 @@ button, input, select, textarea {
   }
 }
 
-/* Carousel Container */
-.testimonials-carousel-wrap {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding: 4px 4px 12px;
-  scrollbar-width: none;
+/* Center-Focused Coverflow Stage (Stacked Cards Layout) */
+.testimonials-coverflow-stage {
   position: relative;
-  z-index: 2;
+  width: 100%;
+  height: 136px;
+  margin: 4px 0 12px 0;
+  perspective: 900px;
+  overflow: visible;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+  z-index: 3;
 }
 
-.testimonials-carousel-wrap::-webkit-scrollbar {
-  display: none;
+@media (min-width: 768px) {
+  .testimonials-coverflow-stage {
+    height: 142px;
+    max-width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
-/* Floating Layered Card (Shorter, compact, premium) */
+/* Shorter, Compact Floating Coverflow Card Item */
 .testimonial-card-item {
-  scroll-snap-align: start;
-  min-width: 255px;
-  max-width: 270px;
-  flex-shrink: 0;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: clamp(232px, 68vw, 264px);
+  height: 134px;
   background: #ffffff;
-  border: 1px solid rgba(2, 132, 199, 0.14);
-  border-radius: 18px;
-  padding: 13px 14px 12px;
-  box-shadow: 0 8px 22px rgba(2, 132, 199, 0.08), 0 2px 5px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(2, 132, 199, 0.18);
+  border-radius: 16px;
+  padding: 9px 13px 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease, border-color 0.28s ease;
-  cursor: pointer;
   box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.44s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.44s ease,
+              box-shadow 0.44s ease,
+              border-color 0.35s ease;
+  will-change: transform, opacity;
+}
+
+/* 1. Center Active Card (Larger, fully visible, elevated shadow) */
+.testimonial-card-item.card-active {
+  transform: translateX(-50%) translateZ(0) scale(1);
+  opacity: 1;
+  z-index: 10;
+  pointer-events: auto;
+  box-shadow: 0 14px 28px -4px rgba(14, 55, 105, 0.22), 0 4px 10px -2px rgba(14, 55, 105, 0.1);
+  border-color: rgba(2, 132, 199, 0.45);
+}
+
+/* 2. Previous Left Card (Partially visible behind on the left) */
+.testimonial-card-item.card-prev {
+  transform: translateX(calc(-50% - 74px)) translateZ(-45px) scale(0.85) rotateY(6deg);
+  opacity: 0.52;
+  z-index: 5;
+  pointer-events: auto;
+  box-shadow: 0 6px 16px rgba(14, 55, 105, 0.1);
+}
+
+/* 3. Next Right Card (Partially visible behind on the right) */
+.testimonial-card-item.card-next {
+  transform: translateX(calc(-50% + 74px)) translateZ(-45px) scale(0.85) rotateY(-6deg);
+  opacity: 0.52;
+  z-index: 5;
+  pointer-events: auto;
+  box-shadow: 0 6px 16px rgba(14, 55, 105, 0.1);
+}
+
+/* 4. Other cards (hidden offstage) */
+.testimonial-card-item.card-hidden {
+  transform: translateX(-50%) translateZ(-90px) scale(0.7);
   opacity: 0;
-  transform: translateY(18px) scale(0.97);
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* Scroll-triggered reveal */
-.testimonials-mobile-section.revealed .testimonial-card-item {
-  animation: cardEntranceReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.testimonials-mobile-section.revealed .testimonial-card-item:nth-child(1) {
-  animation-delay: 0.06s;
-}
-
-.testimonials-mobile-section.revealed .testimonial-card-item:nth-child(2) {
-  animation-delay: 0.18s;
-}
-
-.testimonials-mobile-section.revealed .testimonial-card-item:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-@keyframes cardEntranceReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(18px) scale(0.96);
+@media (min-width: 768px) {
+  .testimonial-card-item {
+    height: 140px;
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+  .testimonial-card-item.card-prev {
+    transform: translateX(calc(-50% - 110px)) translateZ(-45px) scale(0.88) rotateY(5deg);
   }
-}
-
-/* Micro-interactions */
-.testimonial-card-item:hover,
-.testimonial-card-item:active {
-  transform: translateY(-4px) scale(1.015);
-  box-shadow: 0 12px 28px rgba(2, 132, 199, 0.15), 0 3px 8px rgba(0, 0, 0, 0.03);
-  border-color: rgba(2, 132, 199, 0.4);
+  .testimonial-card-item.card-next {
+    transform: translateX(calc(-50% + 110px)) translateZ(-45px) scale(0.88) rotateY(-5deg);
+  }
 }
 
 .testimonial-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
 }
 
 .testimonial-stars {
   color: #f59e0b;
-  font-size: 11.5px;
-  letter-spacing: 1.5px;
+  font-size: 10.5px;
+  letter-spacing: 1.2px;
 }
 
 .testimonial-quote-icon {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1;
-  color: #bae6fd;
+  color: #7dd3fc;
   font-family: Georgia, serif;
 }
 
-/* Shorter quote text */
+/* Shorter quote text (strictly 2 lines) */
 .testimonial-quote-text {
-  font-size: 12px;
-  line-height: 1.42;
+  font-size: 11px;
+  line-height: 1.34;
   color: #334155;
-  margin-bottom: 8px;
+  margin: 0 0 5px 0;
   font-style: normal;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1511,21 +1531,21 @@ button, input, select, textarea {
 .testimonial-author-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   border-top: 1px solid #f1f5f9;
-  padding-top: 8px;
+  padding-top: 5px;
 }
 
 .testimonial-author-avatar {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #f0fdfa;
   border: 1px solid #ccfbf1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 12px;
   flex-shrink: 0;
 }
 
@@ -1535,21 +1555,21 @@ button, input, select, textarea {
 }
 
 .testimonial-author-info h4 {
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 700;
   color: var(--primary-navy);
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.15;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .testimonial-author-info p {
-  font-size: 10.5px;
+  font-size: 9.5px;
   color: var(--text-muted);
   margin: 1px 0 0;
-  line-height: 1.2;
+  line-height: 1.15;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1561,23 +1581,26 @@ button, input, select, textarea {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 4px;
+  margin-top: 6px;
+  position: relative;
+  z-index: 4;
 }
 
 .testimonials-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #bae6fd;
-  transition: all 0.25s ease;
+  background: rgba(2, 132, 199, 0.28);
+  transition: all 0.28s cubic-bezier(0.25, 1, 0.5, 1);
   cursor: pointer;
 }
 
 .testimonials-dot.active {
-  width: 16px;
+  width: 18px;
   border-radius: 999px;
   background: #0284c7;
 }
+
 
 .testimonial-verified-badge {
   font-size: 10px;
