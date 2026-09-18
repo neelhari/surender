@@ -540,12 +540,13 @@ async function renderHomeView() {
 
       <!-- POPULAR COURSES SECTION (Direct Access - No Quote Banner) -->
       <section class="popular-courses-tinted-wrap">
-        <div class="section-header" style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 16px;">
-          <div>
-            <span class="section-badge" style="background: #e0f2fe; color: #0369a1;">Development</span>
+        <div class="section-header section-header-split">
+          <div class="section-header-main">
+            <span class="section-eyebrow">Skill-First Programs</span>
             <h2 class="section-title">Our Popular Courses</h2>
+            <p class="section-subtitle">Hands-on robotics and STEM programs for learners.</p>
           </div>
-          <a href="/courses" style="font-weight: 700; color: var(--accent-blue); font-size: 13px;" onclick="navigate(event, '/courses')">View All &rarr;</a>
+          <a href="/courses" class="section-header-link" onclick="navigate(event, '/courses')">View All &rarr;</a>
         </div>
 
         ${courses.length === 0 ? `
@@ -676,10 +677,10 @@ async function renderHomeView() {
 
       <!-- PRINCIPAL TESTIMONIALS CAROUSEL (Real School Endorsements from Old Site) -->
       <section class="testimonials-mobile-section">
-        <div class="section-header" style="text-align: center; margin-bottom: 16px;">
-          <span class="section-badge">Commendation</span>
+        <div class="section-header text-center">
+          <span class="section-eyebrow">Leader Commendations</span>
           <h2 class="section-title">Success Testimonials</h2>
-          <p class="section-subtitle" style="margin: 0 auto;">Trusted by school principals and educational leaders across Telangana.</p>
+          <p class="section-subtitle">Trusted by school leaders and educators across Telangana.</p>
         </div>
 
         <div class="testimonials-carousel-wrap">
@@ -733,9 +734,9 @@ async function renderHomeView() {
       <!-- CORE PROGRAMS & SERVICES HIGHLIGHT -->
       <section class="section-spacing">
         <div class="section-header">
-          <span class="section-badge">School & College Solutions</span>
+          <span class="section-eyebrow">Institutional Solutions</span>
           <h2 class="section-title">Our Programs & Services</h2>
-          <p class="section-subtitle">Turnkey innovation labs, teacher training, and university tech tours.</p>
+          <p class="section-subtitle">Turnkey labs, teacher training, and university tech tours.</p>
         </div>
 
         <div class="cards-grid">
@@ -895,8 +896,9 @@ async function renderAboutView() {
       <!-- PARTNER INSTITUTIONS SPOTLIGHT CAROUSEL (Also in About Us) -->
       <section class="partner-schools-spotlight-section" style="border-radius: var(--radius-md); margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
         <div class="partner-schools-header">
-          <span class="schools-kicker">Trusted by 20+ Schools</span>
-          <h3 class="schools-title">Partner Institutions Across Telangana</h3>
+          <span class="schools-kicker">Trusted by 20+ Institutions</span>
+          <h3 class="schools-title">Partner Institutions</h3>
+          <p class="schools-subtitle">Leading partner schools and academies across Telangana.</p>
         </div>
 
         <div class="schools-spotlight-carousel" id="aboutSchoolsSpotlightCarousel">
@@ -962,9 +964,9 @@ async function renderAboutView() {
       <!-- DYNAMIC TEAM MEMBERS (Correction 3 Approved) -->
       <section class="section-spacing">
         <div class="section-header">
-          <span class="section-badge">Leadership & Mentors</span>
-          <h2 class="section-title">Our Scientific & Academic Team</h2>
-          <p class="section-subtitle">Research scientists, innovators, and physicists driving experiential education.</p>
+          <span class="section-eyebrow">Leadership & Mentors</span>
+          <h2 class="section-title">Scientific & Academic Team</h2>
+          <p class="section-subtitle">Researchers and physicists driving experiential learning.</p>
         </div>
 
         ${team.length === 0 ? `
@@ -1249,9 +1251,9 @@ async function renderServiceDetailView(slug) {
       <!-- DEDICATED SUB-SERVICES LIST (Correction 1 Required) -->
       ${service.subServices && service.subServices.length > 0 ? `
         <div class="section-header" style="margin-top: 32px;">
-          <span class="section-badge">Modular Offerings</span>
+          <span class="section-eyebrow">Modular Offerings</span>
           <h2 class="section-title">Specialized Sub-Services (${service.subServices.length})</h2>
-          <p class="section-subtitle">Click into any sub-service to inspect syllabus, modules, and dedicated enquiry.</p>
+          <p class="section-subtitle">Explore syllabi, modules, and dedicated project tracks.</p>
         </div>
 
         <div class="cards-grid">
@@ -1458,8 +1460,11 @@ async function renderContactView() {
       <div class="contact-grid" style="margin-top: 4px;">
         <!-- UNIFIED ENQUIRY CARD (Screen 8) -->
         <div class="enquiry-card">
-          <h3 style="font-family: var(--font-heading); font-size: 19px; font-weight: 800; color: var(--primary-navy); margin-bottom: 6px;">Enquiry Form</h3>
-          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Fill in your details and we'll get back to you shortly.</p>
+          <div class="section-header" style="margin-bottom: 14px;">
+            <span class="section-eyebrow">Direct Admissions</span>
+            <h2 class="section-title" style="font-size: 21px;">Admissions & Enquiries</h2>
+            <p class="section-subtitle">Fill in your details and our team will get back shortly.</p>
+          </div>
 
           <!-- TABS: Course Enquiry | Service Enquiry -->
           <div class="enquiry-tabs">
@@ -1522,8 +1527,11 @@ async function renderContactView() {
 
         <!-- CONTACT DETAILS & LOCATION (Screen 9) -->
         <div class="contact-info-card">
-          <h3 style="font-family: var(--font-heading); font-size: 19px; font-weight: 800; color: var(--primary-navy); margin-bottom: 6px;">Contact Information</h3>
-          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">We would love to hear from you. Visit our lab or reach out online.</p>
+          <div class="section-header" style="margin-bottom: 14px;">
+            <span class="section-eyebrow">Campus & Labs</span>
+            <h2 class="section-title" style="font-size: 21px;">Contact Information</h2>
+            <p class="section-subtitle">Visit our Madhapur lab or reach out directly online.</p>
+          </div>
 
           <div class="contact-info-item">
             <div class="contact-item-icon">📍</div>

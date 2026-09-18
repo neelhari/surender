@@ -765,43 +765,137 @@ button, input, select, textarea {
   box-shadow: 0 6px 16px rgba(245, 166, 35, 0.35);
 }
 
-/* Section Header */
+/* ==========================================================================
+   CONSISTENT SECTION-HEADING SYSTEM
+   Micro-label / Eyebrow (11–12px uppercase, accent line, no pills)
+   Single-line main heading (24–28px bold modern)
+   Single-line muted subheading (13–15px)
+   ========================================================================== */
 .section-header {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
+.section-header-split {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-header-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.section-header-link {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: var(--accent-blue);
+  font-size: 13px;
+  padding-bottom: 2px;
+  transition: color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.section-header-link:hover {
+  color: #0284c7;
+  transform: translateX(2px);
+}
+
+/* Eyebrow / Micro-Label (11–12px uppercase with letter spacing & minimal accent bar) */
+.section-eyebrow,
 .section-badge {
-  display: inline-block;
-  background: var(--accent-gold-soft);
-  color: #b45309;
-  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  font-size: 11.5px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
-  padding: 4px 10px;
-  border-radius: 4px;
-  margin-bottom: 6px;
+  letter-spacing: 0.12em;
+  color: var(--accent-blue);
+  margin-bottom: 5px;
+  line-height: 1;
 }
 
+.section-eyebrow::before,
+.section-badge::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: var(--accent-blue);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* Centered section headers */
+.section-header.text-center,
+.section-header-center {
+  text-align: center;
+}
+
+.section-header.text-center .section-eyebrow,
+.section-header.text-center .section-badge,
+.section-header-center .section-eyebrow,
+.section-header-center .section-badge {
+  justify-content: center;
+}
+
+.section-header.text-center .section-eyebrow::after,
+.section-header.text-center .section-badge::after,
+.section-header-center .section-eyebrow::after,
+.section-header-center .section-badge::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: var(--accent-blue);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* Single-Line Main Heading (24–28px, bold modern) */
 .section-title {
   font-family: var(--font-heading);
-  font-size: 22px;
-  font-weight: 700;
+  font-size: clamp(23px, 5.5vw, 25px);
+  font-weight: 800;
   color: var(--primary-navy);
-  line-height: 1.25;
+  line-height: 1.2;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media (min-width: 768px) {
   .section-title {
-    font-size: 30px;
+    font-size: 28px;
+    letter-spacing: -0.025em;
   }
 }
 
+/* Single-Line Subheading (13–15px, muted) */
 .section-subtitle {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--text-muted);
-  margin-top: 4px;
-  max-width: 650px;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: 500;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 768px) {
+  .section-subtitle {
+    font-size: 14.5px;
+  }
 }
 
 /* ==========================================================================
@@ -1029,27 +1123,60 @@ button, input, select, textarea {
 }
 
 .partner-schools-header {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  text-align: center;
 }
 
-.schools-kicker {
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: #b45309;
-  background: rgba(245, 166, 35, 0.14);
-  padding: 3px 10px;
-  border-radius: 999px;
-  display: inline-block;
-  margin-bottom: 4px;
-}
-
-.schools-title {
-  font-size: 13.5px;
+.partner-schools-header .schools-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  font-size: 11.5px;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #b45309;
+  margin-bottom: 5px;
+  line-height: 1;
+}
+
+.partner-schools-header .schools-kicker::before,
+.partner-schools-header .schools-kicker::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: #f59e0b;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.partner-schools-header .schools-title {
+  font-family: var(--font-heading);
+  font-size: clamp(20px, 5vw, 24px);
+  font-weight: 800;
   color: var(--primary-navy);
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.partner-schools-header .schools-subtitle {
+  font-size: 13.5px;
+  color: var(--text-muted);
   margin: 0;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Spotlight Carousel Container */
