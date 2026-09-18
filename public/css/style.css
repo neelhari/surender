@@ -2779,23 +2779,36 @@ textarea.form-control {
 
 /* ==========================================================================
    NURTURED SKILLS SECTION (Exact Match to Reference Image 1)
-   Soft lavender background, pencil/3D robot illustration & medium white card
+   Straight lines, attached to screen edge-to-edge, no outer box curves
    ========================================================================== */
 .nurtured-skills-reference-section {
   position: relative;
   background: linear-gradient(175deg, #f4effe 0%, #ede5fd 50%, #e6dcf9 100%);
-  border-radius: 26px;
-  padding: 24px 18px 22px;
-  margin: 24px 0;
+  border-radius: 0; /* Straight lines, no box curves */
+  width: calc(100% + 32px); /* Attach edge-to-edge to the screen */
+  margin-left: -16px;
+  margin-right: -16px;
+  margin-top: 28px;
+  margin-bottom: 28px;
+  padding: 28px 16px 26px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.05);
+  box-shadow: none;
+  border-top: 1px solid rgba(124, 58, 237, 0.08);
+  border-bottom: 1px solid rgba(124, 58, 237, 0.08);
 }
 
 @media (min-width: 768px) {
   .nurtured-skills-reference-section {
-    padding: 36px 32px 32px;
-    border-radius: 32px;
-    margin: 36px 0;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: 36px;
+    margin-bottom: 36px;
+    padding: 38px calc((100vw - 520px) / 2) 34px;
+    border-radius: 0;
   }
 }
 
