@@ -539,14 +539,21 @@ async function renderHomeView() {
         </div>
       </section>
 
-      <!-- POPULAR COURSES SECTION (Style matching reference: centered heading, subheading, quote, light tint) -->
+      <!-- POPULAR COURSES SECTION (Style matching reference: pencil-art robot, centered heading, 2-line quote) -->
       <section class="home-courses-section">
         <div class="section-center-group">
+          <!-- Pencil-Art Robot Emerging from Behind Content with Waving Hand Animation -->
+          <div class="courses-pencil-robot-container">
+            <div class="courses-pencil-robot-art">
+              <img src="/assets/robot_pencil_body.png" alt="Edueme Mascot Robot" class="pencil-robot-body" loading="lazy">
+              <img src="/assets/robot_pencil_hand.png" alt="Edueme Mascot Robot Waving Hand" class="pencil-robot-hand" loading="lazy">
+            </div>
+          </div>
+
           <h2 class="section-title">Popular Courses</h2>
           <p class="section-subtitle">Hands-on robotics and STEM programs for learners.</p>
           <p class="section-quote-text">
-            &ldquo;Unlock your child&rsquo;s inner innovator with our empowering courses! We believe every child has the potential to create something amazing, and our programs develop the skills and mindset to do so.&rdquo;
-            <span class="section-quote-author">— [Edueme Research Labs]</span>
+            &ldquo;Unlock your child&rsquo;s inner innovator with our empowering courses! Developing the skills and mindset to create something amazing.&rdquo;
           </p>
         </div>
 
