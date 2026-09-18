@@ -548,6 +548,7 @@ async function renderHomeView() {
           </div>
           <a href="/courses" class="section-header-link" onclick="navigate(event, '/courses')">View All &rarr;</a>
         </div>
+        <p class="section-intro-text">Designed for grades 2 to 10+, our curriculum introduces physical computing and coding through real microcontrollers. Students progress from circuit basics to autonomous systems with mentor guidance.</p>
 
         ${courses.length === 0 ? `
           <div class="empty-state">
@@ -749,6 +750,7 @@ async function renderHomeView() {
           <h2 class="section-title">Our Programs & Services</h2>
           <p class="section-subtitle">Turnkey labs, teacher training, and university tech tours.</p>
         </div>
+        <p class="section-intro-text">From establishing dedicated Prayogshala tech labs in schools to conducting immersive national university tours, we partner with institutions to deliver comprehensive, year-round experiential STEM education.</p>
 
         <div class="cards-grid">
           ${featuredServices.map(renderServiceCard).join('')}
@@ -877,33 +879,52 @@ async function renderAboutView() {
         objectPosition: 'center 40%'
       })}
 
-      <!-- ABOUT STORY HIGHLIGHT CARD -->
+      <!-- ABOUT STORY & PHILOSOPHY -->
       <div class="detail-card" style="margin-top: 4px; margin-bottom: 20px;">
-        <h3 class="detail-card-title">🔬 Inspiring 21st Century Innovators</h3>
-        <p style="font-size: 14px; color: #334155; line-height: 1.6; white-space: pre-line;">
-          ${settings?.aboutStory || ''}
-        </p>
+        <div class="section-header" style="margin-bottom: 10px;">
+          <span class="section-eyebrow">Pioneering STEM Education</span>
+          <h2 class="section-title">Empowering Next-Gen Innovators</h2>
+          <p class="section-subtitle">Bridging the gap between classroom theory and real-world technology.</p>
+        </div>
+        <p class="section-intro-text" style="margin-bottom: 0;">As digital technology transforms society, learners need early fluency with the machines shaping tomorrow. Edueme Research Labs is India’s first to introduce component-based robotics from 3rd standard, replacing black-box kits with real microcontrollers, sensors, and code.</p>
+      </div>
+
+      <!-- MISSION CARD -->
+      <div class="detail-card" style="margin-bottom: 20px;">
+        <div class="section-header" style="margin-bottom: 10px;">
+          <span class="section-eyebrow">Purpose & Core Values</span>
+          <h2 class="section-title">Our Educational Mission</h2>
+          <p class="section-subtitle">Turning curious learners into capable 21st-century inventors.</p>
+        </div>
+        <p class="section-intro-text" style="margin-bottom: 0;">${settings?.mission || 'To provide high-quality, practical, and industry-focused education in emerging technologies, turning curious students into capable 21st-century inventors and engineers.'}</p>
       </div>
 
       <!-- STATS COUNTER CARDS (Screen 3 Reference) -->
-      <div class="stats-grid" style="margin-bottom: 24px;">
-        <div class="stat-card">
-          <div class="stat-number">${settings?.stats?.studentsTrained || '5000+'}</div>
-          <div class="stat-label">Students Trained</div>
+      <section style="margin-bottom: 24px;">
+        <div class="section-header" style="margin-bottom: 12px;">
+          <span class="section-eyebrow">Measurable Outcomes</span>
+          <h2 class="section-title">Our Journey in Numbers</h2>
+          <p class="section-subtitle">Demonstrated reach across schools, students, and educators.</p>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">${settings?.stats?.workshops || '200+'}</div>
-          <div class="stat-label">Workshops</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">${settings?.stats?.studentsTrained || '5000+'}</div>
+            <div class="stat-label">Students Trained</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${settings?.stats?.workshops || '200+'}</div>
+            <div class="stat-label">Workshops</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${settings?.stats?.schools || '50+'}</div>
+            <div class="stat-label">Schools</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${settings?.stats?.yearsExp || '10+'}</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">${settings?.stats?.schools || '50+'}</div>
-          <div class="stat-label">Schools</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">${settings?.stats?.yearsExp || '10+'}</div>
-          <div class="stat-label">Years Experience</div>
-        </div>
-      </div>
+      </section>
 
       <!-- PARTNER INSTITUTIONS SPOTLIGHT CAROUSEL (Also in About Us) -->
       <section class="partner-schools-spotlight-section" style="border-radius: var(--radius-md); margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
@@ -912,6 +933,7 @@ async function renderAboutView() {
           <h3 class="schools-title">Partner Institutions</h3>
           <p class="schools-subtitle">Leading partner schools and academies across Telangana.</p>
         </div>
+        <p class="section-intro-text" style="padding: 0 16px; margin-bottom: 14px;">Recognized by leading educational institutions across Telangana for curriculum excellence, turnkey lab setups, and certified mentor training.</p>
 
         <div class="schools-spotlight-carousel" id="aboutSchoolsSpotlightCarousel">
           <div class="school-spotlight-item active" data-index="0" data-name="Samskar The Life School">
@@ -947,18 +969,14 @@ async function renderAboutView() {
         </div>
       </section>
 
-      <!-- MISSION CARD -->
-      <div class="detail-card">
-        <h3 class="detail-card-title">🎯 Our Mission</h3>
-        <p style="font-size: 14px; color: #334155; line-height: 1.6;">
-          ${settings?.mission || 'To provide high-quality, practical and industry-focused education in emerging technologies.'}
-        </p>
-      </div>
-
       <!-- PUBLICATIONS & BOOKS (Brochure Pages 12 & 13) -->
-      <div class="detail-card">
-        <h3 class="detail-card-title">📖 Our Robotics & AI Textbooks</h3>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Standardized STEM & Robotics curriculum books designed for grades II through X:</p>
+      <div class="detail-card" style="margin-bottom: 20px;">
+        <div class="section-header" style="margin-bottom: 10px;">
+          <span class="section-eyebrow">Academic Publications</span>
+          <h2 class="section-title">Robotics & AI Textbooks</h2>
+          <p class="section-subtitle">Structured grade-wise STEM curriculum designed for grades 2 through 10.</p>
+        </div>
+        <p class="section-intro-text">Our proprietary curriculum books blend electronic circuitry diagrams, algorithms, and practical hardware assembly into accessible classroom modules.</p>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
           <div style="padding: 12px; background: var(--bg-main); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
             <div style="font-weight: 700; color: var(--primary-navy);">Learning Robotics with Electronics</div>
@@ -980,6 +998,7 @@ async function renderAboutView() {
           <h2 class="section-title">Scientific & Academic Team</h2>
           <p class="section-subtitle">Researchers and physicists driving experiential learning.</p>
         </div>
+        <p class="section-intro-text">Led by research scientists, mechatronics engineers, and STEM educators with deep academic and industry backgrounds, our team ensures every student receives authentic mentorship.</p>
 
         ${team.length === 0 ? `
           <div class="empty-state">
@@ -1057,6 +1076,14 @@ async function renderCoursesView() {
         imageUrl: '/assets/hero_robotics.jpg',
         objectPosition: 'center 35%'
       })}
+
+      <!-- SECTION INTRO FOR COURSES -->
+      <div class="section-header" style="margin-top: 6px; margin-bottom: 8px;">
+        <span class="section-eyebrow">Component-Based Pedagogy</span>
+        <h2 class="section-title">Practical Technology Courses</h2>
+        <p class="section-subtitle">From fundamental circuitry to advanced AI and autonomous machines.</p>
+      </div>
+      <p class="section-intro-text">Every program is structured around hands-on engineering rather than passive screen time. Students work directly with real microcontrollers, sensors, and industry programming languages to build working prototypes.</p>
 
       <!-- SEARCH INPUT -->
       <div class="search-input-wrap" style="margin-top: 4px;">
@@ -1142,12 +1169,20 @@ async function renderCourseDetailView(slug) {
       </div>
 
       <div class="detail-card">
-        <h3 class="detail-card-title">📖 About This Course</h3>
-        <p style="font-size: 14px; color: #334155; line-height: 1.6;">${course.description}</p>
+        <div class="section-header" style="margin-bottom: 8px;">
+          <span class="section-eyebrow">Curriculum Overview</span>
+          <h3 class="section-title">About This Course</h3>
+          <p class="section-subtitle">Comprehensive practical training designed for tangible skills.</p>
+        </div>
+        <p class="section-intro-text" style="margin-bottom: 0;">${course.description}</p>
       </div>
 
       <div class="detail-card">
-        <h3 class="detail-card-title">🎯 What You'll Learn</h3>
+        <div class="section-header" style="margin-bottom: 12px;">
+          <span class="section-eyebrow">Core Competencies</span>
+          <h3 class="section-title">What You Will Learn</h3>
+          <p class="section-subtitle">Key technical skills mastered through component-level building.</p>
+        </div>
         <ul class="checklist">
           ${(course.highlights || []).map(hl => `
             <li class="checklist-item">
@@ -1156,6 +1191,15 @@ async function renderCourseDetailView(slug) {
             </li>
           `).join('')}
         </ul>
+      </div>
+
+      <div class="detail-card">
+        <div class="section-header" style="margin-bottom: 8px;">
+          <span class="section-eyebrow">Student Experience</span>
+          <h3 class="section-title">Hands-on Hardware & Kits</h3>
+          <p class="section-subtitle">Everything you need to build, test, and innovate.</p>
+        </div>
+        <p class="section-intro-text" style="margin-bottom: 0;">Students receive dedicated hardware components, circuit breadboards, and continuous 1-on-1 mentor guidance. Every course concludes with an autonomous capstone project and verified skill certification.</p>
       </div>
 
       <div style="text-align: center; margin-top: 24px;">
@@ -1187,6 +1231,14 @@ async function renderServicesView() {
         imageUrl: '/assets/services_hero.jpg',
         objectPosition: 'center 35%'
       })}
+
+      <!-- SECTION INTRO FOR SERVICES -->
+      <div class="section-header" style="margin-top: 6px; margin-bottom: 8px;">
+        <span class="section-eyebrow">Turnkey STEM Enablement</span>
+        <h2 class="section-title">Institutional Solutions</h2>
+        <p class="section-subtitle">Transforming school classrooms into modern innovation labs.</p>
+      </div>
+      <p class="section-intro-text">Edueme partners with schools to establish complete robotics and maker infrastructure. We provide tailored hardware inventories, year-round curriculum delivery, teacher training, and university tech tours aligned with national STEM standards.</p>
 
       ${services.length === 0 ? `
         <div class="empty-state">
@@ -1243,13 +1295,21 @@ async function renderServiceDetailView(slug) {
       </div>
 
       <div class="detail-card">
-        <h3 class="detail-card-title">📖 Program Overview</h3>
-        <p style="font-size: 14px; color: #334155; line-height: 1.6;">${service.description}</p>
+        <div class="section-header" style="margin-bottom: 8px;">
+          <span class="section-eyebrow">Program Overview</span>
+          <h3 class="section-title">Objectives & Scope</h3>
+          <p class="section-subtitle">Fostering experiential learning and engineering curiosity.</p>
+        </div>
+        <p class="section-intro-text" style="margin-bottom: 0;">${service.description}</p>
       </div>
 
       <!-- KEY BENEFITS / WHAT A SCHOOL OR STUDENT WILL RECEIVE -->
       <div class="detail-card">
-        <h3 class="detail-card-title">🎁 What a School / Student Will Receive from Edueme</h3>
+        <div class="section-header" style="margin-bottom: 12px;">
+          <span class="section-eyebrow">Partner Inclusions</span>
+          <h3 class="section-title">What Institutions & Students Receive</h3>
+          <p class="section-subtitle">Comprehensive hardware, curriculum, and mentorship support.</p>
+        </div>
         <ul class="checklist">
           ${(service.benefits || []).map(b => `
             <li class="checklist-item">
@@ -1262,11 +1322,12 @@ async function renderServiceDetailView(slug) {
 
       <!-- DEDICATED SUB-SERVICES LIST (Correction 1 Required) -->
       ${service.subServices && service.subServices.length > 0 ? `
-        <div class="section-header" style="margin-top: 32px;">
+        <div class="section-header" style="margin-top: 32px; margin-bottom: 8px;">
           <span class="section-eyebrow">Modular Offerings</span>
           <h2 class="section-title">Specialized Sub-Services (${service.subServices.length})</h2>
           <p class="section-subtitle">Explore syllabi, modules, and dedicated project tracks.</p>
         </div>
+        <p class="section-intro-text">Each modular track targets specific grade bands and technical proficiencies, enabling institutions to tailor learning to their academic calendar.</p>
 
         <div class="cards-grid">
           ${service.subServices.map(sub => `
@@ -1334,13 +1395,21 @@ async function renderSubServiceDetailView(serviceSlug, subServiceSlug) {
       </div>
 
       <div class="detail-card">
-        <h3 class="detail-card-title">📖 In-Depth Overview</h3>
-        <p style="font-size: 14px; color: #334155; line-height: 1.6;">${subService.detailedOverview || subService.description}</p>
+        <div class="section-header" style="margin-bottom: 8px;">
+          <span class="section-eyebrow">Module Focus</span>
+          <h3 class="section-title">In-Depth Overview</h3>
+          <p class="section-subtitle">Detailed roadmap and technical learning objectives.</p>
+        </div>
+        <p class="section-intro-text" style="margin-bottom: 0;">${subService.detailedOverview || subService.description}</p>
       </div>
 
       ${subService.modules && subService.modules.length > 0 ? `
         <div class="detail-card">
-          <h3 class="detail-card-title">🛠️ Included Modules & Practical Activities</h3>
+          <div class="section-header" style="margin-bottom: 12px;">
+            <span class="section-eyebrow">Hands-on Syllabus</span>
+            <h3 class="section-title">Included Activities & Lab Projects</h3>
+            <p class="section-subtitle">Step-by-step engineering exercises from assembly to testing.</p>
+          </div>
           <ul class="checklist">
             ${subService.modules.map(mod => `
               <li class="checklist-item">
@@ -1413,6 +1482,14 @@ async function renderGalleryView() {
         objectPosition: 'center 40%'
       })}
 
+      <!-- SECTION INTRO FOR GALLERY -->
+      <div class="section-header" style="margin-top: 6px; margin-bottom: 8px;">
+        <span class="section-eyebrow">Experiential Highlights</span>
+        <h2 class="section-title">Moments of Innovation</h2>
+        <p class="section-subtitle">Real classroom moments, lab builds, and championship arenas.</p>
+      </div>
+      <p class="section-intro-text">Explore our students and partner schools designing circuits, coding microcontrollers, assembling rovers, and competing in high-energy robotics arenas across India.</p>
+
       <div class="filter-pills" id="gallery-filter-pills" style="margin-top: 4px;">
         ${categories.map(cat => `
           <button class="filter-pill ${cat === activeGalleryCategory ? 'active' : ''}" data-cat="${cat}">
@@ -1468,6 +1545,14 @@ async function renderContactView() {
         imageUrl: '/assets/contact_hero.jpg',
         objectPosition: 'center 40%'
       })}
+
+      <!-- SECTION INTRO FOR CONTACT -->
+      <div class="section-header" style="margin-top: 6px; margin-bottom: 8px;">
+        <span class="section-eyebrow">Connect With Our Mentors</span>
+        <h2 class="section-title">Let's Build the Future Together</h2>
+        <p class="section-subtitle">Whether you are a parent, student, or school administrator.</p>
+      </div>
+      <p class="section-intro-text">Our team is here to assist with course admissions, school lab setups, teacher training workshops, and curriculum inquiries. Reach out directly or fill out the enquiry form below.</p>
 
       <div class="contact-grid" style="margin-top: 4px;">
         <!-- UNIFIED ENQUIRY CARD (Screen 8) -->
