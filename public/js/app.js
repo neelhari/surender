@@ -538,47 +538,6 @@ async function renderHomeView() {
         </div>
       </section>
 
-      <!-- PARTNER SCHOOLS SPOTLIGHT CAROUSEL (Image 2 Round Logos + Image 3 Spotlight Animation) -->
-      <section class="partner-schools-spotlight-section">
-        <div class="partner-schools-header">
-          <span class="schools-kicker">Trusted by 20+ Schools</span>
-          <h3 class="schools-title">Partner Institutions Across Telangana</h3>
-        </div>
-
-        <div class="schools-spotlight-carousel" id="schoolsSpotlightCarousel">
-          <div class="school-spotlight-item active" data-index="0" data-name="Samskar The Life School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_1.png" alt="Samskar The Life School" loading="lazy">
-            </div>
-          </div>
-          <div class="school-spotlight-item" data-index="1" data-name="Arka International School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_2.png" alt="Arka International School" loading="lazy">
-            </div>
-          </div>
-          <div class="school-spotlight-item" data-index="2" data-name="Sri Veda The Universe School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_3.png" alt="Sri Veda The Universe School" loading="lazy">
-            </div>
-          </div>
-          <div class="school-spotlight-item" data-index="3" data-name="Mount Carmel Global School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_4.png" alt="Mount Carmel Global School" loading="lazy">
-            </div>
-          </div>
-          <div class="school-spotlight-item" data-index="4" data-name="Samartha School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_5.png" alt="Samartha School" loading="lazy">
-            </div>
-          </div>
-        </div>
-
-        <!-- Dynamic active school label -->
-        <div class="school-active-indicator" id="schoolActiveName">
-          <span class="school-active-badge">✓ Samskar The Life School</span>
-        </div>
-      </section>
-
       <!-- POPULAR COURSES SECTION (Direct Access - No Quote Banner) -->
       <section class="popular-courses-tinted-wrap">
         <div class="section-header" style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 16px;">
@@ -602,11 +561,8 @@ async function renderHomeView() {
         `}
       </section>
 
-      <!-- EXACT REFERENCE 2x2 STATISTIC CARDS (No Heading, No Badge, Clean White on Soft Mint/Teal) -->
+      <!-- 2x2 STATISTIC CARDS (Free-standing, unboxed, counting animation) -->
       <section class="edueme-stats-section">
-        <div class="edueme-stats-shape-1"></div>
-        <div class="edueme-stats-shape-2"></div>
-
         <div class="edueme-stats-grid">
           <!-- Card 1: 75+ Students Enrolled -->
           <div class="edueme-stat-card">
@@ -829,7 +785,6 @@ async function renderHomeView() {
     </div>
   `;
 
-  initSchoolsSpotlight();
   initStatsCounter();
 }
 
