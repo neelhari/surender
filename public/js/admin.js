@@ -339,6 +339,45 @@ document.getElementById('leads-filter-status')?.addEventListener('change', () =>
 document.getElementById('leads-filter-source')?.addEventListener('change', () => loadLeads());
 
 // -------------------------------------------------------------
+// IMAGE UPLOAD HELPER FOR ADMIN
+// -------------------------------------------------------------
+async function handleAdminImageUpload(fileInput, textInputId, previewImgId) {
+  const file = fileInput.files && fileInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64 = e.target.result;
+    try {
+      showAdminToast('Uploading image...');
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentToken}`
+        },
+        body: JSON.stringify({ imageBase64: base64, filename: file.name })
+      });
+      const data = await res.json();
+      if (data.url) {
+        document.getElementById(textInputId).value = data.url;
+        const preview = document.getElementById(previewImgId);
+        if (preview) {
+          preview.src = data.url;
+          preview.style.display = 'block';
+        }
+        showAdminToast('Image uploaded successfully!');
+      } else {
+        alert(data.error || 'Image upload failed');
+      }
+    } catch (err) {
+      alert('Error uploading image');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// -------------------------------------------------------------
 // 2. COURSES CRUD (Screen 15)
 // -------------------------------------------------------------
 async function loadCourses() {
@@ -355,8 +394,8 @@ function renderCoursesTable() {
 
   tbody.innerHTML = adminState.courses.map(c => `
     <tr>
-      <td><img src="${c.image}" style="width: 50px; height: 38px; border-radius: 4px; object-fit: cover;"></td>
-      <td><strong>${c.title}</strong><div style="font-size: 11px; color: #64748b;">${c.slug}</div></td>
+      <td><img src="${c.image || '/assets/crop_course_ref.jpg'}" style="width: 50px; height: 38px; border-radius: 4px; object-fit: cover;" onerror="this.src='/assets/crop_course_ref.jpg'"></td>
+      <td><strong>${c.title}</strong><div style="font-size: 11px; color: #64748b;">${c.slug} (Order: ${c.displayOrder || 1})</div></td>
       <td><span class="meta-pill">${c.category}</span></td>
       <td>${c.duration} <span style="color: #94a3b8;">(${c.level})</span></td>
       <td>
@@ -375,7 +414,17 @@ function openAddCourseModal() {
     <form id="modal-course-form">
       <div class="form-group">
         <label class="form-label">Course Title *</label>
-        <input type="text" id="c-title" class="form-control" required placeholder="e.g. Robotics with Embedded C">
+        <input type="text" id="c-title" class="form-control" required placeholder="e.g. Robotics with Embedded C" oninput="if(!document.getElementById('c-slug').dataset.touched) document.getElementById('c-slug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')">
+      </div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">URL Slug *</label>
+          <input type="text" id="c-slug" class="form-control" placeholder="robotics-with-embedded-c" oninput="this.dataset.touched = 'true'">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Display Order</label>
+          <input type="number" id="c-order" class="form-control" value="${adminState.courses.length + 1}" min="1">
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Category *</label>
@@ -389,7 +438,7 @@ function openAddCourseModal() {
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         <div class="form-group">
           <label class="form-label">Duration</label>
-          <input type="text" id="c-duration" class="form-control" value="3 - 6 Months">
+          <input type="text" id="c-duration" class="form-control" value="3 – 6 Months">
         </div>
         <div class="form-group">
           <label class="form-label">Level</label>
@@ -402,7 +451,7 @@ function openAddCourseModal() {
       </div>
       <div class="form-group">
         <label class="form-label">Short Summary</label>
-        <input type="text" id="c-short" class="form-control" placeholder="Brief description...">
+        <input type="text" id="c-short" class="form-control" placeholder="Build, program, and innovate with industry-leading microcontrollers...">
       </div>
       <div class="form-group">
         <label class="form-label">Full Description</label>
@@ -410,17 +459,24 @@ function openAddCourseModal() {
       </div>
       <div class="form-group">
         <label class="form-label">Curriculum Highlights (one per line)</label>
-        <textarea id="c-highlights" class="form-control" rows="4" placeholder="Embedded C Syntax\nSensors & Actuators\nAutonomous Obstacle Robot"></textarea>
+        <textarea id="c-highlights" class="form-control" rows="3" placeholder="Embedded C Syntax\nSensors & Actuators\nAutonomous Obstacle Robot"></textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">Image URL / Asset Path</label>
-        <input type="text" id="c-image" class="form-control" value="/assets/brochure/img_7.jpg">
+        <label class="form-label">Course Image (Upload or specify Asset Path / URL)</label>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="c-image" class="form-control" value="/assets/crop_course_ref.jpg" onchange="document.getElementById('c-img-prev').src = this.value">
+          <input type="file" id="c-image-file" accept="image/*" style="display: none;" onchange="handleAdminImageUpload(this, 'c-image', 'c-img-prev')">
+          <button type="button" class="action-btn action-btn-call" style="white-space: nowrap;" onclick="document.getElementById('c-image-file').click()">📁 Upload</button>
+        </div>
+        <div style="margin-top: 8px;">
+          <img id="c-img-prev" src="/assets/crop_course_ref.jpg" style="height: 70px; border-radius: 6px; object-fit: cover; border: 1px solid #e2e8f0;" onerror="this.src='/assets/crop_course_ref.jpg'">
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Status</label>
         <select id="c-status" class="form-control">
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
+          <option value="active">Active (Visible on public website)</option>
+          <option value="inactive">Inactive (Hidden from public website)</option>
         </select>
       </div>
     </form>
@@ -442,6 +498,16 @@ function openEditCourseModal(id) {
       <div class="form-group">
         <label class="form-label">Course Title *</label>
         <input type="text" id="c-title" class="form-control" value="${c.title}" required>
+      </div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">URL Slug *</label>
+          <input type="text" id="c-slug" class="form-control" value="${c.slug || ''}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Display Order</label>
+          <input type="number" id="c-order" class="form-control" value="${c.displayOrder || 1}" min="1">
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Category *</label>
@@ -476,17 +542,24 @@ function openEditCourseModal(id) {
       </div>
       <div class="form-group">
         <label class="form-label">Curriculum Highlights (one per line)</label>
-        <textarea id="c-highlights" class="form-control" rows="4">${(c.highlights || []).join('\n')}</textarea>
+        <textarea id="c-highlights" class="form-control" rows="3">${(c.highlights || []).join('\n')}</textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">Image URL / Asset Path</label>
-        <input type="text" id="c-image" class="form-control" value="${c.image}">
+        <label class="form-label">Course Image (Upload or specify Asset Path / URL)</label>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="c-image" class="form-control" value="${c.image || '/assets/crop_course_ref.jpg'}" onchange="document.getElementById('c-img-prev').src = this.value">
+          <input type="file" id="c-image-file" accept="image/*" style="display: none;" onchange="handleAdminImageUpload(this, 'c-image', 'c-img-prev')">
+          <button type="button" class="action-btn action-btn-call" style="white-space: nowrap;" onclick="document.getElementById('c-image-file').click()">📁 Upload</button>
+        </div>
+        <div style="margin-top: 8px;">
+          <img id="c-img-prev" src="${c.image || '/assets/crop_course_ref.jpg'}" style="height: 70px; border-radius: 6px; object-fit: cover; border: 1px solid #e2e8f0;" onerror="this.src='/assets/crop_course_ref.jpg'">
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Status</label>
         <select id="c-status" class="form-control">
-          <option value="active" ${c.status === 'active' ? 'selected' : ''}>Active</option>
-          <option value="inactive" ${c.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+          <option value="active" ${c.status === 'active' ? 'selected' : ''}>Active (Visible on public website)</option>
+          <option value="inactive" ${c.status === 'inactive' ? 'selected' : ''}>Inactive (Hidden from public website)</option>
         </select>
       </div>
     </form>
@@ -501,6 +574,8 @@ function openEditCourseModal(id) {
 async function saveCourse(editId) {
   const payload = {
     title: document.getElementById('c-title').value.trim(),
+    slug: document.getElementById('c-slug').value.trim(),
+    displayOrder: parseInt(document.getElementById('c-order').value, 10) || 1,
     category: document.getElementById('c-category').value,
     duration: document.getElementById('c-duration').value.trim(),
     level: document.getElementById('c-level').value.trim(),
@@ -561,8 +636,13 @@ function renderServicesTable() {
   tbody.innerHTML = adminState.services.map(s => `
     <tr>
       <td>
-        <strong>${s.title}</strong>
-        <div style="font-size: 11px; color: #64748b;">${s.slug}</div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <img src="${s.image || '/assets/crop_service_ref.jpg'}" style="width: 44px; height: 34px; border-radius: 4px; object-fit: cover;" onerror="this.src='/assets/crop_service_ref.jpg'">
+          <div>
+            <strong>${s.title}</strong>
+            <div style="font-size: 11px; color: #64748b;">${s.slug} (Order: ${s.displayOrder || 1})</div>
+          </div>
+        </div>
       </td>
       <td>${s.duration}</td>
       <td>
@@ -585,15 +665,25 @@ function openAddServiceModal() {
     <form id="modal-service-form">
       <div class="form-group">
         <label class="form-label">Service Title *</label>
-        <input type="text" id="s-title" class="form-control" required placeholder="e.g. Prayogshala (Tech Labs)">
+        <input type="text" id="s-title" class="form-control" required placeholder="e.g. Workshops" oninput="if(!document.getElementById('s-slug').dataset.touched) document.getElementById('s-slug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')">
+      </div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">URL Slug *</label>
+          <input type="text" id="s-slug" class="form-control" placeholder="workshops" oninput="this.dataset.touched = 'true'">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Display Order</label>
+          <input type="number" id="s-order" class="form-control" value="${adminState.services.length + 1}" min="1">
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Duration</label>
-        <input type="text" id="s-duration" class="form-control" value="1 week - 2 weeks">
+        <input type="text" id="s-duration" class="form-control" value="1 Week – 2 Weeks">
       </div>
       <div class="form-group">
         <label class="form-label">Short Summary</label>
-        <input type="text" id="s-short" class="form-control">
+        <input type="text" id="s-short" class="form-control" placeholder="Hands-on technology workshops introducing electronics...">
       </div>
       <div class="form-group">
         <label class="form-label">Full Description</label>
@@ -601,17 +691,24 @@ function openAddServiceModal() {
       </div>
       <div class="form-group">
         <label class="form-label">What School/Student Receives (one benefit per line)</label>
-        <textarea id="s-benefits" class="form-control" rows="4" placeholder="Comprehensive Curriculum\nHardware Kits & Software\nCertifications"></textarea>
+        <textarea id="s-benefits" class="form-control" rows="3" placeholder="Comprehensive Curriculum\nHardware Kits & Software\nCertifications"></textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">Image URL / Asset Path</label>
-        <input type="text" id="s-image" class="form-control" value="/assets/brochure/img_8.jpg">
+        <label class="form-label">Service Image (Upload or specify Asset Path / URL)</label>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="s-image" class="form-control" value="/assets/crop_service_ref.jpg" onchange="document.getElementById('s-img-prev').src = this.value">
+          <input type="file" id="s-image-file" accept="image/*" style="display: none;" onchange="handleAdminImageUpload(this, 's-image', 's-img-prev')">
+          <button type="button" class="action-btn action-btn-call" style="white-space: nowrap;" onclick="document.getElementById('s-image-file').click()">📁 Upload</button>
+        </div>
+        <div style="margin-top: 8px;">
+          <img id="s-img-prev" src="/assets/crop_service_ref.jpg" style="height: 70px; border-radius: 6px; object-fit: cover; border: 1px solid #e2e8f0;" onerror="this.src='/assets/crop_service_ref.jpg'">
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Status</label>
         <select id="s-status" class="form-control">
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
+          <option value="active">Active (Visible on public website)</option>
+          <option value="inactive">Inactive (Hidden from public website)</option>
         </select>
       </div>
     </form>
@@ -633,6 +730,16 @@ function openEditServiceModal(id) {
         <label class="form-label">Service Title *</label>
         <input type="text" id="s-title" class="form-control" value="${s.title}" required>
       </div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">URL Slug *</label>
+          <input type="text" id="s-slug" class="form-control" value="${s.slug || ''}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Display Order</label>
+          <input type="number" id="s-order" class="form-control" value="${s.displayOrder || 1}" min="1">
+        </div>
+      </div>
       <div class="form-group">
         <label class="form-label">Duration</label>
         <input type="text" id="s-duration" class="form-control" value="${s.duration}">
@@ -647,17 +754,24 @@ function openEditServiceModal(id) {
       </div>
       <div class="form-group">
         <label class="form-label">What School/Student Receives (one per line)</label>
-        <textarea id="s-benefits" class="form-control" rows="4">${(s.benefits || []).join('\n')}</textarea>
+        <textarea id="s-benefits" class="form-control" rows="3">${(s.benefits || []).join('\n')}</textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">Image URL / Asset Path</label>
-        <input type="text" id="s-image" class="form-control" value="${s.image}">
+        <label class="form-label">Service Image (Upload or specify Asset Path / URL)</label>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="s-image" class="form-control" value="${s.image || '/assets/crop_service_ref.jpg'}" onchange="document.getElementById('s-img-prev').src = this.value">
+          <input type="file" id="s-image-file" accept="image/*" style="display: none;" onchange="handleAdminImageUpload(this, 's-image', 's-img-prev')">
+          <button type="button" class="action-btn action-btn-call" style="white-space: nowrap;" onclick="document.getElementById('s-image-file').click()">📁 Upload</button>
+        </div>
+        <div style="margin-top: 8px;">
+          <img id="s-img-prev" src="${s.image || '/assets/crop_service_ref.jpg'}" style="height: 70px; border-radius: 6px; object-fit: cover; border: 1px solid #e2e8f0;" onerror="this.src='/assets/crop_service_ref.jpg'">
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Status</label>
         <select id="s-status" class="form-control">
-          <option value="active" ${s.status === 'active' ? 'selected' : ''}>Active</option>
-          <option value="inactive" ${s.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+          <option value="active" ${s.status === 'active' ? 'selected' : ''}>Active (Visible on public website)</option>
+          <option value="inactive" ${s.status === 'inactive' ? 'selected' : ''}>Inactive (Hidden from public website)</option>
         </select>
       </div>
     </form>
@@ -672,6 +786,8 @@ function openEditServiceModal(id) {
 async function saveService(editId) {
   const payload = {
     title: document.getElementById('s-title').value.trim(),
+    slug: document.getElementById('s-slug').value.trim(),
+    displayOrder: parseInt(document.getElementById('s-order').value, 10) || 1,
     duration: document.getElementById('s-duration').value.trim(),
     shortDescription: document.getElementById('s-short').value.trim(),
     description: document.getElementById('s-desc').value.trim(),

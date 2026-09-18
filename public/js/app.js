@@ -27,6 +27,215 @@ function showToast(message, duration = 3500) {
 }
 
 // --------------------------------------------------------------------------
+// PERSISTENT BOOKMARK SYSTEM
+// --------------------------------------------------------------------------
+let savedBookmarks = new Set();
+try {
+  const stored = localStorage.getItem('edueme_saved_items');
+  if (stored) savedBookmarks = new Set(JSON.parse(stored));
+} catch (e) {}
+
+function toggleCardBookmark(event, id, type, title) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  const key = `${type}:${id}`;
+  const btn = event?.currentTarget;
+  if (savedBookmarks.has(key)) {
+    savedBookmarks.delete(key);
+    if (btn) {
+      btn.classList.remove('saved');
+      const svg = btn.querySelector('svg');
+      if (svg) svg.setAttribute('fill', 'none');
+    }
+    showToast(`Removed "${title}" from saved items`);
+  } else {
+    savedBookmarks.add(key);
+    if (btn) {
+      btn.classList.add('saved');
+      const svg = btn.querySelector('svg');
+      if (svg) svg.setAttribute('fill', 'currentColor');
+    }
+    showToast(`Saved "${title}" to your reading list!`);
+  }
+  try {
+    localStorage.setItem('edueme_saved_items', JSON.stringify(Array.from(savedBookmarks)));
+  } catch (e) {}
+}
+
+// --------------------------------------------------------------------------
+// REUSABLE PREMIUM CARD RENDERERS (Exact Reference Match: 60% Image / 40% Content)
+// --------------------------------------------------------------------------
+function renderCourseCard(course) {
+  const isSaved = savedBookmarks.has(`course:${course.id}`);
+  const isRefImg = course.image && (course.image.includes('crop_course_ref') || course.image.includes('course_robotics_ref'));
+  const fallbackImg = '/assets/crop_course_ref.jpg';
+  const imgUrl = course.image || fallbackImg;
+  const safeTitle = (course.title || 'Course').replace(/'/g, "\\'");
+
+  return `
+    <article class="edueme-card course-card-item" data-id="${course.id}" data-category="${course.category || ''}">
+      <!-- Dominant 60% Image Section -->
+      <div class="edueme-card-media-wrap">
+        <img src="${imgUrl}" alt="${course.title}" class="edueme-card-img" loading="lazy" onerror="this.onerror=null; this.src='${fallbackImg}';">
+        <div class="edueme-card-scrim"></div>
+        
+        ${!isRefImg ? `
+          <div class="edueme-card-overlay-top">
+            <div class="edueme-course-kicker">
+              <div class="kicker-accent-bar"></div>
+              <div class="kicker-content">
+                <span class="kicker-type">COURSE</span>
+                <span class="kicker-heading">${course.category || 'Tech'}</span>
+              </div>
+            </div>
+            <div class="edueme-course-keywords">
+              <span>Build</span>
+              <span>Program</span>
+              <span>Innovate</span>
+            </div>
+          </div>
+          <div class="edueme-card-overlay-bottom">
+            <span class="edueme-script-tag">Curiosity to Creation</span>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- Clean 40% Content Section -->
+      <div class="edueme-card-body">
+        <h3 class="edueme-card-title">${course.title}</h3>
+        <p class="edueme-card-desc">${course.shortDescription || course.description || ''}</p>
+        
+        <!-- 3-Column Metadata Row (Icons, Values, Labels) -->
+        <div class="edueme-meta-grid meta-grid-3">
+          <div class="edueme-meta-col">
+            <div class="edueme-meta-icon-wrap icon-blue">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="edueme-meta-data">
+              <span class="edueme-meta-val" title="${course.duration || '3 – 6 Months'}">${course.duration || '3 – 6 Months'}</span>
+              <span class="edueme-meta-lbl">Duration</span>
+            </div>
+          </div>
+
+          <div class="edueme-meta-col">
+            <div class="edueme-meta-icon-wrap icon-green">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="edueme-meta-data">
+              <span class="edueme-meta-val" title="${course.level || 'Beginner to Advanced'}">${course.level || 'Beginner to Advanced'}</span>
+              <span class="edueme-meta-lbl">Level</span>
+            </div>
+          </div>
+
+          <div class="edueme-meta-col">
+            <div class="edueme-meta-icon-wrap icon-purple">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div class="edueme-meta-data">
+              <span class="edueme-meta-val" title="${course.mode || 'Offline / Online'}">${course.mode || 'Offline / Online'}</span>
+              <span class="edueme-meta-lbl">Mode</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Row: View Course CTA + Bookmark -->
+        <div class="edueme-card-actions">
+          <a href="/courses/${course.slug}" class="edueme-action-btn btn-course" onclick="navigate(event, '/courses/${course.slug}')">
+            <span>View Course</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <button type="button" class="edueme-bookmark-btn bookmark-course ${isSaved ? 'saved' : ''}" onclick="toggleCardBookmark(event, '${course.id}', 'course', '${safeTitle}')" aria-label="Save Course" title="Save Course">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="${isSaved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderServiceCard(service) {
+  const isSaved = savedBookmarks.has(`service:${service.id}`);
+  const isRefImg = service.image && (service.image.includes('crop_service_ref') || service.image.includes('srv_workshops_ref'));
+  const fallbackImg = '/assets/crop_service_ref.jpg';
+  const imgUrl = service.image || fallbackImg;
+  const safeTitle = (service.title || 'Program').replace(/'/g, "\\'");
+  const subCount = service.subServices ? service.subServices.length : 0;
+
+  return `
+    <article class="edueme-card service-card-item" data-id="${service.id}">
+      <!-- Dominant 60% Image Section -->
+      <div class="edueme-card-media-wrap">
+        <img src="${imgUrl}" alt="${service.title}" class="edueme-card-img" loading="lazy" onerror="this.onerror=null; this.src='${fallbackImg}';">
+        <div class="edueme-card-scrim"></div>
+        
+        ${!isRefImg ? `
+          <div class="edueme-card-overlay-top">
+            <div class="edueme-service-kicker">
+              <div class="service-kicker-header">
+                <span class="service-dash">—</span>
+                <span class="service-kicker-type">SERVICE</span>
+              </div>
+              <span class="service-kicker-heading">${service.title}</span>
+              <span class="service-kicker-tagline">Hands-on Learning for Real-World Impact</span>
+            </div>
+          </div>
+          <div class="edueme-card-overlay-top-right">
+            <div class="service-stamp-words">
+              <span>LEARN</span>
+              <span>EXPLORE</span>
+              <span>SOLVE</span>
+              <span>TOGETHER</span>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- Clean 40% Content Section -->
+      <div class="edueme-card-body">
+        <h3 class="edueme-card-title">${service.title}</h3>
+        <p class="edueme-card-desc">${service.shortDescription || service.description || ''}</p>
+        
+        <!-- 2-Column Metadata Row (Dynamic sub-services count!) -->
+        <div class="edueme-meta-grid meta-grid-2">
+          <div class="edueme-meta-col service-meta-col">
+            <div class="service-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="edueme-meta-data">
+              <span class="edueme-meta-val" title="${service.duration || '1 Week – 2 Weeks'}">${service.duration || '1 Week – 2 Weeks'}</span>
+              <span class="edueme-meta-lbl">Typical Duration</span>
+            </div>
+          </div>
+
+          <div class="edueme-meta-col service-meta-col">
+            <div class="service-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="edueme-meta-data">
+              <span class="edueme-meta-val">${subCount} Sub-Services</span>
+              <span class="edueme-meta-lbl">Programs Available</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Row: Explore Program CTA + Bookmark -->
+        <div class="edueme-card-actions">
+          <a href="/services/${service.slug}" class="edueme-action-btn btn-service" onclick="navigate(event, '/services/${service.slug}')">
+            <span>Explore Program</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <button type="button" class="edueme-bookmark-btn bookmark-service ${isSaved ? 'saved' : ''}" onclick="toggleCardBookmark(event, '${service.id}', 'service', '${safeTitle}')" aria-label="Save Program" title="Save Program">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="${isSaved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+// --------------------------------------------------------------------------
 // LIGHTBOX VIEWER
 // --------------------------------------------------------------------------
 function openLightbox(imgUrl, caption) {
@@ -336,29 +545,7 @@ async function renderHomeView() {
           </div>
         ` : `
           <div class="cards-grid">
-            ${popularCourses.map(course => `
-              <div class="item-card" style="box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
-                <div class="card-img-wrap">
-                  <img src="${course.image || '/assets/hero_robotics.jpg'}" alt="${course.title}" class="card-img" loading="lazy">
-                  <span class="card-category-badge">${course.category}</span>
-                </div>
-                <div class="card-body">
-                  <div class="batch-date-badge">
-                    <span>📅</span> Next Batch Enrolling
-                  </div>
-                  <div class="card-meta-row">
-                    <span class="meta-pill">⏱️ ${course.duration}</span>
-                    <span class="meta-pill">📊 ${course.level}</span>
-                  </div>
-                  <h3 class="card-title">${course.title}</h3>
-                  <p class="card-desc">${course.shortDescription || course.description}</p>
-                  <a href="/courses/${course.slug}" class="card-btn" onclick="navigate(event, '/courses/${course.slug}')">
-                    <span>View Details</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </a>
-                </div>
-              </div>
-            `).join('')}
+            ${popularCourses.map(renderCourseCard).join('')}
           </div>
         `}
       </section>
@@ -455,25 +642,7 @@ async function renderHomeView() {
         </div>
 
         <div class="cards-grid">
-          ${featuredServices.map(srv => `
-            <div class="item-card">
-              <div class="card-img-wrap">
-                <img src="${srv.image || '/assets/brochure/img_8.jpg'}" alt="${srv.title}" class="card-img" loading="lazy">
-                <span class="card-category-badge">${srv.subServices ? srv.subServices.length + ' Sub-Services' : 'Program'}</span>
-              </div>
-              <div class="card-body">
-                <div class="card-meta-row">
-                  <span class="meta-pill">⏱️ ${srv.duration}</span>
-                </div>
-                <h3 class="card-title">${srv.title}</h3>
-                <p class="card-desc">${srv.shortDescription}</p>
-                <a href="/services/${srv.slug}" class="card-btn" onclick="navigate(event, '/services/${srv.slug}')">
-                  <span>Explore Program</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>
-          `).join('')}
+          ${featuredServices.map(renderServiceCard).join('')}
         </div>
       </section>
 
@@ -709,26 +878,7 @@ async function renderCoursesView() {
       return;
     }
 
-    listContainer.innerHTML = filtered.map(course => `
-      <div class="item-card">
-        <div class="card-img-wrap">
-          <img src="${course.image || '/assets/brochure/img_7.jpg'}" alt="${course.title}" class="card-img" loading="lazy">
-          <span class="card-category-badge">${course.category}</span>
-        </div>
-        <div class="card-body">
-          <div class="card-meta-row">
-            <span class="meta-pill">⏱️ ${course.duration}</span>
-            <span class="meta-pill">📊 ${course.level}</span>
-          </div>
-          <h3 class="card-title">${course.title}</h3>
-          <p class="card-desc">${course.shortDescription || course.description}</p>
-          <a href="/courses/${course.slug}" class="card-btn" onclick="navigate(event, '/courses/${course.slug}')">
-            <span>View Details</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-    `).join('');
+    listContainer.innerHTML = filtered.map(renderCourseCard).join('');
   }
 
   root.innerHTML = `
@@ -886,25 +1036,7 @@ async function renderServicesView() {
         </div>
       ` : `
         <div class="cards-grid">
-          ${services.map(srv => `
-            <div class="item-card">
-              <div class="card-img-wrap">
-                <img src="${srv.image || '/assets/brochure/img_8.jpg'}" alt="${srv.title}" class="card-img" loading="lazy">
-                <span class="card-category-badge">${srv.subServices?.length || 0} Sub-Services</span>
-              </div>
-              <div class="card-body">
-                <div class="card-meta-row">
-                  <span class="meta-pill">⏱️ ${srv.duration}</span>
-                </div>
-                <h3 class="card-title">${srv.title}</h3>
-                <p class="card-desc">${srv.shortDescription}</p>
-                <a href="/services/${srv.slug}" class="card-btn" onclick="navigate(event, '/services/${srv.slug}')">
-                  <span>View Details & Sub-Services</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>
-          `).join('')}
+          ${services.map(renderServiceCard).join('')}
         </div>
       `}
     </div>

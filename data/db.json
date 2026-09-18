@@ -2,15 +2,15 @@
   "courses": [
     {
       "id": "course-1",
-      "title": "Robotics with Embedded 'C'",
+      "title": "Robotics with Embedded C",
       "slug": "robotics-with-embedded-c",
       "category": "Robotics",
       "shortDescription": "Build, program, and innovate with industry-leading microcontrollers and component-based robotics.",
       "description": "Learn to design, build, and program autonomous robots using Embedded C. Covers sensors, actuators, control systems, and real-world projects starting from component level.",
-      "duration": "3 - 6 Months",
+      "duration": "3 – 6 Months",
       "level": "Beginner to Advanced",
       "mode": "Offline / Online",
-      "image": "/assets/hero_robotics.jpg",
+      "image": "/assets/crop_course_ref.jpg",
       "highlights": [
         "Embedded C Programming & Syntax",
         "Arduino & Microcontroller Architecture",
@@ -144,9 +144,9 @@
       "id": "srv-workshops",
       "title": "Workshops",
       "slug": "workshops",
-      "shortDescription": "Hands-on technology workshops introducing electronics, microcontrollers, and coding to schools and colleges.",
+      "shortDescription": "Hands-on technology workshops introducing electronics, robotics, and coding to schools and colleges.",
       "description": "The main agenda of any workshop is to introduce a new skill or tech to students and make them fascinated, driving them towards having a long journey in mastering the skill. In this short journey students will get introduced to electronic components and how to command them with basic coding skills.",
-      "duration": "1 week - 2 weeks (2 days a week)",
+      "duration": "1 Week – 2 Weeks",
       "benefits": [
         "Comprehensive Curriculum",
         "Hardware Kits & Software Provided",
@@ -156,7 +156,7 @@
         "Tech Summits & Intra-School Competitions",
         "Full support in all business days/hours"
       ],
-      "image": "/assets/srv_workshop.jpg",
+      "image": "/assets/crop_service_ref.jpg",
       "status": "active",
       "displayOrder": 1,
       "createdAt": "2026-09-18T08:17:25.955Z"
@@ -629,6 +629,22 @@
   ],
   "leads": [
     {
+      "id": "lead-1789759758824",
+      "fullName": "Siddharth Rao",
+      "phone": "+91 98765 12345",
+      "email": "siddharth@example.com",
+      "sourceType": "course",
+      "courseId": "course-1",
+      "courseName": "Robotics with Embedded C",
+      "serviceId": null,
+      "serviceName": null,
+      "subServiceId": null,
+      "subServiceName": null,
+      "message": "Interested in offline weekend batch",
+      "status": "new",
+      "createdAt": "2026-09-18T19:29:18.824Z"
+    },
+    {
       "id": "lead-1789723057599",
       "fullName": "Vikramaditya Test",
       "phone": "+91 98765 43210",
@@ -759,6 +775,17 @@
     }
   ],
   "notifications": [
+    {
+      "id": "notif-1789759758962",
+      "leadId": "lead-1789759758824",
+      "timestamp": "2026-09-18T19:29:18.962Z",
+      "whatsAppRecipient": "+919059508050",
+      "whatsAppContent": "*NEW LEAD RECEIVED — EDUEME RESEARCH LABS*\n\n👤 *Name:* Siddharth Rao\n📞 *Phone:* +91 98765 12345\n✉️ *Email:* siddharth@example.com\n🎯 *Interest:* COURSE - Robotics with Embedded C\n💬 *Message:* Interested in offline weekend batch\n📅 *Time:* 19/9/2026, 12:59:18 am\n\nView in Admin Panel: http://localhost:3005/admin",
+      "whatsAppStatus": "Dispatched",
+      "emailRecipient": "info@eduemeresearchlabs.com",
+      "emailSubject": "[New Lead] Siddharth Rao — Robotics with Embedded C",
+      "emailStatus": "Dispatched"
+    },
     {
       "id": "notif-1789723057785",
       "leadId": "lead-1789723057599",
