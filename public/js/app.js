@@ -277,31 +277,55 @@ async function renderHomeView() {
         </div>
       </section>
 
-      <!-- PARTNER SCHOOLS SOCIAL PROOF STRIP (Immediate Credibility from Old Site) -->
-      <section class="partner-schools-strip">
-        <div class="partner-schools-title">Trusted by 20+ Leading Schools Across Telangana</div>
-        <div class="partner-schools-list">
-          <div class="partner-school-pill"><span class="icon">🏫</span> Mount Carmel Global School</div>
-          <div class="partner-school-pill"><span class="icon">🏫</span> Samskar Global School</div>
-          <div class="partner-school-pill"><span class="icon">🏫</span> Phoenix Greens School of Learning</div>
-          <div class="partner-school-pill"><span class="icon">🏫</span> Arka International School</div>
-          <div class="partner-school-pill"><span class="icon">🏫</span> Srivedha The Universal School</div>
+      <!-- PARTNER SCHOOLS SPOTLIGHT CAROUSEL (Image 2 Round Logos + Image 3 Spotlight Animation) -->
+      <section class="partner-schools-spotlight-section">
+        <div class="partner-schools-header">
+          <span class="schools-kicker">Trusted by 20+ Schools</span>
+          <h3 class="schools-title">Partner Institutions Across Telangana</h3>
+        </div>
+
+        <div class="schools-spotlight-carousel" id="schoolsSpotlightCarousel">
+          <div class="school-spotlight-item active" data-index="0" data-name="Samskar The Life School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_1.png" alt="Samskar The Life School" loading="lazy">
+            </div>
+          </div>
+          <div class="school-spotlight-item" data-index="1" data-name="Arka International School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_2.png" alt="Arka International School" loading="lazy">
+            </div>
+          </div>
+          <div class="school-spotlight-item" data-index="2" data-name="Sri Veda The Universe School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_3.png" alt="Sri Veda The Universe School" loading="lazy">
+            </div>
+          </div>
+          <div class="school-spotlight-item" data-index="3" data-name="Mount Carmel Global School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_4.png" alt="Mount Carmel Global School" loading="lazy">
+            </div>
+          </div>
+          <div class="school-spotlight-item" data-index="4" data-name="Samartha School">
+            <div class="school-logo-disc">
+              <img src="/assets/schools/school_5.png" alt="Samartha School" loading="lazy">
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic active school label -->
+        <div class="school-active-indicator" id="schoolActiveName">
+          <span class="school-active-badge">✓ Samskar The Life School</span>
         </div>
       </section>
 
-      <!-- POPULAR COURSES SECTION (Soft-Tinted Depth + Old Site Quote Banner) -->
+      <!-- POPULAR COURSES SECTION (Direct Access - No Quote Banner) -->
       <section class="popular-courses-tinted-wrap">
-        <div class="section-header" style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 8px;">
+        <div class="section-header" style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 16px;">
           <div>
             <span class="section-badge" style="background: #e0f2fe; color: #0369a1;">Development</span>
             <h2 class="section-title">Our Popular Courses</h2>
           </div>
           <a href="/courses" style="font-weight: 700; color: var(--accent-blue); font-size: 13px;" onclick="navigate(event, '/courses')">View All &rarr;</a>
-        </div>
-
-        <div class="courses-quote-banner">
-          &ldquo;Unlock your child's inner innovator with our empowering courses! We believe every child has the potential to create something amazing.&rdquo;
-          <div style="font-size: 11px; font-weight: 700; color: var(--primary-navy); margin-top: 4px; font-style: normal;">— Edueme Research Labs</div>
         </div>
 
         ${courses.length === 0 ? `
@@ -494,6 +518,8 @@ async function renderHomeView() {
       </section>
     </div>
   `;
+
+  initSchoolsSpotlight();
 }
 
 // --------------------------------------------------------------------------
@@ -1354,6 +1380,46 @@ async function renderContactView() {
       }
     });
   }
+}
+
+// --------------------------------------------------------------------------
+// SCHOOLS SPOTLIGHT CAROUSEL ANIMATION (Image 2 + Image 3 Reference)
+// --------------------------------------------------------------------------
+let schoolsSpotlightTimer = null;
+function initSchoolsSpotlight() {
+  if (schoolsSpotlightTimer) clearInterval(schoolsSpotlightTimer);
+  const items = document.querySelectorAll('.school-spotlight-item');
+  const label = document.getElementById('schoolActiveName');
+  if (!items || items.length === 0) return;
+
+  let currentIndex = 0;
+
+  function setSpotlight(idx) {
+    currentIndex = (idx + items.length) % items.length;
+    items.forEach((it, i) => {
+      if (i === currentIndex) {
+        it.classList.add('active');
+      } else {
+        it.classList.remove('active');
+      }
+    });
+    const activeItem = items[currentIndex];
+    const name = activeItem ? activeItem.getAttribute('data-name') : '';
+    if (label && name) {
+      label.innerHTML = `<span class="school-active-badge">✓ ${name}</span>`;
+    }
+  }
+
+  items.forEach((it, idx) => {
+    it.addEventListener('click', () => {
+      setSpotlight(idx);
+    });
+  });
+
+  // Automatically cycle spotlight smoothly
+  schoolsSpotlightTimer = setInterval(() => {
+    setSpotlight(currentIndex + 1);
+  }, 2600);
 }
 
 // --------------------------------------------------------------------------
