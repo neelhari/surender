@@ -683,12 +683,8 @@ async function renderHomeView() {
 
       <!-- FLOATING LAYERED TESTIMONIALS (Soft Light Blue Gradient + Mascot Animation) -->
       <section class="testimonials-mobile-section" id="testimonialsSection">
-        <!-- Floating Mascot Header Row (No text heading, cute floating mascot + endorsement pill) -->
+        <!-- Floating Mascot Header Row (Cute floating mascot animation) -->
         <div class="testimonials-mascot-row">
-          <div class="testimonials-mascot-badge">
-            <span class="testimonials-mascot-stars">★★★★★</span>
-            <span class="testimonials-mascot-text">Top School Endorsements</span>
-          </div>
           <img src="/assets/robot_nurtured.png" alt="Edueme Mascot" class="testimonials-floating-robot" loading="lazy">
         </div>
 
