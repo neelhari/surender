@@ -675,59 +675,70 @@ async function renderHomeView() {
         </div>
       </section>
 
-      <!-- PRINCIPAL TESTIMONIALS CAROUSEL (Real School Endorsements from Old Site) -->
-      <section class="testimonials-mobile-section">
-        <div class="section-header text-center">
-          <span class="section-eyebrow">Leader Commendations</span>
-          <h2 class="section-title">Success Testimonials</h2>
-          <p class="section-subtitle">Trusted by school leaders and educators across Telangana.</p>
+      <!-- FLOATING LAYERED TESTIMONIALS (Soft Light Blue Gradient + Mascot Animation) -->
+      <section class="testimonials-mobile-section" id="testimonialsSection">
+        <!-- Floating Mascot Header Row (No text heading, cute floating mascot + endorsement pill) -->
+        <div class="testimonials-mascot-row">
+          <div class="testimonials-mascot-badge">
+            <span class="testimonials-mascot-stars">★★★★★</span>
+            <span class="testimonials-mascot-text">Top School Endorsements</span>
+          </div>
+          <img src="/assets/robot_nurtured.png" alt="Edueme Mascot" class="testimonials-floating-robot" loading="lazy">
         </div>
 
-        <div class="testimonials-carousel-wrap">
+        <!-- Shorter, Compact Floating Layered Cards -->
+        <div class="testimonials-carousel-wrap" id="testimonialsCarousel">
           <div class="testimonial-card-item">
-            <div>
-              <div class="testimonial-stars">★★★★★</div>
-              <p class="testimonial-quote-text">&ldquo;Robotics instruction from Edueme Research Labs is exceptional. Excellent instructors make complex concepts simple. Students train with actual robots and circuitry.&rdquo;</p>
+            <div class="testimonial-card-header">
+              <span class="testimonial-stars">★★★★★</span>
+              <span class="testimonial-quote-icon">&ldquo;</span>
             </div>
+            <p class="testimonial-quote-text">&ldquo;Edueme’s robotics training is exceptional. Instructors make complex electronics simple with actual robots.&rdquo;</p>
             <div class="testimonial-author-row">
               <div class="testimonial-author-avatar">👨‍🏫</div>
               <div class="testimonial-author-info">
                 <h4>Jagadeesh</h4>
-                <p>Principal, Mount Carmel Global School</p>
-                <span class="testimonial-verified-badge">✓ Verified Partner School</span>
+                <p>Mount Carmel Global School</p>
               </div>
             </div>
           </div>
 
           <div class="testimonial-card-item">
-            <div>
-              <div class="testimonial-stars">★★★★★</div>
-              <p class="testimonial-quote-text">&ldquo;Edueme offers outstanding coaching, practical kits, and a very supportive learning environment. Friendly interactions between mentors and students inspire true innovation.&rdquo;</p>
+            <div class="testimonial-card-header">
+              <span class="testimonial-stars">★★★★★</span>
+              <span class="testimonial-quote-icon">&ldquo;</span>
             </div>
+            <p class="testimonial-quote-text">&ldquo;Outstanding coaching and practical kits. Friendly mentors inspire real hardware innovation.&rdquo;</p>
             <div class="testimonial-author-row">
               <div class="testimonial-author-avatar">👨‍🏫</div>
               <div class="testimonial-author-info">
                 <h4>Vamshi Mohan</h4>
                 <p>Samskar Global School</p>
-                <span class="testimonial-verified-badge">✓ Verified Partner School</span>
               </div>
             </div>
           </div>
 
           <div class="testimonial-card-item">
-            <div>
-              <div class="testimonial-stars">★★★★★</div>
-              <p class="testimonial-quote-text">&ldquo;The Prayogshala lab setup transformed how our students engage with science. Introducing robotics as early as 3rd grade has given our students an immense advantage.&rdquo;</p>
+            <div class="testimonial-card-header">
+              <span class="testimonial-stars">★★★★★</span>
+              <span class="testimonial-quote-icon">&ldquo;</span>
             </div>
+            <p class="testimonial-quote-text">&ldquo;The Prayogshala lab setup transformed science learning from 3rd grade onwards.&rdquo;</p>
             <div class="testimonial-author-row">
               <div class="testimonial-author-avatar">👩‍🏫</div>
               <div class="testimonial-author-info">
                 <h4>M. Divya</h4>
-                <p>Principal, Arka International School</p>
-                <span class="testimonial-verified-badge">✓ Verified Partner School</span>
+                <p>Arka International School</p>
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Pagination Indicator Dots -->
+        <div class="testimonials-dots-wrap" id="testimonialsDots">
+          <span class="testimonials-dot active" data-index="0"></span>
+          <span class="testimonials-dot" data-index="1"></span>
+          <span class="testimonials-dot" data-index="2"></span>
         </div>
       </section>
 
@@ -839,6 +850,7 @@ async function renderHomeView() {
 
   initStatsCounter();
   initNurturedSkills();
+  initFloatingTestimonials();
 }
 
 // --------------------------------------------------------------------------
@@ -1957,6 +1969,74 @@ function initNurturedSkills() {
   }
 
   startAutoCycle();
+}
+
+// --------------------------------------------------------------------------
+// FLOATING LAYERED TESTIMONIALS ANIMATION CONTROLLER
+// --------------------------------------------------------------------------
+function initFloatingTestimonials() {
+  const section = document.getElementById('testimonialsSection');
+  const carousel = document.getElementById('testimonialsCarousel');
+  const dots = document.querySelectorAll('#testimonialsDots .testimonials-dot');
+  if (!section || !carousel) return;
+
+  // 1. Scroll-triggered reveal using IntersectionObserver
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          section.classList.add('revealed');
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.12 });
+    observer.observe(section);
+  } else {
+    section.classList.add('revealed');
+  }
+
+  // 2. Carousel scroll snapping and dot indicator updates
+  const cards = carousel.querySelectorAll('.testimonial-card-item');
+  carousel.addEventListener('scroll', () => {
+    const scrollLeft = carousel.scrollLeft;
+    const cardWidth = cards[0] ? cards[0].offsetWidth + 12 : 265;
+    const activeIndex = Math.min(Math.round(scrollLeft / cardWidth), dots.length - 1);
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === activeIndex);
+    });
+  }, { passive: true });
+
+  // Dot click navigation
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = parseInt(dot.getAttribute('data-index'), 10) || 0;
+      if (cards[idx]) {
+        cards[idx].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      }
+    });
+  });
+
+  // 3. Subtle Parallax Effect on Scroll
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        if (rect.top < windowHeight && rect.bottom > 0) {
+          const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
+          const parallaxOffset = (progress - 0.5) * 14;
+          const mascot = section.querySelector('.testimonials-floating-robot');
+          if (mascot) {
+            mascot.style.transform = `translateY(${parallaxOffset * -0.6}px)`;
+          }
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 // --------------------------------------------------------------------------
