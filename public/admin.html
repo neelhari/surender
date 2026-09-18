@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Edueme Research Labs</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    :root {
+      --admin-sidebar-width: 250px;
+    }
+    body {
+      background: #f1f5f9;
+      padding-bottom: 0;
+    }
+    .admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+    .admin-sidebar {
+      width: var(--admin-sidebar-width);
+      background: #0e1628;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+      z-index: 1000;
+    }
+    .admin-logo-area {
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-logo-area img {
+      height: 34px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+    .admin-nav {
+      list-style: none;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .admin-nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #cbd5e1;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .admin-nav-item a:hover, .admin-nav-item a.active {
+      background: rgba(245, 166, 35, 0.15);
+      color: var(--accent-gold);
+    }
+    .admin-content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    .admin-topbar {
+      height: 60px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+    .admin-main {
+      padding: 24px;
+      flex: 1;
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .admin-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .admin-title {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary-navy);
+    }
+    /* Stat cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    .kpi-val {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .kpi-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    /* Data table */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .table-toolbar {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #fcfdfe;
+    }
+    .data-table-wrap {
+      overflow-x: auto;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    .data-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: #475569;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: #1e293b;
+      vertical-align: middle;
+    }
+    .data-table tr:hover td {
+      background: #f8fafc;
+    }
+    /* Modal */
+    .admin-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(14, 22, 40, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .admin-modal.open {
+      display: flex;
+    }
+    .modal-box {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--primary-navy);
+    }
+    .modal-body {
+      padding: 20px;
+    }
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: #f8fafc;
+    }
+    /* Responsive */
+    @media (max-width: 860px) {
+      .admin-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+      }
+      .admin-sidebar.open {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       AUTH LOGIN OVERLAY (Screen 13 Reference)
+       ======================================================================== -->
+  <div id="login-container" style="display: none; min-height: 100vh; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #0e1628 0%, #1e293b 100%);">
+    <div style="background: #ffffff; width: 100%; max-width: 400px; border-radius: 16px; padding: 32px 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35); text-align: center;">
+      <img src="/assets/logo.png" alt="Edueme Research Labs" style="height: 40px; margin-bottom: 16px;">
+      <h2 style="font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: var(--primary-navy); margin-bottom: 6px;">Admin Login</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Manage courses, services, leads & website content</p>
+
+      <div id="login-error" style="display: none; background: #fee2e2; color: #b91c1c; font-size: 13px; padding: 8px; border-radius: 6px; margin-bottom: 14px;"></div>
+
+      <form id="login-form" style="text-align: left;">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email Address</label>
+          <input type="email" id="login-email" class="form-control" value="admin@edueme.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-control" value="admin123" required>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; font-size: 13px;">
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" checked> Remember me
+          </label>
+          <a href="#" onclick="alert('Default demo credentials:\nEmail: admin@edueme.com\nPassword: admin123'); return false;" style="color: var(--accent-blue);">Forgot password?</a>
+        </div>
+        <button type="submit" class="submit-btn">Login to Admin Panel →</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       ADMIN APP SHELL
+       ======================================================================== -->
+  <div id="admin-app" class="admin-wrapper" style="display: none;">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-logo-area">
+        <img src="/assets/logo.png" alt="Edueme">
+        <button id="sidebar-close-btn" style="background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; display: none;">&times;</button>
+      </div>
+      <ul class="admin-nav">
+        <li class="admin-nav-item"><a href="#dashboard" class="active" onclick="switchAdminTab('dashboard')">📊 Dashboard</a></li>
+        <li class="admin-nav-item"><a href="#leads" onclick="switchAdminTab('leads')">📥 Leads & Enquiries</a></li>
+        <li class="admin-nav-item"><a href="#courses" onclick="switchAdminTab('courses')">🎓 Courses</a></li>
+        <li class="admin-nav-item"><a href="#services" onclick="switchAdminTab('services')">🔬 Services & Sub-Services</a></li>
+        <li class="admin-nav-item"><a href="#gallery" onclick="switchAdminTab('gallery')">📸 Gallery</a></li>
+        <li class="admin-nav-item"><a href="#team" onclick="switchAdminTab('team')">👥 Team Members</a></li>
+        <li class="admin-nav-item"><a href="#banners" onclick="switchAdminTab('banners')">🖼️ Home Banners</a></li>
+        <li class="admin-nav-item"><a href="#settings" onclick="switchAdminTab('settings')">⚙️ Site Settings</a></li>
+        <li class="admin-nav-item"><a href="#seo" onclick="switchAdminTab('seo')">🔍 SEO Metadata</a></li>
+        <li class="admin-nav-item" style="margin-top: 20px;"><a href="/" target="_blank" style="color: #38bdf8;">🌐 View Live Site &rarr;</a></li>
+      </ul>
+      <div style="padding: 16px; border-top: 1px solid rgba(255,255,255,0.08);">
+        <button onclick="adminLogout()" style="width: 100%; background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <div class="admin-content-area">
+      <!-- TOPBAR -->
+      <header class="admin-topbar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button id="mobile-sidebar-toggle" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--primary-navy);">☰</button>
+          <div style="font-weight: 700; color: var(--primary-navy); font-size: 15px;" id="current-tab-title">Admin Dashboard</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 13px; color: var(--text-muted);">Signed in as: <strong style="color: var(--primary-navy);">admin@edueme.com</strong></div>
+          <a href="/" target="_blank" class="header-cta-btn" style="padding: 6px 12px; font-size: 12px;">Live Site</a>
+        </div>
+      </header>
+
+      <!-- MAIN TAB CONTENT CONTAINER -->
+      <main class="admin-main">
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">Dashboard Overview</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Real-time lead statistics and recent activity</p>
+            </div>
+            <button class="header-cta-btn" onclick="switchAdminTab('leads')">View All Leads →</button>
+          </div>
+
+          <div class="kpi-grid" id="dashboard-kpis"></div>
+
+          <!-- RECENT LEADS TABLE (Screen 14 Reference) -->
+          <div class="table-card">
+            <div class="table-toolbar">
+              <strong style="color: var(--primary-navy);">Recent Inquiries & Leads</strong>
+              <button class="action-btn action-btn-email" onclick="exportLeadsCSV()">📥 Export Leads CSV</button>
+            </div>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Source / Interest</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-leads-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: LEADS MANAGEMENT (Screen 17 Reference) -->
+        <section id="tab-leads" style="display: none;">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">Leads & Enquiries Management</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">View, filter, update status, and export captured leads</p>
+            </div>
+            <button class="header-cta-btn" onclick="exportLeadsCSV()">📥 Export CSV / Excel</button>
+          </div>
+
+          <div class="table-card">
+            <div class="table-toolbar">
+              <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px;">
+                <input type="text" id="leads-search-input" class="form-control" placeholder="Search by name, phone, email, course..." style="max-width: 320px;">
+                <select id="leads-filter-status" class="form-control" style="max-width: 160px;">
+                  <option value="all">All Statuses</option>
+                  <option value="new">New</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="converted">Converted</option>
+                </select>
+                <select id="leads-filter-source" class="form-control" style="max-width: 160px;">
+                  <option value="all">All Sources</option>
+                  <option value="course">Course</option>
+                  <option value="service">Service</option>
+                  <option value="sub-service">Sub-Service</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date & Time</th>
+                    <th>Full Name</th>
+                    <th>Contact Info</th>
+                    <th>Interested Course / Service</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="all-leads-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: COURSES MANAGEMENT (Screen 15 Reference) -->
+        <section id="tab-courses" style="display: none;">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">Manage Courses</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Add, edit, reorder, or toggle active courses</p>
+            </div>
+            <button class="header-cta-btn" onclick="openAddCourseModal()">+ Add New Course</button>
+          </div>
+          <div class="table-card">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Duration & Level</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-courses-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 4: SERVICES & SUB-SERVICES (Screen 16 Reference & Correction 1) -->
+        <section id="tab-services" style="display: none;">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">Manage Services & Sub-Services</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Manage programs, workshops, tech labs, and modular sub-services</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="action-btn action-btn-wa" onclick="openAddSubServiceModal()">+ Add Sub-Service</button>
+              <button class="header-cta-btn" onclick="openAddServiceModal()">+ Add New Service</button>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Duration</th>
+                    <th>Sub-Services Count</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-services-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 5: GALLERY MANAGEMENT (Correction 2 Approved) -->
+        <section id="tab-gallery" style="display: none;">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">Gallery Management</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Add, edit, delete, categorize, or reorder showcase photos</p>
+            </div>
+            <button class="header-cta-btn" onclick="openAddGalleryModal()">+ Add Gallery Photo</button>
+          </div>
+          <div class="table-card">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Thumbnail</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Order</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-gallery-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 6: TEAM MEMBERS (Correction 3 Approved) -->
+        <section id="tab-team" style="display: none;">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">Team & Mentors Management</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Manage leadership, scientists, and educators shown on About Us</p>
+            </div>
+            <button class="header-cta-btn" onclick="openAddTeamModal()">+ Add Team Member</button>
+          </div>
+          <div class="table-card">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Role / Designation</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-team-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 7: HOME BANNERS (Correction 4 Approved) -->
+        <section id="tab-banners" style="display: none;">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">Home Banners & Content</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Control hero banners, badge texts, CTAs, and images dynamically</p>
+            </div>
+            <button class="header-cta-btn" onclick="openAddBannerModal()">+ Add Hero Banner</button>
+          </div>
+          <div class="table-card">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Banner Image</th>
+                    <th>Badge & Title</th>
+                    <th>CTA</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-banners-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 8: SETTINGS -->
+        <section id="tab-settings" style="display: none;">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">Site & Communication Settings</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Official phone numbers, WhatsApp alerts, admin emails, and office address</p>
+            </div>
+          </div>
+          <div class="table-card" style="padding: 24px;">
+            <form id="settings-form">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                <div class="form-group">
+                  <label class="form-label">Phone (Landline)</label>
+                  <input type="text" id="set-phone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Mobile Number</label>
+                  <input type="text" id="set-mobile" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">WhatsApp Number (For Visitor Chat)</label>
+                  <input type="text" id="set-wa" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Alert WhatsApp (Admin Instant Notification)</label>
+                  <input type="text" id="set-alert-wa" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Alert Email (Admin Instant Notification)</label>
+                  <input type="email" id="set-alert-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Working Hours</label>
+                  <input type="text" id="set-hours" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 10px;">
+                <label class="form-label">Office & Lab Address</label>
+                <input type="text" id="set-address" class="form-control" required>
+              </div>
+
+              <h4 style="font-family: var(--font-heading); font-size: 16px; margin: 20px 0 10px; color: var(--primary-navy);">Impact Counter Metrics</h4>
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                <div class="form-group">
+                  <label class="form-label">Students</label>
+                  <input type="text" id="stat-students" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Workshops</label>
+                  <input type="text" id="stat-workshops" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Schools</label>
+                  <input type="text" id="stat-schools" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Years Exp</label>
+                  <input type="text" id="stat-years" class="form-control" required>
+                </div>
+              </div>
+
+              <button type="submit" class="hero-primary-btn" style="margin-top: 16px;">Save Site Settings</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- TAB 9: SEO MANAGEMENT -->
+        <section id="tab-seo" style="display: none;">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">SEO Metadata Management</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Manage titles, descriptions, and keywords per route</p>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Route</th>
+                    <th>Meta Title</th>
+                    <th>Meta Description</th>
+                    <th>Keywords</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-seo-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       SHARED ADMIN MODAL (For Courses, Services, SubServices, Banners, Team)
+       ======================================================================== -->
+  <div class="admin-modal" id="admin-modal" onclick="closeAdminModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Edit Item</h3>
+        <button onclick="closeAdminModal()" style="background: none; border: none; font-size: 22px; cursor: pointer;">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div>
+  </div>
+
+  <div class="toast-msg" id="toast-msg"></div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

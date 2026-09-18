@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title id="page-title">Edueme Research Labs — Think. Create. Innovate. | STEM & Robotics</title>
+  <meta id="meta-desc" name="description" content="Future-ready STEM, Robotics, AI, and IoT education for schools and curious minds. First in India to introduce component-based robotics from 3rd standard.">
+  <meta id="meta-keywords" name="keywords" content="STEM education, robotics for kids, AI with Python, IoT training, school robotics lab, Hyderabad">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:site_name" content="Edueme Research Labs">
+  <meta property="og:title" content="Edueme Research Labs — Think. Create. Innovate.">
+  <meta property="og:description" content="Future-ready STEM, Robotics, AI, and IoT education for schools and curious minds.">
+  <meta property="og:image" content="/assets/logo.png">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon using exact logo icon -->
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+
+  <!-- Core Mobile-First Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       STICKY APP HEADER (Mobile App Proportions & Exact Logo)
+       ======================================================================== -->
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="/" class="logo-link" onclick="navigate(event, '/')">
+        <img src="/assets/logo.png" alt="Edueme Research Labs — Learn . Practice . Achieve" class="app-logo">
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="desktop-nav">
+        <a class="nav-item" href="/" onclick="navigate(event, '/')">Home</a>
+        <a class="nav-item" href="/about" onclick="navigate(event, '/about')">About Us</a>
+        <a class="nav-item" href="/courses" onclick="navigate(event, '/courses')">Courses</a>
+        <a class="nav-item" href="/services" onclick="navigate(event, '/services')">Programs & Services</a>
+        <a class="nav-item" href="/gallery" onclick="navigate(event, '/gallery')">Gallery</a>
+        <a class="nav-item" href="/contact" onclick="navigate(event, '/contact')">Contact</a>
+      </nav>
+
+      <div class="header-right">
+        <button class="hamburger-btn" id="drawer-toggle" aria-label="Open Mobile Menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       OFF-CANVAS MOBILE DRAWER (Screen 2 Approved Reference)
+       ======================================================================== -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer">
+    <div class="drawer-header">
+      <img src="/assets/logo.png" alt="Edueme Research Labs" class="drawer-logo">
+      <button class="drawer-close-btn" id="drawer-close" aria-label="Close Menu">&times;</button>
+    </div>
+    <div class="drawer-body">
+      <ul class="drawer-menu">
+        <li class="drawer-menu-item"><a href="/" onclick="closeDrawerAndNav(event, '/')">🏠 Home</a></li>
+        <li class="drawer-menu-item"><a href="/about" onclick="closeDrawerAndNav(event, '/about')">ℹ️ About Us</a></li>
+        <li class="drawer-menu-item"><a href="/courses" onclick="closeDrawerAndNav(event, '/courses')">🎓 Courses</a></li>
+        <li class="drawer-menu-item"><a href="/services" onclick="closeDrawerAndNav(event, '/services')">🔬 Services & Programs</a></li>
+        <li class="drawer-menu-item"><a href="/gallery" onclick="closeDrawerAndNav(event, '/gallery')">📸 Gallery</a></li>
+        <li class="drawer-menu-item"><a href="/contact" onclick="closeDrawerAndNav(event, '/contact')">📞 Contact Us</a></li>
+      </ul>
+
+      <div class="drawer-cta-card">
+        <h4 class="drawer-cta-title">Let's Build a Smarter Generation</h4>
+        <p class="drawer-cta-sub">Join thousands of young innovators with Edueme Research Labs.</p>
+        <button class="drawer-cta-btn" onclick="closeDrawerAndNav(event, '/contact')">Get in Touch →</button>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <a href="https://facebook.com/edueme" target="_blank" class="drawer-social-icon" aria-label="Facebook">f</a>
+      <a href="https://instagram.com/skilleducation" target="_blank" class="drawer-social-icon" aria-label="Instagram">📸</a>
+      <a href="https://linkedin.com" target="_blank" class="drawer-social-icon" aria-label="LinkedIn">in</a>
+      <a href="https://youtube.com" target="_blank" class="drawer-social-icon" aria-label="YouTube">▶</a>
+    </div>
+  </aside>
+
+  <!-- ========================================================================
+       SPA DYNAMIC VIEW CONTAINER
+       ======================================================================== -->
+  <main id="app-root"></main>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="app-footer">
+    <div class="app-container">
+      <div class="footer-grid">
+        <div>
+          <img src="/assets/logo.png" alt="Edueme Research Labs" class="footer-logo">
+          <p class="footer-desc">
+            Empowering students with work-oriented learning in Robotics, AI, IoT, and Mechatronics. First in India to introduce component-based robotics from 3rd standard.
+          </p>
+          <div style="margin-top: 14px; font-size: 12px; color: #94a3b8;">
+            Associated with <strong>STEM Education, 4ZMUS & IIT Hyderabad</strong> standards.
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Core Programs</h4>
+          <ul class="footer-links">
+            <li><a href="/services/tech-labs-prayogshala" onclick="navigate(event, '/services/tech-labs-prayogshala')">Prayogshala (Tech Labs)</a></li>
+            <li><a href="/services/workshops" onclick="navigate(event, '/services/workshops')">Hands-on Workshops</a></li>
+            <li><a href="/services/tech-tours-anveshana" onclick="navigate(event, '/services/tech-tours-anveshana')">Tech Tours (Anveshana)</a></li>
+            <li><a href="/courses/robotics-with-embedded-c" onclick="navigate(event, '/courses/robotics-with-embedded-c')">Robotics with Embedded C</a></li>
+            <li><a href="/courses/ai-with-python" onclick="navigate(event, '/courses/ai-with-python')">AI with Python</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Contact & Location</h4>
+          <p style="margin-bottom: 8px; line-height: 1.4;">1-98/11/62, Arunodaya Colony, Sri Sai Nagar, Madhapur, Hyderabad, Telangana - 500081</p>
+          <p style="margin-bottom: 4px;"><strong>Helpline:</strong> <a href="tel:+919059508050" style="color: #cbd5e1;">+91 90595 08050</a></p>
+          <p style="margin-bottom: 4px;"><strong>Email:</strong> <a href="mailto:info@eduemeresearchlabs.com" style="color: #cbd5e1;">info@eduemeresearchlabs.com</a></p>
+          <p style="margin-top: 8px;"><a href="/admin" style="color: var(--accent-gold); font-weight: 600;">🔒 Staff / Admin Panel →</a></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>&copy; 2026 Edueme Research Labs. All rights reserved.</div>
+        <div>Think . Create . Innovate — Learn . Practice . Achieve</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       PERSISTENT MOBILE BOTTOM NAVIGATION (Screen 1 Reference)
+       ======================================================================== -->
+  <nav class="bottom-nav">
+    <a href="/" class="bottom-nav-item active" id="bnav-home" onclick="navigate(event, '/')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/courses" class="bottom-nav-item" id="bnav-courses" onclick="navigate(event, '/courses')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Courses</span>
+    </a>
+    <a href="/services" class="bottom-nav-item" id="bnav-services" onclick="navigate(event, '/services')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>Services</span>
+    </a>
+    <a href="/gallery" class="bottom-nav-item" id="bnav-gallery" onclick="navigate(event, '/gallery')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Gallery</span>
+    </a>
+    <a href="/contact" class="bottom-nav-item" id="bnav-contact" onclick="navigate(event, '/contact')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>Contact</span>
+    </a>
+  </nav>
+
+  <!-- ========================================================================
+       FLOATING ACTIONS (Click-to-Call & WhatsApp)
+       ======================================================================== -->
+  <div class="floating-actions">
+    <a href="https://wa.me/919059508050?text=Hello%20Edueme%20Research%20Labs%2C%20I%20would%20like%20to%20enquire%20about%20your%20programs." target="_blank" class="float-btn float-whatsapp" aria-label="Chat on WhatsApp" title="WhatsApp Chat">
+      💬
+    </a>
+    <a href="tel:+919059508050" class="float-btn float-call" aria-label="Call Edueme" title="Click to Call">
+      📞
+    </a>
+  </div>
+
+  <!-- ========================================================================
+       LIGHTBOX MODAL
+       ======================================================================== -->
+  <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox()">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <img id="lightbox-img" class="lightbox-img" src="" alt="Edueme Innovation">
+      <div id="lightbox-caption" style="color: #ffffff; text-align: center; margin-top: 10px; font-weight: 600;"></div>
+    </div>
+  </div>
+
+  <!-- Toast Message -->
+  <div class="toast-msg" id="toast-msg"></div>
+
+  <!-- Application Logic -->
+  <script src="/js/app.js"></script>
+</body>
+</html>
