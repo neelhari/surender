@@ -1411,6 +1411,15 @@ button, input, select, textarea {
   max-width: 320px;
   position: relative;
   z-index: 2;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.courses-pencil-robot-container.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (min-width: 768px) {
@@ -1448,24 +1457,27 @@ button, input, select, textarea {
   pointer-events: none;
   z-index: 2;
   transform-origin: 61.8% 87.4%;
-  animation: robotPencilHandWave 2.4s ease-in-out infinite;
+  animation: robotPencilHandWave 2.6s ease-in-out infinite;
 }
 
 @keyframes robotPencilHandWave {
   0%, 100% {
     transform: rotate(0deg);
   }
-  20% {
-    transform: rotate(-5deg);
+  15% {
+    transform: rotate(-6deg);
   }
-  40% {
-    transform: rotate(4deg);
+  30% {
+    transform: rotate(7deg);
+  }
+  45% {
+    transform: rotate(-6deg);
   }
   60% {
-    transform: rotate(-5deg);
+    transform: rotate(5deg);
   }
-  80% {
-    transform: rotate(3deg);
+  75%, 95% {
+    transform: rotate(0deg);
   }
 }
 
@@ -3647,4 +3659,189 @@ textarea.form-control {
 
 .nurtured-next-btn:active {
   transform: scale(0.95);
+}
+
+/* ==========================================================================
+   COHESIVE PREMIUM MOTION SYSTEM
+   ========================================================================== */
+
+/* 1. Scroll-Triggered Reveal Classes */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--stagger, 0) * 95ms);
+  will-change: transform, opacity;
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--stagger, 0) * 95ms);
+  will-change: transform, opacity;
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--stagger, 0) * 95ms);
+  will-change: transform, opacity;
+}
+
+.reveal-item.is-revealed,
+.reveal-left.is-revealed,
+.reveal-right.is-revealed {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* 2. Image Reveal (Fade + Subtle Scale) */
+.reveal-img {
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--stagger, 0) * 80ms);
+  will-change: transform, opacity;
+}
+
+.reveal-img.is-revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 3. Micro-Interactions: Cards & Elements */
+.item-card,
+.stat-card,
+.edueme-stat-card,
+.team-card,
+.detail-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.item-card:hover,
+.stat-card:hover,
+.edueme-stat-card:hover,
+.team-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.08);
+}
+
+.item-card:active,
+.stat-card:active,
+.edueme-stat-card:active,
+.team-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+/* Gallery Card Hover & Reveal Interaction */
+.gallery-card {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s ease;
+  overflow: hidden;
+}
+
+.gallery-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -6px rgba(2, 132, 199, 0.22);
+}
+
+.gallery-card img {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-card:hover img {
+  transform: scale(1.03);
+}
+
+/* Value Pillar Micro-Grid Interaction */
+.value-pillar-item {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.2s ease,
+              border-color 0.2s ease;
+}
+
+.value-pillar-item:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.value-pillar-item:active {
+  transform: scale(0.98);
+}
+
+/* 4. Micro-Interactions: Buttons */
+.header-cta-btn,
+.hero-primary-btn,
+.hero-secondary-btn,
+.card-btn,
+.detail-primary-cta,
+.hamburger-btn,
+.submit-btn,
+.search-btn {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s ease,
+              background-color 0.2s ease,
+              color 0.2s ease;
+}
+
+.header-cta-btn:hover,
+.hero-primary-btn:hover,
+.detail-primary-cta:hover,
+.card-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25);
+}
+
+.hero-secondary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
+}
+
+.header-cta-btn:active,
+.hero-primary-btn:active,
+.hero-secondary-btn:active,
+.card-btn:active,
+.detail-primary-cta:active,
+.hamburger-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* 5. Accessibility & Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-item,
+  .reveal-left,
+  .reveal-right,
+  .reveal-img,
+  .courses-pencil-robot-container {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .pencil-robot-hand {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .testimonials-floating-robot {
+    animation: none !important;
+    transform: none !important;
+  }
 }

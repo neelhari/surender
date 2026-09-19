@@ -451,6 +451,11 @@ async function handleRouting() {
   else {
     render404View();
   }
+
+  // Initialize cohesive motion system for the rendered view
+  requestAnimationFrame(() => {
+    initGlobalMotion();
+  });
 }
 
 // --------------------------------------------------------------------------
@@ -936,19 +941,19 @@ async function renderAboutView() {
         </div>
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-number">${settings?.stats?.studentsTrained || '5000+'}</div>
+            <div class="stat-number" data-target="${parseInt(settings?.stats?.studentsTrained) || 5000}" data-suffix="+">${settings?.stats?.studentsTrained || '5000+'}</div>
             <div class="stat-label">Students Trained</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number">${settings?.stats?.workshops || '200+'}</div>
+            <div class="stat-number" data-target="${parseInt(settings?.stats?.workshops) || 200}" data-suffix="+">${settings?.stats?.workshops || '200+'}</div>
             <div class="stat-label">Workshops</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number">${settings?.stats?.schools || '50+'}</div>
+            <div class="stat-number" data-target="${parseInt(settings?.stats?.schools) || 50}" data-suffix="+">${settings?.stats?.schools || '50+'}</div>
             <div class="stat-label">Schools</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number">${settings?.stats?.yearsExp || '10+'}</div>
+            <div class="stat-number" data-target="${parseInt(settings?.stats?.yearsExp) || 10}" data-suffix="+">${settings?.stats?.yearsExp || '10+'}</div>
             <div class="stat-label">Years Experience</div>
           </div>
         </div>
@@ -1899,22 +1904,24 @@ function initSchoolsSpotlight(carouselId = 'schoolsSpotlightCarousel', labelId =
 }
 
 // --------------------------------------------------------------------------
-// 2x2 STATISTIC CARDS COUNTING ANIMATION
+// IMPACT STATISTIC CARDS COUNTING ANIMATION
 // --------------------------------------------------------------------------
 function initStatsCounter() {
-  const statElements = document.querySelectorAll('.edueme-stat-num[data-target]');
+  const statElements = document.querySelectorAll('.edueme-stat-num[data-target], .stat-number[data-target]');
   if (!statElements || statElements.length === 0) return;
 
-  let hasAnimated = false;
+  statElements.forEach(el => {
+    if (el.dataset.counterInitialized) return;
+    el.dataset.counterInitialized = 'true';
 
-  function runCounters() {
-    if (hasAnimated) return;
-    hasAnimated = true;
+    const target = parseInt(el.getAttribute('data-target'), 10) || 0;
+    const suffix = el.getAttribute('data-suffix') || '+';
+    const duration = 1350; // 1.35s
+    let hasAnimated = false;
 
-    statElements.forEach(el => {
-      const target = parseInt(el.getAttribute('data-target'), 10) || 0;
-      const suffix = el.getAttribute('data-suffix') || '+';
-      const duration = 1400; // 1.4s
+    function runCounter() {
+      if (hasAnimated) return;
+      hasAnimated = true;
       const startTime = performance.now();
 
       function update(now) {
@@ -1933,23 +1940,102 @@ function initStatsCounter() {
       }
 
       requestAnimationFrame(update);
-    });
+    }
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            runCounter();
+            obs.disconnect();
+          }
+        });
+      }, { threshold: 0.15 });
+      observer.observe(el);
+    } else {
+      runCounter();
+    }
+  });
+}
+
+// --------------------------------------------------------------------------
+// COHESIVE GLOBAL MOTION SYSTEM CONTROLLER
+// --------------------------------------------------------------------------
+function initGlobalMotion() {
+  // Respect reduced-motion preferences
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.reveal-item, .reveal-left, .reveal-right, .reveal-img, .courses-pencil-robot-container')
+      .forEach(el => el.classList.add('is-revealed'));
+    return;
   }
 
-  const section = document.querySelector('.edueme-stats-section');
-  if (section && 'IntersectionObserver' in window) {
+  // 1. Grid Items (Courses, Services, Team, Stats, Gallery, Pillars)
+  const gridSelectors = [
+    '.cards-grid',
+    '.stats-grid',
+    '.edueme-stats-grid',
+    '.team-grid',
+    '.gallery-grid',
+    '.value-pillars-microgrid'
+  ];
+
+  gridSelectors.forEach(gridSel => {
+    document.querySelectorAll(gridSel).forEach(grid => {
+      const items = Array.from(grid.children);
+      items.forEach((item, index) => {
+        if (!item.classList.contains('reveal-item') && !item.classList.contains('reveal-left') && !item.classList.contains('reveal-right')) {
+          // Stagger by 80-120ms (index % 4 * 95ms)
+          item.style.setProperty('--stagger', index % 4);
+          // Alternating left/right entrance or slight upward movement
+          if (index % 2 === 0) {
+            item.classList.add('reveal-left');
+          } else {
+            item.classList.add('reveal-right');
+          }
+        }
+      });
+    });
+  });
+
+  // 2. Images inside cards & gallery
+  document.querySelectorAll('.card-img-wrap img, .gallery-card img, .team-avatar').forEach((img, index) => {
+    if (!img.classList.contains('reveal-img')) {
+      img.classList.add('reveal-img');
+      img.style.setProperty('--stagger', (index % 3));
+    }
+  });
+
+  // 3. Robot mascot container
+  const robotContainer = document.querySelector('.courses-pencil-robot-container');
+  if (robotContainer && !robotContainer.classList.contains('reveal-item')) {
+    robotContainer.classList.add('reveal-item');
+  }
+
+  // 4. Observe all revealable elements
+  const revealElements = document.querySelectorAll(
+    '.reveal-item:not(.is-revealed), .reveal-left:not(.is-revealed), .reveal-right:not(.is-revealed), .reveal-img:not(.is-revealed), .courses-pencil-robot-container:not(.is-revealed)'
+  );
+
+  if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          runCounters();
-          obs.disconnect();
+          entry.target.classList.add('is-revealed');
+          obs.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.15 });
-    observer.observe(section);
+    }, {
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.1
+    });
+
+    revealElements.forEach(el => observer.observe(el));
   } else {
-    runCounters();
+    revealElements.forEach(el => el.classList.add('is-revealed'));
   }
+
+  // 5. Initialize stats counters
+  initStatsCounter();
 }
 
 // --------------------------------------------------------------------------
