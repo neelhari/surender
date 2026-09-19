@@ -5,19 +5,19 @@ const DB_FILE = path.join(__dirname, 'db.json');
 
 // Authentic initial seed data extracted directly from brochure & mobile UI
 const initialData = {
-  courses: [
+  "courses": [
     {
-      id: "course-1",
-      title: "Robotics with Embedded 'C'",
-      slug: "robotics-with-embedded-c",
-      category: "Robotics",
-      shortDescription: "Build, program, and innovate with industry-leading microcontrollers and component-based robotics.",
-      description: "Learn to design, build, and program autonomous robots using Embedded C. Covers sensors, actuators, control systems, and real-world projects starting from component level.",
-      duration: "3 - 6 Months",
-      level: "Beginner to Advanced",
-      mode: "Offline / Online",
-      image: "/assets/brochure/img_7.jpg",
-      highlights: [
+      "id": "course-1",
+      "title": "Robotics with Embedded 'C'",
+      "slug": "robotics-with-embedded-c",
+      "category": "Robotics",
+      "shortDescription": "Build, program, and innovate with industry-leading microcontrollers and component-based robotics.",
+      "description": "Learn to design, build, and program autonomous robots using Embedded C. Covers sensors, actuators, control systems, and real-world projects starting from component level.",
+      "duration": "3 – 6 Months",
+      "level": "Beginner to Advanced",
+      "mode": "Offline / Online",
+      "image": "/assets/crop_course_ref.jpg",
+      "highlights": [
         "Embedded C Programming & Syntax",
         "Arduino & Microcontroller Architecture",
         "Sensors & Actuators Interfacing",
@@ -25,22 +25,22 @@ const initialData = {
         "Motor Drivers & H-Bridge Control",
         "Autonomous Obstacle Avoiding Robot Project"
       ],
-      status: "active",
-      displayOrder: 1,
-      createdAt: new Date().toISOString()
+      "status": "active",
+      "displayOrder": 1,
+      "createdAt": "2026-09-18T08:17:25.937Z"
     },
     {
-      id: "course-2",
-      title: "AI with Python",
-      slug: "ai-with-python",
-      category: "AI",
-      shortDescription: "Explore the frontiers of Artificial Intelligence, Computer Vision, and smart automation using Python.",
-      description: "A comprehensive journey from Python programming basics to building intelligent agents, image classifiers, and interactive AI models.",
-      duration: "3 - 8 Months",
-      level: "Beginner Friendly",
-      mode: "Offline / Online",
-      image: "/assets/brochure/img_6.jpg",
-      highlights: [
+      "id": "course-2",
+      "title": "Artificial Intelligence (AI) with Python",
+      "slug": "ai-with-python",
+      "category": "AI",
+      "shortDescription": "Explore the frontiers of Artificial Intelligence, Computer Vision, and smart automation using Python.",
+      "description": "A comprehensive journey from Python programming basics to building intelligent agents, image classifiers, and interactive AI models.",
+      "duration": "3 - 8 Months",
+      "level": "Beginner Friendly",
+      "mode": "Offline / Online",
+      "image": "/assets/course_ai_python.jpg",
+      "highlights": [
         "Python Programming Fundamentals",
         "NumPy & Pandas Data Analysis",
         "OpenCV & Computer Vision Basics",
@@ -48,22 +48,22 @@ const initialData = {
         "Building Intelligent Decision Agents",
         "Capstone AI Project Presentation"
       ],
-      status: "active",
-      displayOrder: 2,
-      createdAt: new Date().toISOString()
+      "status": "active",
+      "displayOrder": 2,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "course-3",
-      title: "Internet of Things (IoT) with Embedded 'C'",
-      slug: "iot-with-embedded-c",
-      category: "IoT",
-      shortDescription: "Connect physical devices to the cloud and build real-time smart home & telemetry systems.",
-      description: "Hands-on engineering with ESP32/ESP8266 Wi-Fi microcontrollers, cloud dashboards, REST APIs, and MQTT sensor telemetry.",
-      duration: "3 - 6 Months",
-      level: "Intermediate",
-      mode: "Offline / Online",
-      image: "/assets/brochure/img_13.jpg",
-      highlights: [
+      "id": "course-3",
+      "title": "Internet of Things (IoT) with Embedded 'C'",
+      "slug": "iot-with-embedded-c",
+      "category": "IoT",
+      "shortDescription": "Connect physical devices to the cloud and build real-time smart home & telemetry systems.",
+      "description": "Hands-on engineering with ESP32/ESP8266 Wi-Fi microcontrollers, cloud dashboards, REST APIs, and MQTT sensor telemetry.",
+      "duration": "3 - 6 Months",
+      "level": "Intermediate",
+      "mode": "Offline / Online",
+      "image": "/assets/course_iot_esp32.jpg",
+      "highlights": [
         "ESP32 Architecture & Pinouts",
         "Wireless Wi-Fi & Bluetooth Stacks",
         "Sensor Telemetry & MQTT Protocols",
@@ -71,22 +71,22 @@ const initialData = {
         "Smart Home Automation Prototype",
         "Data Security for IoT Nodes"
       ],
-      status: "active",
-      displayOrder: 3,
-      createdAt: new Date().toISOString()
+      "status": "active",
+      "displayOrder": 3,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "course-4",
-      title: "Machine Learning (ML) with Python",
-      slug: "machine-learning-with-python",
-      category: "AI",
-      shortDescription: "Train predictive algorithms and analyze data patterns using Scikit-learn and Python.",
-      description: "Dive deep into supervised and unsupervised learning algorithms, feature engineering, and deploying predictive ML models.",
-      duration: "4 - 8 Months",
-      level: "Intermediate to Advanced",
-      mode: "Offline / Online",
-      image: "/assets/brochure/img_14.jpg",
-      highlights: [
+      "id": "course-4",
+      "title": "Machine Learning (ML) with Python",
+      "slug": "machine-learning-with-python",
+      "category": "AI",
+      "shortDescription": "Train predictive algorithms and analyze data patterns using Scikit-learn and Python.",
+      "description": "Dive deep into supervised and unsupervised learning algorithms, feature engineering, and deploying predictive ML models.",
+      "duration": "4 - 8 Months",
+      "level": "Intermediate to Advanced",
+      "mode": "Offline / Online",
+      "image": "/assets/course_ml.jpg",
+      "highlights": [
         "Supervised & Unsupervised Learning",
         "Linear Regression & Classification",
         "Decision Trees & Random Forests",
@@ -94,22 +94,22 @@ const initialData = {
         "Predictive Analytics Case Studies",
         "End-to-end ML Pipeline Deployment"
       ],
-      status: "active",
-      displayOrder: 4,
-      createdAt: new Date().toISOString()
+      "status": "active",
+      "displayOrder": 4,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "course-5",
-      title: "Mechatronics & Mechanical Design",
-      slug: "mechatronics-mechanical-design",
-      category: "Robotics",
-      shortDescription: "Master CAD modeling, gear mechanisms, and electromechanical prototyping.",
-      description: "Students learn how hardware structure, gears, linkages, and electronic actuators harmonize in industrial automation and robotic arms.",
-      duration: "3 - 6 Months",
-      level: "Beginner to Intermediate",
-      mode: "In-Lab",
-      image: "/assets/brochure/img_15.jpg",
-      highlights: [
+      "id": "course-5",
+      "title": "Mechatronics",
+      "slug": "mechatronics",
+      "category": "Robotics",
+      "shortDescription": "Master CAD modeling, gear mechanisms, and electromechanical prototyping.",
+      "description": "Students learn how hardware structure, gears, linkages, and electronic actuators harmonize in industrial automation and robotic arms.",
+      "duration": "3 - 6 Months",
+      "level": "Beginner to Intermediate",
+      "mode": "In-Lab",
+      "image": "/assets/course_mechatronics.jpg",
+      "highlights": [
         "Kinematics & Gear Ratio Fundamentals",
         "3D CAD Prototyping & Foam Fabrication",
         "Servo & Stepper Motor Drive Systems",
@@ -117,22 +117,22 @@ const initialData = {
         "Robotic Arm Gripper Design",
         "Industrial Automation Simulations"
       ],
-      status: "active",
-      displayOrder: 5,
-      createdAt: new Date().toISOString()
+      "status": "active",
+      "displayOrder": 5,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "course-6",
-      title: "UAV & Drone Technology",
-      slug: "uav-drone-technology",
-      category: "Robotics",
-      shortDescription: "Understand aerodynamics, flight controllers, telemetry, and drone assembly.",
-      description: "Learn how quadcopters work, calculate thrust-to-weight ratios, calibrate flight controllers, and execute autonomous waypoint navigation.",
-      duration: "2 - 4 Months",
-      level: "Intermediate",
-      mode: "Offline / Field Lab",
-      image: "/assets/brochure/img_19.jpg",
-      highlights: [
+      "id": "course-6",
+      "title": "UAV (Drones)",
+      "slug": "uav-drones",
+      "category": "Robotics",
+      "shortDescription": "Understand aerodynamics, flight controllers, telemetry, and drone assembly.",
+      "description": "Learn how quadcopters work, calculate thrust-to-weight ratios, calibrate flight controllers, and execute autonomous waypoint navigation.",
+      "duration": "2 - 4 Months",
+      "level": "Intermediate",
+      "mode": "Offline / Field Lab",
+      "image": "/assets/course_drone.jpg",
+      "highlights": [
         "Quadcopter Aerodynamics & Physics",
         "Brushless Motors & Electronic Speed Controllers (ESCs)",
         "Flight Controller Wiring & Calibration",
@@ -140,41 +140,204 @@ const initialData = {
         "FPV & Sensor Telemetry Integration",
         "Safe Flight Principles & Waypoint Navigation"
       ],
-      status: "active",
-      displayOrder: 6,
-      createdAt: new Date().toISOString()
-    }
-  ],
-  services: [
-    {
-      id: "srv-workshops",
-      title: "Workshops",
-      slug: "workshops",
-      shortDescription: "Hands-on technology workshops introducing electronics, microcontrollers, and coding to schools and colleges.",
-      description: "The main agenda of any workshop is to introduce a new skill or tech to students and make them fascinated, driving them towards having a long journey in mastering the skill. In this short journey students will get introduced to electronic components and how to command them with basic coding skills.",
-      duration: "1 week - 2 weeks (2 days a week)",
-      benefits: [
-        "Comprehensive Curriculum",
-        "Hardware Kits & Software Provided",
-        "Printed/Digital E-Material",
-        "Interactive In-Class Sessions",
-        "Verified Skill Certifications",
-        "Tech Summits & Intra-School Competitions",
-        "Full support in all business days/hours"
-      ],
-      image: "/assets/brochure/img_8.jpg",
-      status: "active",
-      displayOrder: 1,
-      createdAt: new Date().toISOString()
+      "status": "active",
+      "displayOrder": 6,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "srv-prayogshala",
-      title: "Tech Labs (Prayogshala)",
-      slug: "tech-labs-prayogshala",
-      shortDescription: "Custom-designed and installed industry-grade innovation tech labs for schools.",
-      description: "We custom design and setup industry-grade tech labs where students learn and become creative with the skills gained in the classroom. Equipped with every hardware component starting from screws to advanced microcontrollers and sensors. We also provide aesthetic maker materials to encourage students to create attractive, robust prototypes.",
-      duration: "Permanent School Setup & Annual Mentorship",
-      benefits: [
+      "id": "course-7",
+      "title": "Augmented Reality / Virtual Reality",
+      "slug": "augmented-reality-virtual-reality",
+      "category": "AR/VR",
+      "shortDescription": "Immerse in interactive 3D spatial computing, virtual simulations, and holographic AR environments.",
+      "description": "Explore the exciting domain of Augmented and Virtual Reality. Students learn 3D modeling, spatial environments, interactive simulations, and building AR/VR apps using industry-standard game engines and sensors.",
+      "duration": "3 - 6 Months",
+      "level": "Beginner to Intermediate",
+      "mode": "Offline / Online",
+      "image": "/assets/course_ar_vr.jpg",
+      "highlights": [
+        "Fundamentals of Augmented & Virtual Reality",
+        "3D Spatial Environments & Modeling",
+        "Interactive VR Controllers & Headsets",
+        "Marker-based and Markerless AR Apps",
+        "Spatial Audio & Immersive Visual Effects",
+        "Interactive Capstone AR/VR Experience"
+      ],
+      "status": "active",
+      "displayOrder": 7,
+      "createdAt": "2026-09-19T12:00:00.000Z"
+    },
+    {
+      "id": "course-8",
+      "title": "Database & Programming Languages",
+      "slug": "database-programming-languages",
+      "category": "Programming",
+      "shortDescription": "Master computational logic, relational database schemas, SQL queries, and robust programming principles.",
+      "description": "Build a strong foundation in core computer science, relational databases, data structures, and practical coding. Students learn SQL query design, database normalization, and programming logic to build data-driven applications.",
+      "duration": "3 - 6 Months",
+      "level": "Beginner to Intermediate",
+      "mode": "Offline / Online",
+      "image": "/assets/course_database.jpg",
+      "highlights": [
+        "Core Programming Logic & Algorithms",
+        "Relational Database Management (RDBMS)",
+        "SQL Queries, Joins & Aggregations",
+        "Data Modeling & Schema Normalization",
+        "Connecting Databases with Code Applications",
+        "Database Security & Transaction Management"
+      ],
+      "status": "active",
+      "displayOrder": 8,
+      "createdAt": "2026-09-19T12:00:00.000Z"
+    },
+    {
+      "id": "course-9",
+      "title": "Deep Learning (DL) with Python",
+      "slug": "deep-learning-with-python",
+      "category": "AI",
+      "shortDescription": "Construct artificial neural networks, convolutional vision architectures, and deep predictive models.",
+      "description": "Delve into neural networks, backpropagation, convolutional networks (CNNs), and recurrent architectures. Learn how to train deep learning models using Python and PyTorch/TensorFlow for computer vision and speech recognition.",
+      "duration": "4 - 8 Months",
+      "level": "Intermediate to Advanced",
+      "mode": "Offline / Online",
+      "image": "/assets/course_deep_learning.jpg",
+      "highlights": [
+        "Artificial Neural Networks & Perceptrons",
+        "Forward & Backpropagation Optimization",
+        "Convolutional Neural Networks (CNN) for Images",
+        "Recurrent Neural Networks (RNN) & Sequence Models",
+        "Model Training, Overfitting Prevention & Loss Curves",
+        "Deploying Deep Learning Classification APIs"
+      ],
+      "status": "active",
+      "displayOrder": 9,
+      "createdAt": "2026-09-19T12:00:00.000Z"
+    },
+    {
+      "id": "course-10",
+      "title": "Game Design (Android/IOS)",
+      "slug": "game-design-android-ios",
+      "category": "Game Design",
+      "shortDescription": "Design, animate, and deploy thrilling 2D/3D mobile games with physics engines and touch controls.",
+      "description": "Learn game development from initial storyboarding to physics simulation, character animation, and cross-platform publishing on Android and iOS. Students build playable games with engaging mechanics.",
+      "duration": "3 - 6 Months",
+      "level": "Beginner to Intermediate",
+      "mode": "Offline / Online",
+      "image": "/assets/course_game_design.jpg",
+      "highlights": [
+        "Game Physics, Colliders & Gravity",
+        "Character Sprites, 3D Assets & Animation",
+        "Mobile Touch & Gyroscope Controls",
+        "Level Design, Score Systems & Game States",
+        "Audio FX & Visual Effects Integration",
+        "Publishing & Testing on Mobile Devices"
+      ],
+      "status": "active",
+      "displayOrder": 10,
+      "createdAt": "2026-09-19T12:00:00.000Z"
+    },
+    {
+      "id": "course-11",
+      "title": "Android Development (SWIFT UI, FLUTTER, IOS)",
+      "slug": "android-development-swiftui-flutter-ios",
+      "category": "Mobile Dev",
+      "shortDescription": "Engineer modern, responsive native and cross-platform mobile apps with Flutter, SwiftUI, and Android SDK.",
+      "description": "Comprehensive mobile app engineering across Android and iOS platforms. Students master user interface design with SwiftUI and Flutter, state management, API integration, and app publishing.",
+      "duration": "3 - 6 Months",
+      "level": "Beginner to Intermediate",
+      "mode": "Offline / Online",
+      "image": "/assets/course_mobile_dev.jpg",
+      "highlights": [
+        "Mobile UI Design & Responsive Layouts",
+        "Flutter Cross-Platform Architecture",
+        "SwiftUI & iOS Native Component Design",
+        "State Management & Local Storage",
+        "REST API Integration & Cloud Sync",
+        "Building & Deploying Production Mobile Apps"
+      ],
+      "status": "active",
+      "displayOrder": 11,
+      "createdAt": "2026-09-19T12:00:00.000Z"
+    },
+    {
+      "id": "course-12",
+      "title": "Web Development (HTML/CSS/JS)",
+      "slug": "web-development-html-css-js",
+      "category": "Web Dev",
+      "shortDescription": "Craft modern, responsive, interactive websites from scratch using semantic HTML, CSS, and JavaScript.",
+      "description": "Master the foundations of the World Wide Web. Learn semantic HTML5 structure, modern responsive CSS layouts (Flexbox/Grid), and interactive JavaScript programming to build dynamic web applications.",
+      "duration": "3 - 6 Months",
+      "level": "Beginner Friendly",
+      "mode": "Offline / Online",
+      "image": "/assets/course_web_dev.jpg",
+      "highlights": [
+        "Semantic HTML5 & Modern Document Hierarchy",
+        "CSS3 Responsive Layouts, Flexbox & Grid Systems",
+        "Interactive JavaScript DOM Manipulation & Events",
+        "Async Programming & Fetching Live Web APIs",
+        "Mobile-First Design & Web Performance",
+        "Hosting & Deploying Live Web Projects"
+      ],
+      "status": "active",
+      "displayOrder": 12,
+      "createdAt": "2026-09-19T12:00:00.000Z"
+    },
+    {
+      "id": "course-13",
+      "title": "3D Printing",
+      "slug": "3d-printing",
+      "category": "Hardware",
+      "shortDescription": "Transform digital CAD models into physical reality using additive manufacturing and 3D printers.",
+      "description": "Learn additive manufacturing, slicing software, filament selection, and rapid prototyping. Students design 3D parts in CAD and operate 3D printers to fabricate custom robotic brackets, gears, and enclosures.",
+      "duration": "2 - 4 Months",
+      "level": "Beginner to Intermediate",
+      "mode": "In-Lab / Offline",
+      "image": "/assets/course_3d_printing.jpg",
+      "highlights": [
+        "Additive Manufacturing Principles & History",
+        "3D CAD Modeling for Rapid Prototyping",
+        "Slicing Software, Layer Heights & Infill Density",
+        "Filament Materials: PLA, ABS, PETG & Properties",
+        "3D Printer Calibration, Bed Leveling & Maintenance",
+        "Fabricating Custom Robotic Parts & Enclosures"
+      ],
+      "status": "active",
+      "displayOrder": 13,
+      "createdAt": "2026-09-19T12:00:00.000Z"
+    }
+  ],
+  "services": [
+    {
+      "id": "srv-workshops",
+      "title": "Workshops",
+      "slug": "workshops",
+      "shortDescription": "Hands-on technology workshops introducing electronics, robotics, and coding to schools and colleges.",
+      "description": "The main agenda of any workshop is to introduce a new skill or tech to the students and make them fascinated, drive them towards having a long journey in prospering the skill. In this short journey students will get introduced to may electronic component and way to comand them with basic coding skills. This introduction will help them to explore their creative thoughts.",
+      "duration": "1 week - 2 weeks (2 days a week)",
+      "benefits": [
+        "Comprehensive Curriculum",
+        "Kits & Software",
+        "E material",
+        "In - Class sessions",
+        "Certifications",
+        "Tech Summits",
+        "Expo's ( Pradarshan)",
+        "Intra School Competitions",
+        "Support in all the business days/hours."
+      ],
+      "image": "/assets/crop_service_ref.jpg",
+      "status": "active",
+      "displayOrder": 1,
+      "createdAt": "2026-09-18T08:17:25.955Z"
+    },
+    {
+      "id": "srv-prayogshala",
+      "title": "Tech Labs (Prayogshala)",
+      "slug": "tech-labs-prayogshala",
+      "shortDescription": "Custom-designed and installed industry-grade innovation tech labs for schools.",
+      "description": "We custom design and setup industry-grade tech labs where students learn and become creative with the skills gained in the classroom. Equipped with every hardware component starting from screws to advanced microcontrollers and sensors. We also provide aesthetic maker materials to encourage students to create attractive, robust prototypes.",
+      "duration": "Permanent School Setup & Annual Mentorship",
+      "benefits": [
         "Complete Lab Architecture & Workbenches",
         "Microcontrollers, Sensors & Actuator Inventory",
         "Safety Tools, Soldering Stations & 3D Prototyping",
@@ -182,57 +345,62 @@ const initialData = {
         "Year-round Curriculum & Component Replenishment",
         "IIT Hyderabad Associated STEM Standards"
       ],
-      image: "/assets/brochure/img_10.jpg",
-      status: "active",
-      displayOrder: 2,
-      createdAt: new Date().toISOString()
+      "image": "/assets/srv_prayogshala.jpg",
+      "status": "active",
+      "displayOrder": 2,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "srv-anveshana",
-      title: "Tech Tours (Anveshana)",
-      slug: "tech-tours-anveshana",
-      shortDescription: "Structured immersion tours to IITs, NITs, and top university tech & incubation centers.",
-      description: "Anveshana is a structured tech tour mainly focused on helping students broaden their knowledge of building industry-standard technologies. We plan tours to National level institutions and Universities (mainly IITs, NITs, and top research institutions), introducing students to advanced tech labs, innovative prototypes, and entrepreneurship clubs.",
-      duration: "2 - 5 Days Guided Tour",
-      benefits: [
+      "id": "srv-anveshana",
+      "title": "Tech Tours (Anveshana)",
+      "slug": "tech-tours-anveshana",
+      "shortDescription": "Structured immersion tours to IITs, NITs, and top university tech & incubation centers.",
+      "description": "Anveshana is a structured tech tour mainly focused on helping students broaden their knowledge of building industry-standard technologies. We plan tours to National level institutions and Universities (mainly IITs, NITs, and top research institutions), introducing students to advanced tech labs, innovative prototypes, and entrepreneurship clubs.",
+      "duration": "2 - 5 Days Guided Tour",
+      "benefits": [
         "Exclusive Access to IIT & NIT Labs",
         "Interactive Sessions with University Researchers",
         "Exposure to Incubators & Startup Ecosystems",
         "Guided Educational Mentorship throughout the tour",
         "Certificate of Participation & Technical Tour Dossier"
       ],
-      image: "/assets/brochure/img_14.jpg",
-      status: "active",
-      displayOrder: 3,
-      createdAt: new Date().toISOString()
+      "image": "/assets/srv_anveshana.jpg",
+      "status": "active",
+      "displayOrder": 3,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "srv-bootcamps",
-      title: "Boot Camps",
-      slug: "boot-camps",
-      shortDescription: "Intensive term/semester journeys in electronics, mechanics, and programming.",
-      description: "Students undertake a focused journey for a term or semester learning all required fundamentals of electronics and coding enough to start making their own creative inventions in peer teams.",
-      duration: "4 weeks - 12 weeks (2 days a week)",
-      benefits: [
-        "Comprehensive Project-based Curriculum",
-        "Individual Kits & Software Access",
-        "E-Material & In-Class Guided Sprints",
-        "Continuous Assessments & Milestone Feedback",
-        "Final Capstone Robot Build & Exhibition"
+      "id": "srv-bootcamps",
+      "title": "Boot Camps",
+      "slug": "boot-camps",
+      "shortDescription": "Intensive term/semester journeys in electronics, mechanics, and programming.",
+      "description": "As a part of boot camps Students will have a short journey for a term or a semester learning all the required basics of the electronics and coding enough to start making their own creative stuff. In this journey students will start socializing themselves as the best way to learn more in less time is to team up with the peers. This way they enjoy the learning process.",
+      "duration": "4 weeks - 12 weeks (2 days a week)",
+      "benefits": [
+        "Comprehensive Curriculum",
+        "Kits & Software",
+        "E material",
+        "In - Class sessions",
+        "Assessments",
+        "Certifications",
+        "Tech Summits",
+        "Expo's ( Pradarshan)",
+        "Intra School Competitions",
+        "Support in all the business days/hours."
       ],
-      image: "/assets/brochure/img_9.jpg",
-      status: "active",
-      displayOrder: 4,
-      createdAt: new Date().toISOString()
+      "image": "/assets/srv_bootcamp.jpg",
+      "status": "active",
+      "displayOrder": 4,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "srv-yearend",
-      title: "Year End Programs",
-      slug: "year-end-programs",
-      shortDescription: "Full academic year iterative journey integrating curriculum with science & math.",
-      description: "As part of Year End programs, students have an iterative journey with electronics and coding, providing deep knowledge of each robot/project. Students connect extensive maths and science principles practically with what they build.",
-      duration: "10 Months (Academic Year)",
-      benefits: [
+      "id": "srv-yearend",
+      "title": "Year End Programs",
+      "slug": "year-end-programs",
+      "shortDescription": "Full academic year iterative journey integrating curriculum with science & math.",
+      "description": "As part of Year End programs, students have an iterative journey with electronics and coding, providing deep knowledge of each robot/project. Students connect extensive maths and science principles practically with what they build.",
+      "duration": "10 Months (Academic Year)",
+      "benefits": [
         "Comprehensive Grade-wise Curriculum",
         "Complete Kits, Hardware & Software",
         "Books & E-Material for every enrolled student",
@@ -240,518 +408,578 @@ const initialData = {
         "Term Assessments & Global Skill Certification",
         "Expo (Pradarshan) & Tech Tour (Anveshana) Inclusion"
       ],
-      image: "/assets/brochure/img_6.jpg",
-      status: "active",
-      displayOrder: 5,
-      createdAt: new Date().toISOString()
+      "image": "/assets/srv_yearend.jpg",
+      "status": "active",
+      "displayOrder": 5,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "srv-online",
-      title: "Online Live Trainings (Learn At Home)",
-      slug: "online-live-trainings",
-      shortDescription: "Live interactive robotics & coding lessons delivered right to students' homes.",
-      description: "Develop critical thinking and problem-solving skills from home. Certified instructors guide students through virtual simulators and physical hardware delivered to their doorstep.",
-      duration: "10 Months / Flexible Batches",
-      benefits: [
-        "Doorstep Hardware Kit Delivery",
-        "Small Batch Live Online Mentorship",
-        "Interactive Coding & Virtual Circuit Simulators",
-        "Participation in Online Tech Competitions",
-        "Flexible Timing to Match School Schedule"
+      "id": "srv-online",
+      "title": "Online Live Trainings",
+      "slug": "online-live-trainings",
+      "shortDescription": "Live interactive robotics & coding lessons delivered right to students' homes.",
+      "description": "Online Live Trainings offer structured remote robotics and STEM education directly to students' homes. Led by experienced and certified instructors, students build critical thinking, coding fluency, and engineering confidence through interactive lessons, virtual simulators, and physical hardware kits.",
+      "duration": "10 Months",
+      "benefits": [
+        "Comprehensive Curriculum",
+        "Kits & Software",
+        "Books / E material",
+        "In - Class sessions",
+        "Assessments",
+        "Certifications",
+        "Tech Summits",
+        "Expo's ( Pradarshan)",
+        "Inter/ Intra School Competitions",
+        "Tech Tours (Anveshana)",
+        "Support in all the business days/hours."
       ],
-      image: "/assets/brochure/img_7.jpg",
-      status: "active",
-      displayOrder: 6,
-      createdAt: new Date().toISOString()
+      "image": "/assets/srv_online.jpg",
+      "status": "active",
+      "displayOrder": 6,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "srv-teacher",
-      title: "Teacher Training Programs",
-      slug: "teacher-training-programs",
-      shortDescription: "Equipping school educators with hands-on tech stacks, maker tools, and pedagogy.",
-      description: "One or two teachers from partner schools are trained prior to the academic year. These trained teachers confidently teach students throughout the academic year for the enrolled program.",
-      duration: "8 weeks - 14 weeks (1 - 1.5 hours each business day)",
-      benefits: [
+      "id": "srv-teacher",
+      "title": "Teacher Training Programs",
+      "slug": "teacher-training-programs",
+      "shortDescription": "Equipping school educators with hands-on tech stacks, maker tools, and pedagogy.",
+      "description": "One or two teachers from partner schools are trained prior to the academic year. These trained teachers confidently teach students throughout the academic year for the enrolled program.",
+      "duration": "8 weeks - 14 weeks (1 - 1.5 hours each business day)",
+      "benefits": [
         "Modern Tech Teaching Methods & Pedagogy",
         "Comprehensive Curriculum Delivery Skills",
         "Maker Space Operation & Tool Maintenance",
         "Student Progress Analysis & Assessment Design",
         "Certified STEM Educator Credential"
       ],
-      image: "/assets/brochure/img_15.jpg",
-      status: "active",
-      displayOrder: 7,
-      createdAt: new Date().toISOString()
+      "image": "/assets/srv_teacher.jpg",
+      "status": "active",
+      "displayOrder": 7,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     },
     {
-      id: "srv-competitions",
-      title: "Inter / Intra School Competitions",
-      slug: "inter-intra-school-competitions",
-      shortDescription: "Fast-paced robotics leagues, arena challenges, and tech hackathons.",
-      description: "Helps children drive themselves in a fast-paced competitive environment matching given problem statements within time limits. Includes making different robots, robo-soccer, obstacle courses, and tech quizzes.",
-      duration: "1 - 3 Days Event",
-      benefits: [
+      "id": "srv-competitions",
+      "title": "Inter / Intra School Competitions",
+      "slug": "inter-intra-school-competitions",
+      "shortDescription": "Fast-paced robotics leagues, arena challenges, and tech hackathons.",
+      "description": "Helps children drive themselves in a fast-paced competitive environment matching given problem statements within time limits. Includes making different robots, robo-soccer, obstacle courses, and tech quizzes.",
+      "duration": "1 - 3 Days Event",
+      "benefits": [
         "Standardized Problem Statements & Arena Regulations",
         "Trophies, Medals & Recognition Certificates",
         "Evaluation by Professional Industry Judges",
         "Fun Tech Quizzes & Innovation Showcases"
       ],
-      image: "/assets/brochure/img_13.jpg",
-      status: "active",
-      displayOrder: 8,
-      createdAt: new Date().toISOString()
+      "image": "/assets/srv_competition.jpg",
+      "status": "active",
+      "displayOrder": 8,
+      "createdAt": "2026-09-18T08:17:25.955Z"
     }
   ],
-  subServices: [
+  "subServices": [
     {
-      id: "sub-1",
-      serviceId: "srv-workshops",
-      serviceSlug: "workshops",
-      title: "Hands-on Robotics Boot Camp Workshop",
-      slug: "hands-on-robotics-workshop",
-      description: "2-day immersive workshop introducing students to motors, sensors, and chassis assembly.",
-      detailedOverview: "In this workshop, students work in small teams to assemble their very first robot from modular components. They understand how battery power, gearboxes, and switches work together before progressing into programming.",
-      modules: [
+      "id": "sub-1",
+      "serviceId": "srv-workshops",
+      "serviceSlug": "workshops",
+      "title": "Hands-on Robotics Boot Camp Workshop",
+      "slug": "hands-on-robotics-workshop",
+      "description": "2-day immersive workshop introducing students to motors, sensors, and chassis assembly.",
+      "detailedOverview": "In this workshop, students work in small teams to assemble their very first robot from modular components. They understand how battery power, gearboxes, and switches work together before progressing into programming.",
+      "modules": [
         "Introduction to Electronic Components",
         "Chassis & Gearbox Mechanical Assembly",
         "Breadboard Prototyping without Soldering",
         "Testing Line & Obstacle Sensors",
         "Mini Arena Challenge"
       ],
-      image: "/assets/brochure/img_8.jpg",
-      status: "active",
-      displayOrder: 1
+      "image": "/assets/srv_workshop.jpg",
+      "status": "active",
+      "displayOrder": 1
     },
     {
-      id: "sub-2",
-      serviceId: "srv-workshops",
-      serviceSlug: "workshops",
-      title: "Arduino & Microcontroller Workshop",
-      slug: "arduino-microcontroller-workshop",
-      description: "Comprehensive introduction to digital I/O, PWM, and C-based logic on Arduino boards.",
-      detailedOverview: "Students learn how code commands physical components. We cover reading analog inputs, writing digital outputs, and building responsive prototypes like automated streetlights and buzzer alarms.",
-      modules: [
+      "id": "sub-2",
+      "serviceId": "srv-workshops",
+      "serviceSlug": "workshops",
+      "title": "Arduino & Microcontroller Workshop",
+      "slug": "arduino-microcontroller-workshop",
+      "description": "Comprehensive introduction to digital I/O, PWM, and C-based logic on Arduino boards.",
+      "detailedOverview": "Students learn how code commands physical components. We cover reading analog inputs, writing digital outputs, and building responsive prototypes like automated streetlights and buzzer alarms.",
+      "modules": [
         "Microcontroller Architecture & Pin Maps",
         "C++ Syntax & Logic on Arduino IDE",
         "Digital Read/Write & Analog ADC",
         "Actuator Interfacing (Relays & Servos)",
         "Automated Smart Device Project"
       ],
-      image: "/assets/brochure/img_1.jpg",
-      status: "active",
-      displayOrder: 2
+      "image": "/assets/srv_workshop.jpg",
+      "status": "active",
+      "displayOrder": 2
     },
     {
-      id: "sub-3",
-      serviceId: "srv-workshops",
-      serviceSlug: "workshops",
-      title: "AI & Computer Vision Essentials",
-      slug: "ai-computer-vision-workshop",
-      description: "Interactive session introducing facial detection, object tracking, and camera feeds.",
-      detailedOverview: "Designed for young curious minds to see AI in action. Using intuitive Python libraries and block tools, students write code to detect faces, recognize hand gestures, and trigger robotic actions.",
-      modules: [
+      "id": "sub-3",
+      "serviceId": "srv-workshops",
+      "serviceSlug": "workshops",
+      "title": "AI & Computer Vision Essentials",
+      "slug": "ai-computer-vision-workshop",
+      "description": "Interactive session introducing facial detection, object tracking, and camera feeds.",
+      "detailedOverview": "Designed for young curious minds to see AI in action. Using intuitive Python libraries and block tools, students write code to detect faces, recognize hand gestures, and trigger robotic actions.",
+      "modules": [
         "What is Computer Vision?",
         "Camera Feed Manipulation & Filters",
         "Gesture Recognition Pipeline",
         "Connecting Vision to Physical Outputs",
         "Student Presentation"
       ],
-      image: "/assets/brochure/img_12.jpg",
-      status: "active",
-      displayOrder: 3
+      "image": "/assets/srv_workshop.jpg",
+      "status": "active",
+      "displayOrder": 3
     },
     {
-      id: "sub-4",
-      serviceId: "srv-prayogshala",
-      serviceSlug: "tech-labs-prayogshala",
-      title: "Component-Based Robotics Lab",
-      slug: "component-based-robotics-lab",
-      description: "A complete innovation lab setup with microcontrollers, breadboards, chassis, and electronics.",
-      detailedOverview: "We install dedicated workstations equipped with component organizers, DC power supplies, multimeters, and over 150+ varieties of electronic parts. This transforms ordinary classrooms into active R&D centers.",
-      modules: [
+      "id": "sub-4",
+      "serviceId": "srv-prayogshala",
+      "serviceSlug": "tech-labs-prayogshala",
+      "title": "Component-Based Robotics Lab",
+      "slug": "component-based-robotics-lab",
+      "description": "A complete innovation lab setup with microcontrollers, breadboards, chassis, and electronics.",
+      "detailedOverview": "We install dedicated workstations equipped with component organizers, DC power supplies, multimeters, and over 150+ varieties of electronic parts. This transforms ordinary classrooms into active R&D centers.",
+      "modules": [
         "Full Workstation & Storage Setup",
         "Over 150 Electronic Components Catalog",
         "Modular Chassis & Gearbox Kits",
         "Continuous Lab Replenishment Support"
       ],
-      image: "/assets/brochure/img_10.jpg",
-      status: "active",
-      displayOrder: 1
+      "image": "/assets/srv_prayogshala.jpg",
+      "status": "active",
+      "displayOrder": 1
     },
     {
-      id: "sub-5",
-      serviceId: "srv-prayogshala",
-      serviceSlug: "tech-labs-prayogshala",
-      title: "Advanced IoT & Smart Systems Lab",
-      slug: "iot-smart-systems-lab",
-      description: "Cloud-connected lab bench with Wi-Fi microcontrollers and telemetry display modules.",
-      detailedOverview: "Equips older students to build IoT stations that push environmental data, air quality stats, and telemetry to cloud dashboards, giving them real exposure to smart-city technologies.",
-      modules: [
+      "id": "sub-5",
+      "serviceId": "srv-prayogshala",
+      "serviceSlug": "tech-labs-prayogshala",
+      "title": "Advanced IoT & Smart Systems Lab",
+      "slug": "iot-smart-systems-lab",
+      "description": "Cloud-connected lab bench with Wi-Fi microcontrollers and telemetry display modules.",
+      "detailedOverview": "Equips older students to build IoT stations that push environmental data, air quality stats, and telemetry to cloud dashboards, giving them real exposure to smart-city technologies.",
+      "modules": [
         "ESP32 & NodeMCU Test Benches",
         "Environmental & Gas Sensor Suites",
         "Local Gateway & Cloud Telemetry Setup",
         "Interactive Dashboard Monitors"
       ],
-      image: "/assets/brochure/img_18.jpg",
-      status: "active",
-      displayOrder: 2
+      "image": "/assets/srv_prayogshala.jpg",
+      "status": "active",
+      "displayOrder": 2
     },
     {
-      id: "sub-6",
-      serviceId: "srv-prayogshala",
-      serviceSlug: "tech-labs-prayogshala",
-      title: "Makerspace & Prototyping Station",
-      slug: "makerspace-prototyping-station",
-      description: "Creative fabrication station featuring 3D printers, foam cutters, and aesthetic modeling supplies.",
-      detailedOverview: "Allows students to give physical shape to their creative ideas. From lightweight aerodynamic shells to gear linkages, this station fosters mechanical engineering intuition.",
-      modules: [
+      "id": "sub-6",
+      "serviceId": "srv-prayogshala",
+      "serviceSlug": "tech-labs-prayogshala",
+      "title": "Makerspace & Prototyping Station",
+      "slug": "makerspace-prototyping-station",
+      "description": "Creative fabrication station featuring 3D printers, foam cutters, and aesthetic modeling supplies.",
+      "detailedOverview": "Allows students to give physical shape to their creative ideas. From lightweight aerodynamic shells to gear linkages, this station fosters mechanical engineering intuition.",
+      "modules": [
         "Precision 3D Printer & Filament Stock",
         "Foam Cutters, Safety Shears & Glue Guns",
         "Aesthetic Craft Materials & Chassis Plates",
         "Safety Equipment & First-Aid Protocols"
       ],
-      image: "/assets/brochure/img_21.jpg",
-      status: "active",
-      displayOrder: 3
+      "image": "/assets/srv_prayogshala.jpg",
+      "status": "active",
+      "displayOrder": 3
     },
     {
-      id: "sub-7",
-      serviceId: "srv-anveshana",
-      serviceSlug: "tech-tours-anveshana",
-      title: "IIT & National University Immersion",
-      slug: "iit-university-tech-immersion",
-      description: "Guided technical visits to IIT Hyderabad and premier university research labs.",
-      detailedOverview: "Students walk through national research labs, witness advanced industrial robots, supercomputing clusters, and interact directly with professors and doctoral scholars.",
-      modules: [
+      "id": "sub-7",
+      "serviceId": "srv-anveshana",
+      "serviceSlug": "tech-tours-anveshana",
+      "title": "IIT & National University Immersion",
+      "slug": "iit-university-tech-immersion",
+      "description": "Guided technical visits to IIT Hyderabad and premier university research labs.",
+      "detailedOverview": "Students walk through national research labs, witness advanced industrial robots, supercomputing clusters, and interact directly with professors and doctoral scholars.",
+      "modules": [
         "IIT Campus Guided Lab Tour",
         "Interactive Q&A with University Researchers",
         "Live Demonstration of Industrial Robots",
         "Student Career Guidance & Path Mapping"
       ],
-      image: "/assets/brochure/img_14.jpg",
-      status: "active",
-      displayOrder: 1
+      "image": "/assets/srv_anveshana.jpg",
+      "status": "active",
+      "displayOrder": 1
     },
     {
-      id: "sub-8",
-      serviceId: "srv-anveshana",
-      serviceSlug: "tech-tours-anveshana",
-      title: "Incubation & Startup Hub Visit",
-      slug: "incubation-entrepreneurship-tour",
-      description: "Exposure to deep-tech hardware startups, patent labs, and prototype testing centers.",
-      detailedOverview: "Inspires young minds to see how school projects grow into commercial innovations. Students tour incubator floors, meet startup founders, and see patents being engineered.",
-      modules: [
+      "id": "sub-8",
+      "serviceId": "srv-anveshana",
+      "serviceSlug": "tech-tours-anveshana",
+      "title": "Incubation & Startup Hub Visit",
+      "slug": "incubation-entrepreneurship-tour",
+      "description": "Exposure to deep-tech hardware startups, patent labs, and prototype testing centers.",
+      "detailedOverview": "Inspires young minds to see how school projects grow into commercial innovations. Students tour incubator floors, meet startup founders, and see patents being engineered.",
+      "modules": [
         "Incubator Floor Walkthrough",
         "Founder Pitch Sessions & Case Studies",
         "Patent & Prototype Demonstration",
         "Interactive Ideation Workshop"
       ],
-      image: "/assets/brochure/img_16.jpg",
-      status: "active",
-      displayOrder: 2
+      "image": "/assets/srv_anveshana.jpg",
+      "status": "active",
+      "displayOrder": 2
     },
     {
-      id: "sub-9",
-      serviceId: "srv-bootcamps",
-      serviceSlug: "boot-camps",
-      title: "Semester Robotics Foundation",
-      slug: "semester-robotics-foundation",
-      description: "12-week structured semester track covering circuit theory, logic gates, and autonomous navigation.",
-      detailedOverview: "A weekly intensive sprint where students build a complete functional robot from scratch, culminating in a semester exhibition for parents and faculty.",
-      modules: [
+      "id": "sub-9",
+      "serviceId": "srv-bootcamps",
+      "serviceSlug": "boot-camps",
+      "title": "Semester Robotics Foundation",
+      "slug": "semester-robotics-foundation",
+      "description": "12-week structured semester track covering circuit theory, logic gates, and autonomous navigation.",
+      "detailedOverview": "A weekly intensive sprint where students build a complete functional robot from scratch, culminating in a semester exhibition for parents and faculty.",
+      "modules": [
         "Weekly Hands-on Theory & Lab",
         "Sensors, Logic & Decision Trees",
         "Bluetooth Mobile Control Integration",
         "Semester Capstone Evaluation"
       ],
-      image: "/assets/brochure/img_9.jpg",
-      status: "active",
-      displayOrder: 1
+      "image": "/assets/srv_bootcamp.jpg",
+      "status": "active",
+      "displayOrder": 1
     },
     {
-      id: "sub-10",
-      serviceId: "srv-yearend",
-      serviceSlug: "year-end-programs",
-      title: "School Annual Curriculum Program",
-      slug: "school-annual-curriculum",
-      description: "Full 10-month integration into the school timetable from Grade 3 through Grade 10.",
-      detailedOverview: "Seamlessly aligns with CBSE/ICSE science and mathematics syllabus. Each student receives individual books, hardware components, and weekly lab instruction from certified mentors.",
-      modules: [
+      "id": "sub-10",
+      "serviceId": "srv-yearend",
+      "serviceSlug": "year-end-programs",
+      "title": "School Annual Curriculum Program",
+      "slug": "school-annual-curriculum",
+      "description": "Full 10-month integration into the school timetable from Grade 3 through Grade 10.",
+      "detailedOverview": "Seamlessly aligns with CBSE/ICSE science and mathematics syllabus. Each student receives individual books, hardware components, and weekly lab instruction from certified mentors.",
+      "modules": [
         "Age-Appropriate Curriculum (Grade 3 to 10)",
         "Custom Workbooks & Robotics Textbooks",
         "Continuous Formative Assessments",
         "Annual Project Expo Exhibition"
       ],
-      image: "/assets/brochure/img_6.jpg",
-      status: "active",
-      displayOrder: 1
+      "image": "/assets/srv_yearend.jpg",
+      "status": "active",
+      "displayOrder": 1
     },
     {
-      id: "sub-11",
-      serviceId: "srv-teacher",
-      serviceSlug: "teacher-training-programs",
-      title: "Tech Teaching Methodologies & Maker Pedagogy",
-      slug: "tech-teaching-methodologies",
-      description: "Intensive 8-14 week training empowering school teachers to run hands-on STEM classes.",
-      detailedOverview: "Focuses on pedagogical confidence: how to guide students through open-ended debugging, safety in maker labs, and grading experiential STEM projects.",
-      modules: [
+      "id": "sub-11",
+      "serviceId": "srv-teacher",
+      "serviceSlug": "teacher-training-programs",
+      "title": "Tech Teaching Methodologies & Maker Pedagogy",
+      "slug": "tech-teaching-methodologies",
+      "description": "Intensive 8-14 week training empowering school teachers to run hands-on STEM classes.",
+      "detailedOverview": "Focuses on pedagogical confidence: how to guide students through open-ended debugging, safety in maker labs, and grading experiential STEM projects.",
+      "modules": [
         "Experiential Learning Pedagogy",
         "Lab Safety & Troubleshooting Guide",
         "Lesson Planning & Rubric Development",
         "Practical Certification Exam"
       ],
-      image: "/assets/brochure/img_15.jpg",
-      status: "active",
-      displayOrder: 1
+      "image": "/assets/srv_teacher.jpg",
+      "status": "active",
+      "displayOrder": 1
     }
   ],
-  homeBanners: [
+  "homeBanners": [
     {
-      id: "banner-1",
-      badge: "Future-Ready Skills",
-      title: "Future-Ready Skills for a Brighter Tomorrow",
-      subtitle: "Robotics | AI | IoT | STEM for Curious Minds. First in India to introduce component-based robotics from 3rd standard.",
-      ctaText: "Explore Programs",
-      ctaLink: "/courses",
-      imageUrl: "/assets/brochure/img_7.jpg",
-      displayOrder: 1,
-      status: "active"
+      "id": "banner-1",
+      "badge": "Future-Ready Skills",
+      "title": "Future-Ready Skills for a Brighter Tomorrow",
+      "subtitle": "Robotics | AI | IoT | STEM for Curious Minds. First in India to introduce component-based robotics from 3rd standard.",
+      "ctaText": "Explore Programs",
+      "ctaLink": "/courses",
+      "imageUrl": "/assets/hero_robotics.jpg",
+      "displayOrder": 1,
+      "status": "active"
     },
     {
-      id: "banner-2",
-      badge: "Hands-on School Tech Labs",
-      title: "Prayogshala Tech Labs & Experiential Learning",
-      subtitle: "Empowering 5000+ students across 50+ schools with state-of-the-art microcontrollers, robotics, and IIT Hyderabad associated standards.",
-      ctaText: "Discover Tech Labs",
-      ctaLink: "/services/tech-labs-prayogshala",
-      imageUrl: "/assets/brochure/img_6.jpg",
-      displayOrder: 2,
-      status: "active"
+      "id": "banner-2",
+      "badge": "Hands-on School Tech Labs",
+      "title": "Prayogshala Tech Labs & Experiential Learning",
+      "subtitle": "Empowering 5000+ students across 50+ schools with state-of-the-art microcontrollers, robotics, and IIT Hyderabad associated standards.",
+      "ctaText": "Discover Tech Labs",
+      "ctaLink": "/services/tech-labs-prayogshala",
+      "imageUrl": "/assets/brochure/img_6.jpg",
+      "displayOrder": 2,
+      "status": "active"
     }
   ],
-  teamMembers: [
+  "teamMembers": [
     {
-      id: "team-1",
-      name: "Dr. K. Srinivas",
-      role: "Lead Robotics & Embedded Scientist",
-      bio: "15+ years of research experience in Mechatronics and STEM curriculum. Spearheaded component-based robotics integration across 50+ schools.",
-      image: "/assets/brochure/img_11.jpg",
-      displayOrder: 1,
-      status: "active"
+      "id": "team-1",
+      "name": "Dr. K. Srinivas",
+      "role": "Lead Robotics & Embedded Scientist",
+      "bio": "15+ years of research experience in Mechatronics and STEM curriculum. Spearheaded component-based robotics integration across 50+ schools.",
+      "image": "/assets/srv_teacher.jpg",
+      "displayOrder": 1,
+      "status": "active"
     },
     {
-      id: "team-2",
-      name: "Ananya Deshmukh",
-      role: "AI & Machine Learning Specialist",
-      bio: "Specialist in Python computer vision, cognitive systems, and youth-oriented machine learning pedagogy.",
-      image: "/assets/brochure/img_15.jpg",
-      displayOrder: 2,
-      status: "active"
+      "id": "team-2",
+      "name": "Ananya Deshmukh",
+      "role": "AI & Machine Learning Specialist",
+      "bio": "Specialist in Python computer vision, cognitive systems, and youth-oriented machine learning pedagogy.",
+      "image": "/assets/course_ai_python.jpg",
+      "displayOrder": 2,
+      "status": "active"
     },
     {
-      id: "team-3",
-      name: "Vikram Verma",
-      role: "Head of Hardware & Maker Labs",
-      bio: "Hardware architect specializing in Arduino, ESP32 telemetry, UAV avionics, and Prayogshala lab setups.",
-      image: "/assets/brochure/img_19.jpg",
-      displayOrder: 3,
-      status: "active"
+      "id": "team-3",
+      "name": "Vikram Verma",
+      "role": "Head of Hardware & Maker Labs",
+      "bio": "Hardware architect specializing in Arduino, ESP32 telemetry, UAV avionics, and Prayogshala lab setups.",
+      "image": "/assets/course_iot_esp32.jpg",
+      "displayOrder": 3,
+      "status": "active"
     },
     {
-      id: "team-4",
-      name: "Pooja Sharma",
-      role: "Director of Teacher Training & Outreach",
-      bio: "Leading the professional development of school educators to champion hands-on STEM across classrooms.",
-      image: "/assets/brochure/img_12.jpg",
-      displayOrder: 4,
-      status: "active"
+      "id": "team-4",
+      "name": "Pooja Sharma",
+      "role": "Director of Teacher Training & Outreach",
+      "bio": "Leading the professional development of school educators to champion hands-on STEM across classrooms.",
+      "image": "/assets/srv_yearend.jpg",
+      "displayOrder": 4,
+      "status": "active"
     }
   ],
-  galleryItems: [
+  "galleryItems": [
     {
-      id: "gal-1",
-      title: "Amity University Tech Summit Delegation",
-      category: "Tech Tours",
-      imageUrl: "/assets/brochure/img_14.jpg",
-      status: "active",
-      displayOrder: 1
+      "id": "gal-1",
+      "title": "Amity University Tech Summit Delegation",
+      "category": "Tech Tours",
+      "imageUrl": "/assets/srv_anveshana.jpg",
+      "status": "active",
+      "displayOrder": 1
     },
     {
-      id: "gal-2",
-      title: "Autonomous Mobile Robot Assembly & Wiring",
-      category: "Workshops",
-      imageUrl: "/assets/brochure/img_7.jpg",
-      status: "active",
-      displayOrder: 2
+      "id": "gal-2",
+      "title": "Autonomous Mobile Robot Assembly & Wiring",
+      "category": "Workshops",
+      "imageUrl": "/assets/hero_robotics.jpg",
+      "status": "active",
+      "displayOrder": 2
     },
     {
-      id: "gal-3",
-      title: "Prayogshala Electronics & Sensor Workbench",
-      category: "Tech Labs",
-      imageUrl: "/assets/brochure/img_10.jpg",
-      status: "active",
-      displayOrder: 3
+      "id": "gal-3",
+      "title": "Prayogshala Electronics & Sensor Workbench",
+      "category": "Tech Labs",
+      "imageUrl": "/assets/srv_prayogshala.jpg",
+      "status": "active",
+      "displayOrder": 3
     },
     {
-      id: "gal-4",
-      title: "Pradarshan Annual Student Robotics Expo",
-      category: "Competitions",
-      imageUrl: "/assets/brochure/img_13.jpg",
-      status: "active",
-      displayOrder: 4
+      "id": "gal-4",
+      "title": "Pradarshan Annual Student Robotics Expo",
+      "category": "Competitions",
+      "imageUrl": "/assets/srv_competition.jpg",
+      "status": "active",
+      "displayOrder": 4
     },
     {
-      id: "gal-5",
-      title: "Hands-on Microcontroller Soldering & Testing",
-      category: "Workshops",
-      imageUrl: "/assets/brochure/img_8.jpg",
-      status: "active",
-      displayOrder: 5
+      "id": "gal-5",
+      "title": "Hands-on Microcontroller Soldering & Testing",
+      "category": "Workshops",
+      "imageUrl": "/assets/srv_workshop.jpg",
+      "status": "active",
+      "displayOrder": 5
     },
     {
-      id: "gal-6",
-      title: "Electric Go-Kart Chassis & Steering Fabrication",
-      category: "Tech Labs",
-      imageUrl: "/assets/brochure/img_24.jpg",
-      status: "active",
-      displayOrder: 6
+      "id": "gal-6",
+      "title": "Electric Go-Kart Chassis & Steering Fabrication",
+      "category": "Tech Labs",
+      "imageUrl": "/assets/course_mechatronics.jpg",
+      "status": "active",
+      "displayOrder": 6
     },
     {
-      id: "gal-7",
-      title: "Inter-School Robo-Soccer Arena Championship",
-      category: "Competitions",
-      imageUrl: "/assets/brochure/img_23.jpg",
-      status: "active",
-      displayOrder: 7
+      "id": "gal-7",
+      "title": "Inter-School Robo-Soccer Arena Championship",
+      "category": "Competitions",
+      "imageUrl": "/assets/srv_bootcamp.jpg",
+      "status": "active",
+      "displayOrder": 7
     },
     {
-      id: "gal-8",
-      title: "Anveshana IIT Hyderabad National Lab Visit",
-      category: "Tech Tours",
-      imageUrl: "/assets/brochure/img_16.jpg",
-      status: "active",
-      displayOrder: 8
+      "id": "gal-8",
+      "title": "Anveshana IIT Hyderabad National Lab Visit",
+      "category": "Tech Tours",
+      "imageUrl": "/assets/course_drone.jpg",
+      "status": "active",
+      "displayOrder": 8
     }
   ],
-  leads: [
+  "leads": [
     {
-      id: "lead-101",
-      fullName: "Rahul Sharma",
-      phone: "+91 98765 43210",
-      email: "rahul.sharma@example.com",
-      sourceType: "course",
-      courseId: "course-1",
-      courseName: "Robotics with Embedded 'C'",
-      serviceId: null,
-      serviceName: null,
-      subServiceId: null,
-      subServiceName: null,
-      message: "Interested in the weekend batch for grade 7 student.",
-      status: "new",
-      createdAt: new Date(Date.now() - 3600000 * 24).toISOString()
+      "id": "lead-1789759758824",
+      "fullName": "Siddharth Rao",
+      "phone": "+91 98765 12345",
+      "email": "siddharth@example.com",
+      "sourceType": "course",
+      "courseId": "course-1",
+      "courseName": "Robotics with Embedded C",
+      "serviceId": null,
+      "serviceName": null,
+      "subServiceId": null,
+      "subServiceName": null,
+      "message": "Interested in offline weekend batch",
+      "status": "new",
+      "createdAt": "2026-09-18T19:29:18.824Z"
     },
     {
-      id: "lead-102",
-      fullName: "Priya Mehta",
-      phone: "+91 98220 11223",
-      email: "priya.mehta@delhischool.edu",
-      sourceType: "service",
-      courseId: null,
-      courseName: null,
-      serviceId: "srv-prayogshala",
-      serviceName: "Tech Labs (Prayogshala)",
-      subServiceId: "sub-4",
-      subServiceName: "Component-Based Robotics Lab",
-      message: "Looking to setup Prayogshala lab for our middle school campus.",
-      status: "contacted",
-      createdAt: new Date(Date.now() - 3600000 * 48).toISOString()
+      "id": "lead-1789723057599",
+      "fullName": "Vikramaditya Test",
+      "phone": "+91 98765 43210",
+      "email": "vikram.test@example.com",
+      "sourceType": "course",
+      "courseId": "course-1",
+      "courseName": "Robotics with Embedded 'C'",
+      "serviceId": null,
+      "serviceName": null,
+      "subServiceId": null,
+      "subServiceName": null,
+      "message": "Automated test enquiry for robotics course",
+      "status": "new",
+      "createdAt": "2026-09-18T09:17:37.600Z"
     },
     {
-      id: "lead-103",
-      fullName: "Amit Kumar",
-      phone: "+91 99401 55667",
-      email: "amit.k@techinnovate.org",
-      sourceType: "course",
-      courseId: "course-3",
-      courseName: "Internet of Things (IoT) with Embedded 'C'",
-      serviceId: null,
-      serviceName: null,
-      subServiceId: null,
-      subServiceName: null,
-      message: "Enquiry regarding online live batch schedule.",
-      status: "converted",
-      createdAt: new Date(Date.now() - 3600000 * 72).toISOString()
+      "id": "lead-101",
+      "fullName": "Rahul Sharma",
+      "phone": "+91 98765 43210",
+      "email": "rahul.sharma@example.com",
+      "sourceType": "course",
+      "courseId": "course-1",
+      "courseName": "Robotics with Embedded 'C'",
+      "serviceId": null,
+      "serviceName": null,
+      "subServiceId": null,
+      "subServiceName": null,
+      "message": "Interested in the weekend batch for grade 7 student.",
+      "status": "new",
+      "createdAt": "2026-09-17T08:17:25.955Z"
+    },
+    {
+      "id": "lead-102",
+      "fullName": "Priya Mehta",
+      "phone": "+91 98220 11223",
+      "email": "priya.mehta@delhischool.edu",
+      "sourceType": "service",
+      "courseId": null,
+      "courseName": null,
+      "serviceId": "srv-prayogshala",
+      "serviceName": "Tech Labs (Prayogshala)",
+      "subServiceId": "sub-4",
+      "subServiceName": "Component-Based Robotics Lab",
+      "message": "Looking to setup Prayogshala lab for our middle school campus.",
+      "status": "contacted",
+      "createdAt": "2026-09-16T08:17:25.955Z"
+    },
+    {
+      "id": "lead-103",
+      "fullName": "Amit Kumar",
+      "phone": "+91 99401 55667",
+      "email": "amit.k@techinnovate.org",
+      "sourceType": "course",
+      "courseId": "course-3",
+      "courseName": "Internet of Things (IoT) with Embedded 'C'",
+      "serviceId": null,
+      "serviceName": null,
+      "subServiceId": null,
+      "subServiceName": null,
+      "message": "Enquiry regarding online live batch schedule.",
+      "status": "converted",
+      "createdAt": "2026-09-15T08:17:25.955Z"
     }
   ],
-  settings: {
-    id: "global_settings",
-    companyName: "Edueme Research Labs",
-    tagline: "Think . Create . Innovate",
-    slogan: "Learn . Practice . Achieve",
-    phone: "+91 90595 08050",
-    mobile: "+91 90595 08050",
-    whatsappNumber: "+91 90595 08050",
-    alertEmail: "info@eduemeresearchlabs.com",
-    alertWhatsApp: "+919059508050",
-    address: "1-98/11/62, Arunodaya Colony, Sri Sai Nagar, Madhapur, Hyderabad, Telangana - 500081",
-    workingHours: "Mon - Sat: 9:00 AM - 6:00 PM",
-    socialLinks: {
-      facebook: "https://facebook.com/edueme",
-      instagram: "https://instagram.com/skilleducation",
-      linkedin: "https://linkedin.com/company/edueme",
-      youtube: "https://youtube.com/@edueme"
+  "settings": {
+    "id": "global_settings",
+    "companyName": "Edueme Research Labs",
+    "tagline": "Think . Create . Innovate",
+    "slogan": "Learn . Practice . Achieve",
+    "phone": "+91 90595 08050",
+    "mobile": "+91 90595 08050",
+    "whatsappNumber": "+91 90595 08050",
+    "alertEmail": "info@eduemeresearchlabs.com",
+    "alertWhatsApp": "+919059508050",
+    "address": "1-98/11/62, Arunodaya Colony, Sri Sai Nagar, Madhapur, Hyderabad, Telangana - 500081",
+    "workingHours": "Mon - Sat: 9:00 AM - 6:00 PM",
+    "socialLinks": {
+      "facebook": "https://facebook.com/edueme",
+      "instagram": "https://instagram.com/skilleducation",
+      "linkedin": "https://linkedin.com/company/edueme",
+      "youtube": "https://youtube.com/@edueme"
     },
-    stats: {
-      studentsTrained: "5000+",
-      workshops: "200+",
-      schools: "50+",
-      yearsExp: "10+"
+    "stats": {
+      "studentsTrained": "5000+",
+      "workshops": "200+",
+      "schools": "50+",
+      "yearsExp": "10+"
     },
-    aboutStory: "The pace of technical development in the modern world is accelerating more quickly than before. Adaptation and the acquisition of new competencies and skills are crucial in this continuously changing world. All citizens—young and old—are impacted by the advancement of digital technology and the digitalization of society.\n\nOur future generation is now in need to learn about these machines to be future ready. We at Edueme take extensive care of providing Work-Oriented learning opportunities to our students to make them ready for the 2nd half of the 21st century.\n\nOur team includes research scientists, innovators, and Physicists who have extensive knowledge and rich experience in the areas of Robotics, Mechanical Design, Machine Learning, and Artificial Intelligence. We are the first in India to introduce component-based robotics from 3rd standard.",
-    mission: "To provide high-quality, practical, and industry-focused education in emerging technologies, turning curious students into capable 21st-century inventors and engineers."
+    "aboutStory": "The pace of technical development in the modern world is accelerating more quickly than before. Adaptation and the acquisition of new competencies and skills are crucial in this continuously changing world. All citizens—young and old—are impacted by the advancement of digital technology and the digitalization of society.\n\nOur future generation is now in need to learn about these machines to be future ready. We at Edueme take extensive care of providing Work-Oriented learning opportunities to our students to make them ready for the 2nd half of the 21st century.\n\nOur team includes research scientists, innovators, and Physicists who have extensive knowledge and rich experience in the areas of Robotics, Mechanical Design, Machine Learning, and Artificial Intelligence. We are the first in India to introduce component-based robotics from 3rd standard.",
+    "mission": "To provide high-quality, practical, and industry-focused education in emerging technologies, turning curious students into capable 21st-century inventors and engineers."
   },
-  seo: [
+  "seo": [
     {
-      pageRoute: "/",
-      metaTitle: "Edueme Research Labs — Think. Create. Innovate. | STEM & Robotics",
-      metaDescription: "Future-ready STEM, Robotics, AI, and IoT education for schools and curious minds. Component-based robotics education from 3rd standard in Hyderabad.",
-      keywords: "STEM education, robotics for kids, AI with Python, IoT training, school robotics lab, Hyderabad"
+      "pageRoute": "/",
+      "metaTitle": "Edueme Research Labs — Think. Create. Innovate. | STEM & Robotics",
+      "metaDescription": "Future-ready STEM, Robotics, AI, and IoT education for schools and curious minds. Component-based robotics education from 3rd standard in Hyderabad.",
+      "keywords": "STEM education, robotics for kids, AI with Python, IoT training, school robotics lab, Hyderabad"
     },
     {
-      pageRoute: "/about",
-      metaTitle: "About Edueme Research Labs — Inspiring Innovation. Building Future.",
-      metaDescription: "Learn about Edueme Research Labs, our team of research scientists, physicists, and our mission to pioneer component-based robotics education.",
-      keywords: "Edueme about, robotics institute, STEM curriculum, science innovators Hyderabad"
+      "pageRoute": "/about",
+      "metaTitle": "About Edueme Research Labs — Inspiring Innovation. Building Future.",
+      "metaDescription": "Learn about Edueme Research Labs, our team of research scientists, physicists, and our mission to pioneer component-based robotics education.",
+      "keywords": "Edueme about, robotics institute, STEM curriculum, science innovators Hyderabad"
     },
     {
-      pageRoute: "/courses",
-      metaTitle: "Courses in Robotics, AI, IoT & Embedded Systems | Edueme Research Labs",
-      metaDescription: "Explore hands-on technology courses in Robotics with Embedded C, AI with Python, IoT, Mechatronics, and UAV Drone systems.",
-      keywords: "robotics courses, python AI course, embedded c course, IoT classes"
+      "pageRoute": "/courses",
+      "metaTitle": "Courses in Robotics, AI, IoT & Embedded Systems | Edueme Research Labs",
+      "metaDescription": "Explore hands-on technology courses in Robotics with Embedded C, AI with Python, IoT, Mechatronics, and UAV Drone systems.",
+      "keywords": "robotics courses, python AI course, embedded c course, IoT classes"
     },
     {
-      pageRoute: "/services",
-      metaTitle: "Programs & Services for Schools & Colleges | Edueme Research Labs",
-      metaDescription: "Prayogshala Tech Labs, Anveshana Tech Tours, Workshops, Boot Camps, and Teacher Training Programs for schools and institutions.",
-      keywords: "school robotics lab setup, prayogshala, tech tours, teacher STEM training"
+      "pageRoute": "/services",
+      "metaTitle": "Programs & Services for Schools & Colleges | Edueme Research Labs",
+      "metaDescription": "Prayogshala Tech Labs, Anveshana Tech Tours, Workshops, Boot Camps, and Teacher Training Programs for schools and institutions.",
+      "keywords": "school robotics lab setup, prayogshala, tech tours, teacher STEM training"
     },
     {
-      pageRoute: "/gallery",
-      metaTitle: "Moments of Learning & Innovation — Gallery | Edueme Research Labs",
-      metaDescription: "Glimpse of students building autonomous robots, school tech labs, competitions, and university research visits.",
-      keywords: "robotics gallery, student prototypes, STEM expo photos"
+      "pageRoute": "/gallery",
+      "metaTitle": "Moments of Learning & Innovation — Gallery | Edueme Research Labs",
+      "metaDescription": "Glimpse of students building autonomous robots, school tech labs, competitions, and university research visits.",
+      "keywords": "robotics gallery, student prototypes, STEM expo photos"
     },
     {
-      pageRoute: "/contact",
-      metaTitle: "Contact & Enquiry | Edueme Research Labs — Madhapur, Hyderabad",
-      metaDescription: "Get in touch with Edueme Research Labs. Enquire about courses, Prayogshala lab setups, or school workshops. Call +91 9059508050.",
-      keywords: "contact Edueme, robotics enquiry Hyderabad, Madhapur STEM lab"
+      "pageRoute": "/contact",
+      "metaTitle": "Contact & Enquiry | Edueme Research Labs — Madhapur, Hyderabad",
+      "metaDescription": "Get in touch with Edueme Research Labs. Enquire about courses, Prayogshala lab setups, or school workshops. Call +91 9059508050.",
+      "keywords": "contact Edueme, robotics enquiry Hyderabad, Madhapur STEM lab"
     }
   ],
-  notifications: []
+  "notifications": [
+    {
+      "id": "notif-1789759758962",
+      "leadId": "lead-1789759758824",
+      "timestamp": "2026-09-18T19:29:18.962Z",
+      "whatsAppRecipient": "+919059508050",
+      "whatsAppContent": "*NEW LEAD RECEIVED — EDUEME RESEARCH LABS*\n\n👤 *Name:* Siddharth Rao\n📞 *Phone:* +91 98765 12345\n✉️ *Email:* siddharth@example.com\n🎯 *Interest:* COURSE - Robotics with Embedded C\n💬 *Message:* Interested in offline weekend batch\n📅 *Time:* 19/9/2026, 12:59:18 am\n\nView in Admin Panel: http://localhost:3005/admin",
+      "whatsAppStatus": "Dispatched",
+      "emailRecipient": "info@eduemeresearchlabs.com",
+      "emailSubject": "[New Lead] Siddharth Rao — Robotics with Embedded C",
+      "emailStatus": "Dispatched"
+    },
+    {
+      "id": "notif-1789723057785",
+      "leadId": "lead-1789723057599",
+      "timestamp": "2026-09-18T09:17:37.785Z",
+      "whatsAppRecipient": "+919059508050",
+      "whatsAppContent": "*NEW LEAD RECEIVED — EDUEME RESEARCH LABS*\n\n👤 *Name:* Vikramaditya Test\n📞 *Phone:* +91 98765 43210\n✉️ *Email:* vikram.test@example.com\n🎯 *Interest:* COURSE - Robotics with Embedded 'C'\n💬 *Message:* Automated test enquiry for robotics course\n📅 *Time:* 18/9/2026, 2:47:37 pm\n\nView in Admin Panel: http://localhost:3005/admin",
+      "whatsAppStatus": "Dispatched",
+      "emailRecipient": "Info@eduemeresearchlabs.com",
+      "emailSubject": "[New Lead] Vikramaditya Test — Robotics with Embedded 'C'",
+      "emailStatus": "Dispatched"
+    }
+  ]
 };
 
-// Thread-safe / crash-safe read and write
 class Database {
   constructor() {
     this.init();
