@@ -285,6 +285,7 @@
         <li class="admin-nav-item"><a href="#dashboard" class="active" onclick="switchAdminTab('dashboard')">📊 Dashboard</a></li>
         <li class="admin-nav-item"><a href="#leads" onclick="switchAdminTab('leads')">📥 Leads & Enquiries</a></li>
         <li class="admin-nav-item"><a href="#courses" onclick="switchAdminTab('courses')">🎓 Courses</a></li>
+        <li class="admin-nav-item"><a href="#events" onclick="switchAdminTab('events')">📅 Events & Workshops</a></li>
         <li class="admin-nav-item"><a href="#services" onclick="switchAdminTab('services')">🔬 Services & Sub-Services</a></li>
         <li class="admin-nav-item"><a href="#gallery" onclick="switchAdminTab('gallery')">📸 Gallery</a></li>
         <li class="admin-nav-item"><a href="#team" onclick="switchAdminTab('team')">👥 Team Members</a></li>
@@ -423,6 +424,35 @@
                   </tr>
                 </thead>
                 <tbody id="admin-courses-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: EVENTS & WORKSHOPS MANAGEMENT -->
+        <section id="tab-events" style="display: none;">
+          <div class="admin-header-row">
+            <div>
+              <h2 class="admin-title">Events & Workshops Management</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Manage upcoming and past workshop events, cover images, multi-photo galleries, and dedicated event page descriptions</p>
+            </div>
+            <button class="header-cta-btn" onclick="openAddEventModal()">+ Add New Event</button>
+          </div>
+          <div class="table-card">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Cover Image</th>
+                    <th>Event Title & Slug</th>
+                    <th>Category & Type</th>
+                    <th>Date & Timings</th>
+                    <th>Gallery Photos</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-events-tbody"></tbody>
               </table>
             </div>
           </div>

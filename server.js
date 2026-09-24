@@ -584,6 +584,92 @@ app.delete('/api/gallery/:id', requireAdmin, (req, res) => {
 });
 
 // -------------------------------------------------------------
+// EVENTS API (Dynamically Manageable & Filterable)
+// -------------------------------------------------------------
+app.get('/api/events', (req, res) => {
+  const all = req.query.all === 'true';
+  const category = req.query.category;
+  const status = req.query.status; // upcoming, past
+  let items = db.get('events') || [];
+  if (!all) items = items.filter(e => e.status === 'active' || e.status === 'upcoming' || e.status === 'completed');
+  if (category && category !== 'All') {
+    items = items.filter(e => e.category && e.category.toLowerCase() === category.toLowerCase());
+  }
+  if (status && status !== 'All') {
+    items = items.filter(e => e.type && e.type.toLowerCase() === status.toLowerCase());
+  }
+  items.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  res.json(items);
+});
+
+app.get('/api/events/:identifier', (req, res) => {
+  const { identifier } = req.params;
+  const list = db.get('events') || [];
+  const event = list.find(e => e.slug === identifier || e.id === identifier);
+  if (!event) return res.status(404).json({ error: 'Event not found' });
+  res.json(event);
+});
+
+app.post('/api/events', requireAdmin, (req, res) => {
+  const events = db.get('events') || [];
+  const newEvent = {
+    id: 'event-' + Date.now(),
+    title: req.body.title || 'Untitled Event',
+    slug: req.body.slug || (req.body.title ? req.body.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'event-' + Date.now()),
+    category: req.body.category || 'Workshops',
+    type: req.body.type || 'upcoming', // upcoming, past
+    date: req.body.date || 'Upcoming Date',
+    timings: req.body.timings || '8:30 AM to 5:30 PM',
+    location: req.body.location || 'Edueme Research Labs / Partner Campus',
+    shortDescription: req.body.shortDescription || '',
+    description: req.body.description || '',
+    image: req.body.image || '/assets/events_hero.jpg',
+    photos: Array.isArray(req.body.photos) ? req.body.photos : (req.body.photos ? [req.body.photos] : []),
+    status: req.body.status || 'active',
+    displayOrder: parseInt(req.body.displayOrder, 10) || events.length + 1,
+    createdAt: new Date().toISOString()
+  };
+  events.push(newEvent);
+  db.set('events', events);
+  res.status(201).json(newEvent);
+});
+
+app.put('/api/events/:id', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const events = db.get('events') || [];
+  const index = events.findIndex(e => e.id === id);
+  if (index === -1) return res.status(404).json({ error: 'Event not found' });
+
+  events[index] = {
+    ...events[index],
+    title: req.body.title !== undefined ? req.body.title : events[index].title,
+    slug: req.body.slug !== undefined ? req.body.slug : events[index].slug,
+    category: req.body.category !== undefined ? req.body.category : events[index].category,
+    type: req.body.type !== undefined ? req.body.type : events[index].type,
+    date: req.body.date !== undefined ? req.body.date : events[index].date,
+    timings: req.body.timings !== undefined ? req.body.timings : events[index].timings,
+    location: req.body.location !== undefined ? req.body.location : events[index].location,
+    shortDescription: req.body.shortDescription !== undefined ? req.body.shortDescription : events[index].shortDescription,
+    description: req.body.description !== undefined ? req.body.description : events[index].description,
+    image: req.body.image !== undefined ? req.body.image : events[index].image,
+    photos: Array.isArray(req.body.photos) ? req.body.photos : events[index].photos,
+    status: req.body.status !== undefined ? req.body.status : events[index].status,
+    displayOrder: req.body.displayOrder !== undefined ? parseInt(req.body.displayOrder, 10) : events[index].displayOrder,
+    updatedAt: new Date().toISOString()
+  };
+  db.set('events', events);
+  res.json(events[index]);
+});
+
+app.delete('/api/events/:id', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  let events = db.get('events') || [];
+  events = events.filter(e => e.id !== id);
+  db.set('events', events);
+  res.json({ success: true });
+});
+
+// -------------------------------------------------------------
 // LEADS & UNIFIED ENQUIRY API
 // -------------------------------------------------------------
 app.post('/api/leads', (req, res) => {
@@ -800,6 +886,49 @@ app.put('/api/seo', requireAdmin, (req, res) => {
   }
   db.set('seo', list);
   res.json({ success: true, seo: list });
+});
+
+// -------------------------------------------------------------
+// IMAGE UPLOAD API (Base64 file upload helper for Admin)
+// -------------------------------------------------------------
+app.post('/api/upload', requireAdmin, (req, res) => {
+  try {
+    const raw = req.body.data || req.body.imageBase64;
+    const filename = req.body.filename;
+    if (!raw) return res.status(400).json({ error: 'No image data provided' });
+
+    // Ensure uploads directory exists
+    const uploadsDir = path.join(__dirname, 'public', 'assets', 'uploads');
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+
+    // Match base64 prefix
+    const matches = raw.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    let buffer;
+    let ext = '.jpg';
+
+    if (matches && matches.length === 3) {
+      const mime = matches[1];
+      if (mime.includes('png')) ext = '.png';
+      else if (mime.includes('webp')) ext = '.webp';
+      else if (mime.includes('svg')) ext = '.svg';
+      else if (mime.includes('gif')) ext = '.gif';
+      buffer = Buffer.from(matches[2], 'base64');
+    } else {
+      buffer = Buffer.from(data, 'base64');
+    }
+
+    const safeName = (filename ? filename.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() : 'upload') + '_' + Date.now() + ext;
+    const filePath = path.join(uploadsDir, safeName);
+    fs.writeFileSync(filePath, buffer);
+
+    const publicUrl = `/assets/uploads/${safeName}`;
+    res.json({ success: true, url: publicUrl });
+  } catch (err) {
+    console.error('Upload error:', err);
+    res.status(500).json({ error: 'Failed to save uploaded file' });
+  }
 });
 
 // -------------------------------------------------------------

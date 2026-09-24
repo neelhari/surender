@@ -8,6 +8,7 @@ let adminState = {
   stats: {},
   leads: [],
   courses: [],
+  events: [],
   services: [],
   subServices: [],
   gallery: [],
@@ -121,7 +122,7 @@ async function adminLogout() {
 // TAB SWITCHING
 // --------------------------------------------------------------------------
 function switchAdminTab(tabName) {
-  const tabs = ['dashboard', 'leads', 'courses', 'services', 'gallery', 'team', 'banners', 'settings', 'seo'];
+  const tabs = ['dashboard', 'leads', 'courses', 'events', 'services', 'gallery', 'team', 'banners', 'settings', 'seo'];
   tabs.forEach(t => {
     const section = document.getElementById(`tab-${t}`);
     if (section) section.style.display = (t === tabName) ? 'block' : 'none';
@@ -139,6 +140,7 @@ function switchAdminTab(tabName) {
     dashboard: 'Dashboard Overview',
     leads: 'Leads & Enquiries',
     courses: 'Courses Management',
+    events: 'Events & Workshops Management',
     services: 'Services & Sub-Services',
     gallery: 'Gallery Showcase',
     team: 'Team & Mentors',
@@ -167,6 +169,7 @@ async function loadAllAdminData() {
   await Promise.all([
     loadLeads(),
     loadCourses(),
+    loadAdminEvents(),
     loadServices(),
     loadGallery(),
     loadTeam(),
@@ -616,6 +619,425 @@ async function deleteCourse(id) {
   });
   showAdminToast('Course deleted');
   loadCourses();
+}
+
+// -------------------------------------------------------------
+// 2.5 EVENTS & WORKSHOPS CRUD
+// -------------------------------------------------------------
+let currentEventPhotos = [];
+
+function renderEventPhotosPreview() {
+  const container = document.getElementById('event-photos-preview-grid');
+  if (!container) return;
+  if (!currentEventPhotos || currentEventPhotos.length === 0) {
+    container.innerHTML = '<div style="font-size: 12px; color: #94a3b8; font-style: italic; padding: 4px;">No dedicated page photos added yet. (Card cover image will be used by default)</div>';
+    return;
+  }
+  container.innerHTML = currentEventPhotos.map((url, idx) => `
+    <div style="position: relative; width: 72px; height: 54px; border-radius: 6px; overflow: hidden; border: 1px solid #cbd5e1; background: #f8fafc; flex-shrink: 0;">
+      <img src="${url}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/events_hero.jpg'">
+      <button type="button" onclick="removeEventPhoto(${idx})" style="position: absolute; top: 2px; right: 2px; background: rgba(239,68,68,0.9); color: #fff; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;">&times;</button>
+    </div>
+  `).join('');
+}
+
+function removeEventPhoto(idx) {
+  currentEventPhotos.splice(idx, 1);
+  renderEventPhotosPreview();
+}
+
+function addEventPhotoFromInput() {
+  const input = document.getElementById('ev-photo-url-input');
+  if (!input) return;
+  const val = input.value.trim();
+  if (val) {
+    currentEventPhotos.push(val);
+    input.value = '';
+    renderEventPhotosPreview();
+  }
+}
+
+async function handleEventMultiPhotoUpload(fileInput) {
+  const files = fileInput.files;
+  if (!files || files.length === 0) return;
+
+  showAdminToast(`Uploading ${files.length} photo(s)...`);
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${currentToken}`
+            },
+            body: JSON.stringify({ imageBase64: e.target.result, filename: file.name })
+          });
+          const data = await res.json();
+          if (data.url) {
+            currentEventPhotos.push(data.url);
+          }
+        } catch (err) {
+          console.error('Multi upload err:', err);
+        }
+        resolve();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  fileInput.value = '';
+  renderEventPhotosPreview();
+  showAdminToast('Dedicated page photos updated!');
+}
+
+async function loadAdminEvents() {
+  try {
+    const res = await fetch('/api/events?all=true');
+    adminState.events = await res.json();
+    renderAdminEventsTable();
+  } catch (e) {
+    console.error('Error loading events:', e);
+  }
+}
+
+function renderAdminEventsTable() {
+  const tbody = document.getElementById('admin-events-tbody');
+  if (!tbody) return;
+
+  if (!adminState.events || adminState.events.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 24px;">No events created yet. Click "+ Add New Event" to get started.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = adminState.events.map(ev => {
+    const photoCount = (ev.photos && ev.photos.length) || 0;
+    const typeClass = ev.type === 'upcoming' ? 'status-active' : 'status-completed';
+    const typeLabel = ev.type === 'upcoming' ? 'Upcoming' : 'Past Event';
+
+    return `
+      <tr>
+        <td>
+          <img src="${ev.image || '/assets/events_hero.jpg'}" style="width: 54px; height: 38px; border-radius: 6px; object-fit: cover; border: 1px solid #e2e8f0;" onerror="this.src='/assets/events_hero.jpg'">
+        </td>
+        <td>
+          <strong>${ev.title}</strong>
+          <div style="font-size: 11px; color: #64748b; font-family: monospace;">/events/${ev.slug}</div>
+        </td>
+        <td>
+          <span class="meta-pill" style="margin-bottom: 3px; display: inline-block;">${ev.category || 'Workshop'}</span>
+          <div><span class="status-pill ${typeClass}" style="font-size: 11px; padding: 2px 6px;">${typeLabel}</span></div>
+        </td>
+        <td style="font-size: 12px;">
+          <div><strong>📅 ${ev.date || 'TBD'}</strong></div>
+          <div style="color: #64748b;">⏰ ${ev.timings || '8:30 AM to 5:30 PM'}</div>
+        </td>
+        <td style="font-size: 12px; color: #475569;">
+          <strong>${photoCount}</strong> photo(s)
+        </td>
+        <td>
+          <span class="status-pill status-${ev.status || 'active'}">${ev.status || 'active'}</span>
+        </td>
+        <td>
+          <button class="action-btn action-btn-call" onclick="openEditEventModal('${ev.id}')">✏️ Edit</button>
+          <button class="action-btn" style="color: #ef4444;" onclick="deleteEvent('${ev.id}')" title="Delete Event">🗑️</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function openAddEventModal() {
+  currentEventPhotos = [];
+  const body = `
+    <form id="modal-event-form">
+      <div class="form-group">
+        <label class="form-label">Event Title *</label>
+        <input type="text" id="ev-title" class="form-control" required placeholder="e.g. Free Hands-on Robotics & AI Workshop" oninput="if(!document.getElementById('ev-slug').dataset.touched) document.getElementById('ev-slug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')">
+      </div>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">Dedicated Page URL Slug *</label>
+          <input type="text" id="ev-slug" class="form-control" placeholder="free-hands-on-robotics-ai-workshop" oninput="this.dataset.touched = 'true'">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Display Order</label>
+          <input type="number" id="ev-order" class="form-control" value="${(adminState.events?.length || 0) + 1}" min="1">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select id="ev-category" class="form-control">
+            <option value="Workshops">Workshops</option>
+            <option value="Competitions">Competitions & Robowars</option>
+            <option value="Masterclasses">Masterclasses</option>
+            <option value="Tech Fests">Tech Fests & Exhibitions</option>
+            <option value="School Programs">School & College Programs</option>
+            <option value="Boot Camps">Hands-on Boot Camps</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Event Type *</label>
+          <select id="ev-type" class="form-control">
+            <option value="upcoming">Upcoming Event (Accepting Registrations)</option>
+            <option value="past">Past / Completed Event (Photo Showcase)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">Event Date</label>
+          <input type="text" id="ev-date" class="form-control" placeholder="e.g. March 28, 2026">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Timings</label>
+          <input type="text" id="ev-timings" class="form-control" value="8:30 AM to 5:30 PM">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Location / Venue</label>
+        <input type="text" id="ev-location" class="form-control" value="Edueme Research Labs / Partner Campus">
+      </div>
+
+      <!-- MAIN CARD IMAGE (1 IMAGE FOR CARD GRID) -->
+      <div class="form-group" style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+          <span><strong>1. Main Card Image</strong> (Displayed on main Events grid)</span>
+          <span style="font-size: 11px; color: #64748b;">1 Image</span>
+        </label>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="ev-image" class="form-control" value="/assets/events_hero.jpg" onchange="document.getElementById('ev-img-prev').src = this.value">
+          <input type="file" id="ev-image-file" accept="image/*" style="display: none;" onchange="handleAdminImageUpload(this, 'ev-image', 'ev-img-prev')">
+          <button type="button" class="action-btn action-btn-call" style="white-space: nowrap;" onclick="document.getElementById('ev-image-file').click()">📁 Upload</button>
+        </div>
+        <div style="margin-top: 8px;">
+          <img id="ev-img-prev" src="/assets/events_hero.jpg" style="height: 65px; border-radius: 6px; object-fit: cover; border: 1px solid #cbd5e1;">
+        </div>
+      </div>
+
+      <!-- DEDICATED PAGE MULTIPLE IMAGES -->
+      <div class="form-group" style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+          <span><strong>2. Dedicated Page Photo Gallery</strong> (Multiple photos shown on detail page)</span>
+          <span style="font-size: 11px; color: var(--accent-blue);">Multi-Upload</span>
+        </label>
+        
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+          <input type="file" id="ev-multi-files" accept="image/*" multiple style="display: none;" onchange="handleEventMultiPhotoUpload(this)">
+          <button type="button" class="hero-primary-btn" style="padding: 6px 14px; font-size: 13px;" onclick="document.getElementById('ev-multi-files').click()">+ Upload Photos From Device</button>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px;">
+          <input type="text" id="ev-photo-url-input" class="form-control" placeholder="Or paste image URL (e.g. /assets/brochure/img_7.jpg)">
+          <button type="button" class="action-btn action-btn-call" style="white-space: nowrap;" onclick="addEventPhotoFromInput()">+ Add URL</button>
+        </div>
+
+        <div id="event-photos-preview-grid" style="display: flex; gap: 8px; flex-wrap: wrap; max-height: 120px; overflow-y: auto; padding: 4px; background: #fff; border-radius: 6px; border: 1px dashed #cbd5e1;"></div>
+      </div>
+
+      <!-- DEDICATED PAGE DESCRIPTION -->
+      <div class="form-group">
+        <label class="form-label">Dedicated Page Description (Simple and clear)</label>
+        <textarea id="ev-desc" class="form-control" rows="5" placeholder="Enter complete details, schedule, highlights, kit requirements, or summary of the event..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select id="ev-status" class="form-control">
+          <option value="active">Active (Visible)</option>
+          <option value="inactive">Inactive (Draft / Hidden)</option>
+        </select>
+      </div>
+    </form>
+  `;
+  const footer = `
+    <button class="hero-secondary-btn" onclick="closeAdminModal()">Cancel</button>
+    <button class="hero-primary-btn" onclick="saveEvent(null)">Create Event</button>
+  `;
+  openAdminModal('Add New Event / Workshop', body, footer);
+  renderEventPhotosPreview();
+}
+
+function openEditEventModal(id) {
+  const ev = (adminState.events || []).find(item => item.id === id);
+  if (!ev) return;
+
+  currentEventPhotos = Array.isArray(ev.photos) ? [...ev.photos] : [];
+
+  const body = `
+    <form id="modal-event-form">
+      <input type="hidden" id="ev-id" value="${ev.id}">
+      <div class="form-group">
+        <label class="form-label">Event Title *</label>
+        <input type="text" id="ev-title" class="form-control" value="${ev.title || ''}" required>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">Dedicated Page URL Slug *</label>
+          <input type="text" id="ev-slug" class="form-control" value="${ev.slug || ''}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Display Order</label>
+          <input type="number" id="ev-order" class="form-control" value="${ev.displayOrder || 1}" min="1">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select id="ev-category" class="form-control">
+            <option value="Workshops" ${ev.category === 'Workshops' ? 'selected' : ''}>Workshops</option>
+            <option value="Competitions" ${ev.category === 'Competitions' ? 'selected' : ''}>Competitions & Robowars</option>
+            <option value="Masterclasses" ${ev.category === 'Masterclasses' ? 'selected' : ''}>Masterclasses</option>
+            <option value="Tech Fests" ${ev.category === 'Tech Fests' ? 'selected' : ''}>Tech Fests & Exhibitions</option>
+            <option value="School Programs" ${ev.category === 'School Programs' ? 'selected' : ''}>School & College Programs</option>
+            <option value="Boot Camps" ${ev.category === 'Boot Camps' ? 'selected' : ''}>Hands-on Boot Camps</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Event Type *</label>
+          <select id="ev-type" class="form-control">
+            <option value="upcoming" ${ev.type === 'upcoming' ? 'selected' : ''}>Upcoming Event (Accepting Registrations)</option>
+            <option value="past" ${ev.type === 'past' ? 'selected' : ''}>Past / Completed Event (Photo Showcase)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">Event Date</label>
+          <input type="text" id="ev-date" class="form-control" value="${ev.date || ''}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Timings</label>
+          <input type="text" id="ev-timings" class="form-control" value="${ev.timings || '8:30 AM to 5:30 PM'}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Location / Venue</label>
+        <input type="text" id="ev-location" class="form-control" value="${ev.location || 'Edueme Research Labs / Partner Campus'}">
+      </div>
+
+      <!-- MAIN CARD IMAGE (1 IMAGE FOR CARD GRID) -->
+      <div class="form-group" style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+          <span><strong>1. Main Card Image</strong> (Displayed on main Events grid)</span>
+          <span style="font-size: 11px; color: #64748b;">1 Image</span>
+        </label>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="ev-image" class="form-control" value="${ev.image || '/assets/events_hero.jpg'}" onchange="document.getElementById('ev-img-prev').src = this.value">
+          <input type="file" id="ev-image-file" accept="image/*" style="display: none;" onchange="handleAdminImageUpload(this, 'ev-image', 'ev-img-prev')">
+          <button type="button" class="action-btn action-btn-call" style="white-space: nowrap;" onclick="document.getElementById('ev-image-file').click()">📁 Upload</button>
+        </div>
+        <div style="margin-top: 8px;">
+          <img id="ev-img-prev" src="${ev.image || '/assets/events_hero.jpg'}" style="height: 65px; border-radius: 6px; object-fit: cover; border: 1px solid #cbd5e1;">
+        </div>
+      </div>
+
+      <!-- DEDICATED PAGE MULTIPLE IMAGES -->
+      <div class="form-group" style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+          <span><strong>2. Dedicated Page Photo Gallery</strong> (Multiple photos shown on detail page)</span>
+          <span style="font-size: 11px; color: var(--accent-blue);">Multi-Upload</span>
+        </label>
+        
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+          <input type="file" id="ev-multi-files" accept="image/*" multiple style="display: none;" onchange="handleEventMultiPhotoUpload(this)">
+          <button type="button" class="hero-primary-btn" style="padding: 6px 14px; font-size: 13px;" onclick="document.getElementById('ev-multi-files').click()">+ Upload Photos From Device</button>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px;">
+          <input type="text" id="ev-photo-url-input" class="form-control" placeholder="Or paste image URL (e.g. /assets/brochure/img_7.jpg)">
+          <button type="button" class="action-btn action-btn-call" style="white-space: nowrap;" onclick="addEventPhotoFromInput()">+ Add URL</button>
+        </div>
+
+        <div id="event-photos-preview-grid" style="display: flex; gap: 8px; flex-wrap: wrap; max-height: 120px; overflow-y: auto; padding: 4px; background: #fff; border-radius: 6px; border: 1px dashed #cbd5e1;"></div>
+      </div>
+
+      <!-- DEDICATED PAGE DESCRIPTION -->
+      <div class="form-group">
+        <label class="form-label">Dedicated Page Description (Simple and clear)</label>
+        <textarea id="ev-desc" class="form-control" rows="5">${ev.description || ''}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select id="ev-status" class="form-control">
+          <option value="active" ${ev.status === 'active' ? 'selected' : ''}>Active (Visible)</option>
+          <option value="inactive" ${ev.status === 'inactive' ? 'selected' : ''}>Inactive (Draft / Hidden)</option>
+        </select>
+      </div>
+    </form>
+  `;
+  const footer = `
+    <button class="hero-secondary-btn" onclick="closeAdminModal()">Cancel</button>
+    <button class="hero-primary-btn" onclick="saveEvent('${ev.id}')">Update Event</button>
+  `;
+  openAdminModal('Edit Event: ' + ev.title, body, footer);
+  renderEventPhotosPreview();
+}
+
+async function saveEvent(editId) {
+  const title = document.getElementById('ev-title').value.trim();
+  const slug = document.getElementById('ev-slug').value.trim();
+  if (!title) {
+    alert('Please enter an event title');
+    return;
+  }
+
+  const payload = {
+    title,
+    slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    displayOrder: parseInt(document.getElementById('ev-order').value, 10) || 1,
+    category: document.getElementById('ev-category').value,
+    type: document.getElementById('ev-type').value,
+    date: document.getElementById('ev-date').value.trim(),
+    timings: document.getElementById('ev-timings').value.trim(),
+    location: document.getElementById('ev-location').value.trim(),
+    image: document.getElementById('ev-image').value.trim() || '/assets/events_hero.jpg',
+    photos: currentEventPhotos,
+    description: document.getElementById('ev-desc').value.trim(),
+    status: document.getElementById('ev-status').value
+  };
+
+  const method = editId ? 'PUT' : 'POST';
+  const url = editId ? `/api/events/${editId}` : '/api/events';
+
+  const res = await fetch(url, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${currentToken}`
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (res.ok) {
+    closeAdminModal();
+    showAdminToast(editId ? 'Event updated successfully' : 'Event created successfully');
+    loadAdminEvents();
+  } else {
+    alert('Failed to save event');
+  }
+}
+
+async function deleteEvent(id) {
+  if (!confirm('Are you sure you want to delete this event?')) return;
+  await fetch(`/api/events/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${currentToken}` }
+  });
+  showAdminToast('Event deleted');
+  loadAdminEvents();
 }
 
 // -------------------------------------------------------------

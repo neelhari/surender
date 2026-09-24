@@ -368,6 +368,9 @@ function updateActiveNav(path) {
   } else if (path.startsWith('/services')) {
     const b = document.getElementById('bnav-services');
     if (b) b.classList.add('active');
+  } else if (path.startsWith('/events')) {
+    const b = document.getElementById('bnav-events');
+    if (b) b.classList.add('active');
   } else if (path.startsWith('/about')) {
     const b = document.getElementById('bnav-about');
     if (b) b.classList.add('active');
@@ -409,6 +412,15 @@ async function handleRouting() {
   if (pathname === '/' || pathname === '') {
     await renderHomeView();
   }
+  // Route: Dedicated Event Detail (/events/:slug)
+  else if (pathname.startsWith('/events/') && pathname.replace('/events/', '').trim()) {
+    const slug = pathname.replace('/events/', '').split('/')[0];
+    await renderEventDetailView(slug);
+  }
+  // Route: Events Listing (/events)
+  else if (pathname === '/events' || pathname === '/events/') {
+    await renderEventsView();
+  }
   // Route: About Us
   else if (pathname === '/about') {
     await renderAboutView();
@@ -422,7 +434,7 @@ async function handleRouting() {
     const slug = pathname.replace('/courses/', '').split('/')[0];
     await renderCourseDetailView(slug);
   }
-  // Route: Sub-Service Detail (/services/:serviceSlug/:subServiceSlug) [Correction 1!]
+  // Route: Sub-Service Detail (/services/:serviceSlug/:subServiceSlug)
   else if (pathname.startsWith('/services/') && pathname.split('/').filter(Boolean).length === 3) {
     const parts = pathname.split('/').filter(Boolean);
     const serviceSlug = parts[1];
@@ -495,7 +507,7 @@ async function renderHomeView() {
     imageUrl: "/assets/hero_robotics.jpg"
   };
 
-  const popularCourses = courses.slice(0, 3);
+  const popularCourses = courses.slice(0, 5);
   const featuredServices = services.slice(0, 4);
 
   root.innerHTML = `
@@ -524,30 +536,37 @@ async function renderHomeView() {
         </div>
       </section>
 
-      <!-- 4 VALUE PILLARS: MINIMALIST TRANSPARENT MICRO-GRID (OPTION B) -->
-      <section class="value-pillars-microgrid">
-        <div class="value-pillar-item">
-          <div class="value-pillar-icon">🤖</div>
+      <!-- 4 VALUE PILLARS: ENHANCED PROMINENT MICRO-GRID (High Visibility on Mobile & Desktop) -->
+      <section class="value-pillars-microgrid" aria-label="Core Pillars">
+        <div class="value-pillar-item" onclick="navigate(event, '/courses')">
+          <div class="value-pillar-icon" title="Hands-on Learning">🤖</div>
           <div class="value-pillar-label">Hands-on<br>Learning</div>
         </div>
-        <div class="value-pillar-item">
-          <div class="value-pillar-icon">👨‍🏫</div>
+        <div class="value-pillar-item" onclick="navigate(event, '/about')">
+          <div class="value-pillar-icon" title="Expert Mentors">👨‍🏫</div>
           <div class="value-pillar-label">Expert<br>Mentors</div>
         </div>
-        <div class="value-pillar-item">
-          <div class="value-pillar-icon">⚡</div>
+        <div class="value-pillar-item" onclick="navigate(event, '/services')">
+          <div class="value-pillar-icon" title="Future Ready">⚡</div>
           <div class="value-pillar-label">Future<br>Ready</div>
         </div>
-        <div class="value-pillar-item">
-          <div class="value-pillar-icon">🎯</div>
+        <div class="value-pillar-item" onclick="navigate(event, '/courses')">
+          <div class="value-pillar-icon" title="For All Age Groups">🎯</div>
           <div class="value-pillar-label">For All<br>Age Groups</div>
         </div>
       </section>
 
-      <!-- POPULAR COURSES SECTION (Style matching reference: pencil-art robot, centered heading, 2-line quote) -->
+      <!-- FREE ONE-DAY WORKSHOP AD BANNER -->
+      <section class="workshop-ad-banner-section">
+        <a href="/contact?subject=Free+One+Day+Workshop+Registration" class="workshop-ad-banner-card" onclick="navigate(event, '/contact?subject=Free+One+Day+Workshop+Registration')" title="Click to Register for Free One Day Workshop">
+          <img src="/assets/workshop_flyer.jpg" alt="Free One Day Workshop — Robotics & AI Masterclass" class="workshop-ad-banner-img" loading="eager">
+        </a>
+      </section>
+
+      <!-- POPULAR COURSES SECTION (Featuring Top 5 Main Courses) -->
       <section class="home-courses-section">
         <div class="section-center-group">
-          <!-- Pencil-Art Robot Emerging from Behind Content with Waving Hand Animation -->
+          <!-- Pencil-Art Mascot Illustration -->
           <div class="courses-pencil-robot-container">
             <div class="courses-pencil-robot-art">
               <img src="/assets/robot_pencil_body.png" alt="Edueme Mascot Robot" class="pencil-robot-body" loading="lazy">
@@ -572,18 +591,18 @@ async function renderHomeView() {
           <div class="cards-grid">
             ${popularCourses.map(renderCourseCard).join('')}
           </div>
-          <div style="text-align: center; margin-top: 20px;">
-            <a href="/courses" class="header-cta-btn" style="padding: 10px 24px; font-size: 13.5px; display: inline-flex;" onclick="navigate(event, '/courses')">
-              <span>View All Courses &rarr;</span>
+          <div style="text-align: center; margin-top: 24px;">
+            <a href="/courses" class="header-cta-btn" style="padding: 11px 26px; font-size: 14px; display: inline-flex;" onclick="navigate(event, '/courses')">
+              <span>Explore All ${courses.length} Courses &rarr;</span>
             </a>
           </div>
         `}
       </section>
 
-      <!-- 2x2 STATISTIC CARDS (Free-standing, unboxed, counting animation) -->
+      <!-- 2x2 STATISTIC CARDS (Updated: 50,000+ Students, 200+ Workshops, 50+ Schools, 10+ Years) -->
       <section class="edueme-stats-section">
         <div class="edueme-stats-grid">
-          <!-- Card 1: 75+ Students Enrolled -->
+          <!-- Card 1: 50,000+ Students Trained -->
           <div class="edueme-stat-card">
             <div class="edueme-stat-icon-wrap">
               <svg class="edueme-stat-icon" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -603,40 +622,34 @@ async function renderHomeView() {
               </svg>
             </div>
             <div class="edueme-stat-data">
-              <span class="edueme-stat-num" data-target="75" data-suffix="+">75+</span>
-              <span class="edueme-stat-label">Students<br>Enrolled</span>
+              <span class="edueme-stat-num" data-target="50000" data-suffix="+">50,000+</span>
+              <span class="edueme-stat-label">Students<br>Trained</span>
             </div>
           </div>
 
-          <!-- Card 2: 100+ Teachers -->
+          <!-- Card 2: 200+ Workshops Conducted -->
           <div class="edueme-stat-card">
             <div class="edueme-stat-icon-wrap">
               <svg class="edueme-stat-icon" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Hair & Head -->
-                <path d="M23 18c-3 0-5 3-5 7 0 2 1 4 1 6M31 18c3 0 5 3 5 7 0 2-1 4-1 6" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="27" cy="20" r="5" stroke="#1e293b" stroke-width="2.2" fill="#ffffff"/>
-                <!-- Face Details -->
-                <circle cx="25.5" cy="20" r="0.8" fill="#e11d48"/>
-                <circle cx="28.5" cy="20" r="0.8" fill="#e11d48"/>
-                <path d="M25.5 22.5c.8.6 2.2.6 3 0" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round"/>
-                <!-- Body / Dress -->
-                <path d="M24 25l-4 6v13h14V31l-4-6" fill="#ffffff" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <!-- Left Hand Gesturing -->
-                <path d="M20 31l-6-2c-1 0-1.5-1-1.5-2s.5-2 1.5-1l4 3" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <!-- Right Arm Holding Teal Book -->
-                <path d="M30 31l3 4" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                <!-- Open Book in Teal -->
-                <path d="M33 30l4-2 5 2v10l-5-2-4 2V30z" fill="#00d4aa" stroke="#1e293b" stroke-width="2" stroke-linejoin="round"/>
-                <line x1="37" y1="28" x2="37" y2="38" stroke="#1e293b" stroke-width="1.8"/>
+                <!-- Laptop Screen Frame -->
+                <rect x="11" y="22" width="32" height="18" rx="3" fill="#ffffff" stroke="#1e293b" stroke-width="2.2"/>
+                <!-- Laptop Keyboard Base -->
+                <path d="M7 40h40l-3 4H10l-3-4z" fill="#ffffff" stroke="#1e293b" stroke-width="2.2" stroke-linejoin="round"/>
+                <line x1="23" y1="41.5" x2="31" y2="41.5" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Open Book in Teal emerging from Laptop Screen -->
+                <path d="M27 16c-3-2-7-2-10 0v14c3-1.5 7-1.5 10 0 3-1.5 7-1.5 10 0V16c-3-2-7-2-10 0z" fill="#00d4aa" stroke="#1e293b" stroke-width="2.2" stroke-linejoin="round"/>
+                <line x1="27" y1="16" x2="27" y2="30" stroke="#1e293b" stroke-width="2"/>
+                <!-- Book Page Lines -->
+                <path d="M20 20c2-.5 4-.5 5 0M20 24c2-.5 4-.5 5 0M34 20c-2-.5-4-.5-5 0M34 24c-2-.5-4-.5-5 0" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
               </svg>
             </div>
             <div class="edueme-stat-data">
-              <span class="edueme-stat-num" data-target="100" data-suffix="+">100+</span>
-              <span class="edueme-stat-label">Teachers</span>
+              <span class="edueme-stat-num" data-target="200" data-suffix="+">200+</span>
+              <span class="edueme-stat-label">Workshops<br>Conducted</span>
             </div>
           </div>
 
-          <!-- Card 3: 50+ Schools Registered -->
+          <!-- Card 3: 50+ Schools -->
           <div class="edueme-stat-card">
             <div class="edueme-stat-icon-wrap">
               <svg class="edueme-stat-icon" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -665,29 +678,27 @@ async function renderHomeView() {
             </div>
             <div class="edueme-stat-data">
               <span class="edueme-stat-num" data-target="50" data-suffix="+">50+</span>
-              <span class="edueme-stat-label">Schools<br>Registered</span>
+              <span class="edueme-stat-label">Schools<br>Partnered</span>
             </div>
           </div>
 
-          <!-- Card 4: 30+ Courses -->
+          <!-- Card 4: 10+ Years Experience -->
           <div class="edueme-stat-card">
             <div class="edueme-stat-icon-wrap">
               <svg class="edueme-stat-icon" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Laptop Screen Frame -->
-                <rect x="11" y="22" width="32" height="18" rx="3" fill="#ffffff" stroke="#1e293b" stroke-width="2.2"/>
-                <!-- Laptop Keyboard Base -->
-                <path d="M7 40h40l-3 4H10l-3-4z" fill="#ffffff" stroke="#1e293b" stroke-width="2.2" stroke-linejoin="round"/>
-                <line x1="23" y1="41.5" x2="31" y2="41.5" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round"/>
-                <!-- Open Book in Teal emerging from Laptop Screen -->
-                <path d="M27 16c-3-2-7-2-10 0v14c3-1.5 7-1.5 10 0 3-1.5 7-1.5 10 0V16c-3-2-7-2-10 0z" fill="#00d4aa" stroke="#1e293b" stroke-width="2.2" stroke-linejoin="round"/>
-                <line x1="27" y1="16" x2="27" y2="30" stroke="#1e293b" stroke-width="2"/>
-                <!-- Book Page Lines -->
-                <path d="M20 20c2-.5 4-.5 5 0M20 24c2-.5 4-.5 5 0M34 20c-2-.5-4-.5-5 0M34 24c-2-.5-4-.5-5 0" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                <!-- Clock / Experience Ring -->
+                <circle cx="27" cy="27" r="16" fill="#ffffff" stroke="#1e293b" stroke-width="2.2"/>
+                <polyline points="27,18 27,27 34,31" stroke="#f5a623" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="27" cy="27" r="2.5" fill="#1e293b"/>
+                <line x1="27" y1="13" x2="27" y2="15" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="41" y1="27" x2="39" y2="27" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="27" y1="41" x2="27" y2="39" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="13" y1="27" x2="15" y2="27" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
             </div>
             <div class="edueme-stat-data">
-              <span class="edueme-stat-num" data-target="30" data-suffix="+">30+</span>
-              <span class="edueme-stat-label">Courses</span>
+              <span class="edueme-stat-num" data-target="10" data-suffix="+">10+</span>
+              <span class="edueme-stat-label">Years<br>Experience</span>
             </div>
           </div>
         </div>
@@ -941,19 +952,19 @@ async function renderAboutView() {
         </div>
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-number" data-target="${parseInt(settings?.stats?.studentsTrained) || 5000}" data-suffix="+">${settings?.stats?.studentsTrained || '5000+'}</div>
+            <div class="stat-number" data-target="${parseInt(String(settings?.stats?.studentsTrained || '50000').replace(/[^0-9]/g, '')) || 50000}" data-suffix="+">${settings?.stats?.studentsTrained || '50,000+'}</div>
             <div class="stat-label">Students Trained</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number" data-target="${parseInt(settings?.stats?.workshops) || 200}" data-suffix="+">${settings?.stats?.workshops || '200+'}</div>
-            <div class="stat-label">Workshops</div>
+            <div class="stat-number" data-target="${parseInt(String(settings?.stats?.workshops || '200').replace(/[^0-9]/g, '')) || 200}" data-suffix="+">${settings?.stats?.workshops || '200+'}</div>
+            <div class="stat-label">Workshops Conducted</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number" data-target="${parseInt(settings?.stats?.schools) || 50}" data-suffix="+">${settings?.stats?.schools || '50+'}</div>
+            <div class="stat-number" data-target="${parseInt(String(settings?.stats?.schools || '50').replace(/[^0-9]/g, '')) || 50}" data-suffix="+">${settings?.stats?.schools || '50+'}</div>
             <div class="stat-label">Schools</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number" data-target="${parseInt(settings?.stats?.yearsExp) || 10}" data-suffix="+">${settings?.stats?.yearsExp || '10+'}</div>
+            <div class="stat-number" data-target="${parseInt(String(settings?.stats?.yearsExp || '10').replace(/[^0-9]/g, '')) || 10}" data-suffix="+">${settings?.stats?.yearsExp || '10+'}</div>
             <div class="stat-label">Years Experience</div>
           </div>
         </div>
@@ -2333,6 +2344,160 @@ function initFloatingTestimonials() {
 }
 
 // --------------------------------------------------------------------------
+// 10. EVENTS DIRECTORY VIEW (Super Clean Photo Grid)
+// --------------------------------------------------------------------------
+async function renderEventsView() {
+  const root = document.getElementById('app-root');
+  const events = await fetch('/api/events').then(r => r.json()).catch(() => []);
+
+  root.innerHTML = `
+    <div class="app-container" style="padding-top: 20px; padding-bottom: 50px;">
+      <div style="margin-bottom: 18px;">
+        <h1 style="font-family: var(--font-heading); font-size: 26px; font-weight: 800; color: var(--primary-navy); margin: 0 0 4px 0;">Events & Workshops</h1>
+      </div>
+
+      ${events.length === 0 ? `
+        <div class="empty-state" style="padding: 48px 20px; text-align: center;">
+          <div class="empty-state-icon" style="font-size: 44px; margin-bottom: 12px;">📅</div>
+          <div class="empty-state-title" style="font-size: 18px; font-weight: 700; color: var(--primary-navy);">No Events Found</div>
+          <div class="empty-state-text" style="color: var(--text-muted); font-size: 14px; margin-top: 6px;">Check back soon for new workshops and competitions!</div>
+        </div>
+      ` : `
+        <div class="events-clean-grid">
+          ${events.map(ev => {
+            const img = ev.image || '/assets/events_hero.jpg';
+            const slug = ev.slug || ev.id;
+            return `
+              <a href="/events/${slug}" class="event-photo-card" onclick="navigate(event, '/events/${slug}')">
+                <div class="event-photo-media">
+                  <img src="${img}" alt="${ev.title}" class="event-photo-img" loading="lazy" onerror="this.onerror=null; this.src='/assets/events_hero.jpg';">
+                </div>
+                <div class="event-photo-caption">
+                  <h3 class="event-caption-title">${ev.title}</h3>
+                  <div class="event-caption-meta">${ev.date || 'Upcoming'} &bull; ${ev.category || 'Workshop'}</div>
+                </div>
+              </a>
+            `;
+          }).join('')}
+        </div>
+      `}
+    </div>
+  `;
+
+  if (typeof initGlobalMotion === 'function') {
+    initGlobalMotion();
+  }
+}
+
+// --------------------------------------------------------------------------
+// DEDICATED EVENT DETAIL VIEW (/events/:slug)
+// Starts directly with uploaded images, followed by description & details
+// --------------------------------------------------------------------------
+async function renderEventDetailView(slug) {
+  const root = document.getElementById('app-root');
+
+  let eventData = null;
+  try {
+    const res = await fetch(`/api/events/${encodeURIComponent(slug)}`);
+    if (res.ok) {
+      eventData = await res.json();
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  if (!eventData) {
+    try {
+      const allEvents = await fetch('/api/events').then(r => r.json());
+      eventData = allEvents.find(e => e.slug === slug || e.id === slug);
+    } catch (e) {}
+  }
+
+  if (!eventData) {
+    render404View('Event Not Found', 'The requested event could not be found.');
+    return;
+  }
+
+  const isUpcoming = eventData.type === 'upcoming';
+  const mainImage = eventData.image || '/assets/events_hero.jpg';
+  
+  // Combine all photos (main image + any uploaded gallery photos)
+  let allGalleryPhotos = [mainImage];
+  if (Array.isArray(eventData.photos) && eventData.photos.length > 0) {
+    eventData.photos.forEach(p => {
+      if (p && !allGalleryPhotos.includes(p)) {
+        allGalleryPhotos.push(p);
+      }
+    });
+  }
+
+  root.innerHTML = `
+    <div class="app-container" style="padding-top: 16px; padding-bottom: 50px;">
+      <!-- TOP NAV BAR -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+        <a href="/events" onclick="navigate(event, '/events')" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--accent-blue); text-decoration: none;">
+          &larr; Back to Events
+        </a>
+      </div>
+
+      <h1 style="font-family: var(--font-heading); font-size: clamp(22px, 5vw, 32px); font-weight: 800; color: var(--primary-navy); line-height: 1.25; margin: 0 0 16px 0;">
+        ${eventData.title}
+      </h1>
+
+      <!-- 1. SINGLE FEATURED IMAGE (70% PROPORTIONS) -->
+      <div class="event-featured-hero-wrap">
+        <img id="event-main-display-img" src="${mainImage}" alt="${eventData.title}" class="event-single-main-img" loading="eager" onclick="openLightbox(this.src, '${(eventData.title || '').replace(/'/g, "\\'")}')" onerror="this.onerror=null; this.src='/assets/events_hero.jpg';">
+        
+        ${allGalleryPhotos.length > 1 ? `
+          <div class="event-thumbs-strip">
+            ${allGalleryPhotos.map((photoUrl, idx) => `
+              <button type="button" class="event-thumb-btn ${idx === 0 ? 'active' : ''}" onclick="document.getElementById('event-main-display-img').src='${photoUrl}'; document.querySelectorAll('.event-thumb-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');" title="View photo ${idx + 1}">
+                <img src="${photoUrl}" alt="Thumbnail ${idx + 1}" loading="lazy" onerror="this.onerror=null; this.src='/assets/events_hero.jpg';">
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- 2. DATE, TIMINGS & VENUE INFO ROW -->
+      <div class="event-detail-info-row" style="margin-bottom: 20px;">
+        <div class="event-detail-info-item">
+          <span>📅</span>
+          <strong>${eventData.date || 'Upcoming'}</strong>
+        </div>
+        <div class="event-detail-info-item">
+          <span>⏰</span>
+          <strong>${eventData.timings || '8:30 AM to 5:30 PM'}</strong>
+        </div>
+        <div class="event-detail-info-item">
+          <span>📍</span>
+          <strong>${eventData.location || 'Edueme Research Labs, Hyderabad'}</strong>
+        </div>
+      </div>
+
+      <!-- 3. DESCRIPTION TEXT (AFTER IMAGES) -->
+      <div class="event-description-text" style="font-size: 15px; line-height: 1.7; color: var(--text-main); margin-bottom: 28px;">
+        ${eventData.description || eventData.shortDescription || 'Full details and curriculum will be shared during registration.'}
+      </div>
+
+      <!-- 4. REGISTRATION / ENQUIRY ACTION -->
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="/contact?subject=${encodeURIComponent('Registration Enquiry for: ' + eventData.title)}" class="hero-primary-btn" style="padding: 12px 28px; font-size: 14.5px;" onclick="navigate(event, '/contact?subject=${encodeURIComponent('Registration Enquiry for: ' + eventData.title)}')">
+          <span>Register / Enquire for this Event &rarr;</span>
+        </a>
+        <a href="/events" class="hero-secondary-btn" style="padding: 12px 22px; font-size: 14.5px;" onclick="navigate(event, '/events')">
+          <span>Back to All Events</span>
+        </a>
+      </div>
+    </div>
+  `;
+
+  if (typeof initGlobalMotion === 'function') {
+    initGlobalMotion();
+  }
+}
+
+// --------------------------------------------------------------------------
 // 404 VIEW
 // --------------------------------------------------------------------------
 function render404View(title = 'Page Not Found', desc = 'The page you are looking for does not exist.') {
@@ -2349,3 +2514,5 @@ function render404View(title = 'Page Not Found', desc = 'The page you are lookin
 
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', handleRouting);
+
+
