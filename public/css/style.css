@@ -1465,13 +1465,14 @@ button, input, select, textarea {
   align-items: flex-end;
   margin: 0 auto 6px auto;
   width: 100%;
-  max-width: 280px;
+  max-width: 290px;
   position: relative;
   z-index: 2;
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
+  background: transparent;
 }
 
 .courses-pencil-robot-container.is-revealed {
@@ -1481,7 +1482,7 @@ button, input, select, textarea {
 
 @media (min-width: 768px) {
   .courses-pencil-robot-container {
-    max-width: 320px;
+    max-width: 330px;
     margin-bottom: 10px;
   }
 }
@@ -1493,16 +1494,19 @@ button, input, select, textarea {
   justify-content: center;
   align-items: flex-end;
   overflow: visible;
+  background: transparent;
 }
 
 .pencil-robot-body {
   width: 100%;
   height: auto;
-  max-height: 160px;
+  max-height: 165px;
   object-fit: contain;
   pointer-events: none;
   z-index: 1;
   display: block;
+  mix-blend-mode: multiply;
+  background: transparent;
   animation: robotGentleFloat 4s ease-in-out infinite;
 }
 
@@ -1589,34 +1593,31 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   FLOATING LAYERED TESTIMONIALS (Deeper Soft Blue Gradient + Coverflow Stacked Cards)
+   FLOATING LAYERED TESTIMONIALS (Clean Background + Coverflow Stacked Cards)
    Center-focused Coverflow carousel with 3D stacked depth, mascot animation
    ========================================================================== */
 .testimonials-mobile-section {
   position: relative;
-  background: linear-gradient(168deg, #b8d7f7 0%, #cbe4fb 48%, #afcff2 100%);
-  border-top: 1px solid rgba(2, 132, 199, 0.28);
-  border-bottom: 1px solid rgba(2, 132, 199, 0.28);
-  width: calc(100% + 32px);
-  margin-left: -16px;
-  margin-right: -16px;
+  background: transparent;
+  border: none;
+  width: 100%;
   margin-top: 24px;
-  margin-bottom: 24px;
-  padding: 20px 16px 16px;
-  overflow: hidden;
+  margin-bottom: 32px;
+  padding: 16px 0 20px;
+  overflow: visible;
 }
 
 @media (min-width: 768px) {
   .testimonials-mobile-section {
-    width: 100vw;
+    width: 100%;
     position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    margin-top: 34px;
-    margin-bottom: 34px;
-    padding: 28px calc((100vw - 1100px) / 2) 22px;
+    left: auto;
+    right: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 28px;
+    margin-bottom: 36px;
+    padding: 20px 0 24px;
   }
 }
 
@@ -1625,8 +1626,8 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-bottom: 10px;
-  padding: 0 6px;
+  margin-bottom: 8px;
+  padding: 0 12px;
   position: relative;
   z-index: 2;
 }
@@ -1635,12 +1636,11 @@ button, input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(2, 132, 199, 0.24);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 999px;
-  padding: 3.5px 12px;
-  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.12);
+  padding: 4px 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
 }
 
 .testimonials-mascot-stars {
@@ -1652,17 +1652,17 @@ button, input, select, textarea {
 .testimonials-mascot-text {
   font-size: 11.5px;
   font-weight: 700;
-  color: #0284c7;
+  color: #0f172a;
   letter-spacing: 0.02em;
 }
 
 /* Floating Mascot Animation */
 .testimonials-floating-robot {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   flex-shrink: 0;
   animation: floatMascot 3.2s ease-in-out infinite;
-  filter: drop-shadow(0 6px 12px rgba(2, 132, 199, 0.22));
+  filter: drop-shadow(0 4px 8px rgba(15, 23, 42, 0.1));
   object-fit: contain;
 }
 
@@ -1679,8 +1679,8 @@ button, input, select, textarea {
 .testimonials-coverflow-stage {
   position: relative;
   width: 100%;
-  height: 168px;
-  margin: 6px 0 14px 0;
+  height: 172px;
+  margin: 6px 0 16px 0;
   perspective: 900px;
   overflow: visible;
   user-select: none;
@@ -1691,8 +1691,8 @@ button, input, select, textarea {
 
 @media (min-width: 768px) {
   .testimonials-coverflow-stage {
-    height: 178px;
-    max-width: 660px;
+    height: 182px;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -1703,12 +1703,12 @@ button, input, select, textarea {
   position: absolute;
   left: 50%;
   top: 0;
-  width: clamp(275px, 78vw, 325px);
-  height: 164px;
+  width: clamp(280px, 80vw, 330px);
+  height: 166px;
   background: #ffffff;
-  border: 1px solid rgba(2, 132, 199, 0.18);
+  border: 1px solid #e2e8f0;
   border-radius: 18px;
-  padding: 12px 16px 11px;
+  padding: 13px 18px 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1727,26 +1727,26 @@ button, input, select, textarea {
   opacity: 1;
   z-index: 10;
   pointer-events: auto;
-  box-shadow: 0 16px 32px -4px rgba(14, 55, 105, 0.2), 0 6px 14px -2px rgba(14, 55, 105, 0.08);
-  border-color: rgba(2, 132, 199, 0.45);
+  box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.04);
+  border-color: #cbd5e1;
 }
 
 /* 2. Previous Left Card (Partially visible behind on the left) */
 .testimonial-card-item.card-prev {
-  transform: translateX(calc(-50% - 88px)) translateZ(-45px) scale(0.86) rotateY(6deg);
-  opacity: 0.52;
+  transform: translateX(calc(-50% - 95px)) translateZ(-45px) scale(0.85) rotateY(6deg);
+  opacity: 0.42;
   z-index: 5;
   pointer-events: auto;
-  box-shadow: 0 6px 16px rgba(14, 55, 105, 0.1);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
 }
 
 /* 3. Next Right Card (Partially visible behind on the right) */
 .testimonial-card-item.card-next {
-  transform: translateX(calc(-50% + 88px)) translateZ(-45px) scale(0.86) rotateY(-6deg);
-  opacity: 0.52;
+  transform: translateX(calc(-50% + 95px)) translateZ(-45px) scale(0.85) rotateY(-6deg);
+  opacity: 0.42;
   z-index: 5;
   pointer-events: auto;
-  box-shadow: 0 6px 16px rgba(14, 55, 105, 0.1);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
 }
 
 /* 4. Other cards (hidden offstage) */
@@ -1759,15 +1759,15 @@ button, input, select, textarea {
 
 @media (min-width: 768px) {
   .testimonial-card-item {
-    width: 350px;
-    height: 174px;
-    padding: 14px 18px 13px;
+    width: 360px;
+    height: 176px;
+    padding: 15px 20px 14px;
   }
   .testimonial-card-item.card-prev {
-    transform: translateX(calc(-50% - 130px)) translateZ(-45px) scale(0.88) rotateY(5deg);
+    transform: translateX(calc(-50% - 150px)) translateZ(-45px) scale(0.88) rotateY(5deg);
   }
   .testimonial-card-item.card-next {
-    transform: translateX(calc(-50% + 130px)) translateZ(-45px) scale(0.88) rotateY(-5deg);
+    transform: translateX(calc(-50% + 150px)) translateZ(-45px) scale(0.88) rotateY(-5deg);
   }
 }
 
@@ -1866,7 +1866,7 @@ button, input, select, textarea {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(2, 132, 199, 0.28);
+  background: #cbd5e1;
   transition: all 0.28s cubic-bezier(0.25, 1, 0.5, 1);
   cursor: pointer;
 }
@@ -1874,7 +1874,7 @@ button, input, select, textarea {
 .testimonials-dot.active {
   width: 18px;
   border-radius: 999px;
-  background: #0284c7;
+  background: #0e1628;
 }
 
 
@@ -3417,36 +3417,35 @@ textarea.form-control {
 
 /* ==========================================================================
    NURTURED SKILLS SECTION (Exact Match to Reference Image 1)
-   Straight lines, attached to screen edge-to-edge, no outer box curves
+/* ==========================================================================
+   NURTURED SKILLS (Static 4-Card Grid - Clean In-Container Layout)
    ========================================================================== */
 .nurtured-skills-reference-section {
   position: relative;
-  background: linear-gradient(175deg, #f4effe 0%, #ede5fd 50%, #e6dcf9 100%);
-  border-radius: 0; /* Straight lines, no box curves */
-  width: calc(100% + 32px); /* Attach edge-to-edge to the screen */
-  margin-left: -16px;
-  margin-right: -16px;
-  margin-top: 28px;
-  margin-bottom: 28px;
-  padding: 28px 16px 26px;
+  background: linear-gradient(175deg, #f5f0ff 0%, #ede5fd 50%, #e8ddfb 100%);
+  border-radius: 24px;
+  width: 100%;
+  margin-top: 24px;
+  margin-bottom: 32px;
+  padding: 26px 18px 24px;
   overflow: hidden;
-  box-shadow: none;
-  border-top: 1px solid rgba(124, 58, 237, 0.08);
-  border-bottom: 1px solid rgba(124, 58, 237, 0.08);
+  box-shadow: 0 6px 24px rgba(124, 58, 237, 0.06);
+  border: 1px solid rgba(124, 58, 237, 0.14);
+  box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
   .nurtured-skills-reference-section {
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    margin-top: 36px;
-    margin-bottom: 36px;
-    padding: 38px calc((100vw - 520px) / 2) 34px;
-    border-radius: 0;
+    padding: 32px 28px 28px;
+    margin: 32px 0 38px;
+    border-radius: 28px;
+  }
+}
+
+@media (min-width: 992px) {
+  .nurtured-skills-reference-section {
+    padding: 36px 36px 32px;
+    margin: 36px 0 44px;
   }
 }
 
@@ -3466,22 +3465,14 @@ textarea.form-control {
   position: relative;
   z-index: 3;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: -16px; /* Robot gently overlaps white card */
+  margin-bottom: 20px;
 }
 
 .nurtured-header-text {
   flex: 1;
-  max-width: 175px;
-  padding-bottom: 22px;
-}
-
-@media (min-width: 768px) {
-  .nurtured-header-text {
-    max-width: 300px;
-    padding-bottom: 30px;
-  }
+  max-width: 480px;
 }
 
 .nurtured-kicker {
@@ -3499,11 +3490,11 @@ textarea.form-control {
   height: 4px;
   background: #a594e0;
   border-radius: 999px;
-  margin: 6px 0 12px;
+  margin: 6px 0 10px;
 }
 
 .nurtured-subtitle {
-  font-size: 13.5px;
+  font-size: 14px;
   line-height: 1.48;
   color: #55627a;
   font-weight: 500;
@@ -3512,7 +3503,7 @@ textarea.form-control {
 
 @media (min-width: 768px) {
   .nurtured-subtitle {
-    font-size: 15px;
+    font-size: 15.5px;
   }
 }
 
@@ -3520,7 +3511,7 @@ textarea.form-control {
 .nurtured-robot-wrap {
   position: relative;
   flex-shrink: 0;
-  width: 142px;
+  width: 120px;
   display: flex;
   justify-content: flex-end;
   pointer-events: none;
@@ -3529,16 +3520,16 @@ textarea.form-control {
 
 @media (min-width: 768px) {
   .nurtured-robot-wrap {
-    width: 180px;
+    width: 140px;
   }
 }
 
 .nurtured-sparks-robot {
   position: absolute;
   top: -10px;
-  left: 18px;
-  width: 26px;
-  height: 26px;
+  left: 14px;
+  width: 24px;
+  height: 24px;
   pointer-events: none;
 }
 
@@ -3546,156 +3537,101 @@ textarea.form-control {
   width: 100%;
   height: auto;
   display: block;
-  filter: drop-shadow(0 10px 18px rgba(99, 85, 156, 0.16));
+  filter: drop-shadow(0 8px 16px rgba(99, 85, 156, 0.16));
 }
 
-/* Single Medium White Rounded Card */
-.nurtured-white-card {
+/* Static 4-Card Grid System */
+.nurtured-static-grid {
   position: relative;
-  z-index: 2;
-  background: #ffffff;
-  border-radius: 22px;
-  padding: 22px 20px 20px;
-  box-shadow: 0 16px 36px rgba(109, 94, 166, 0.09), 0 3px 10px rgba(0, 0, 0, 0.02);
-  box-sizing: border-box;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
 }
 
-@media (min-width: 768px) {
-  .nurtured-white-card {
-    padding: 30px 28px 26px;
-    border-radius: 26px;
-    max-width: 480px;
-    margin: 0 auto;
+@media (min-width: 580px) {
+  .nurtured-static-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
 }
 
-.nurtured-card-top {
+@media (min-width: 992px) {
+  .nurtured-static-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+}
+
+.nurtured-static-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 22px 20px 20px;
+  box-shadow: 0 4px 18px rgba(124, 58, 237, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(139, 92, 246, 0.14);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.nurtured-static-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(124, 58, 237, 0.12);
+  border-color: rgba(139, 92, 246, 0.35);
+}
+
+.nurtured-static-card .nurtured-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 14px;
 }
 
-.nurtured-step-counter {
+.nurtured-static-card .nurtured-step-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.nurtured-static-card .nurtured-step-current {
   font-family: var(--font-heading);
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 800;
   color: #2b2158;
-  letter-spacing: -0.02em;
 }
 
-.nurtured-step-total {
-  font-size: 16px;
-  font-weight: 600;
+.nurtured-static-card .nurtured-step-total {
+  font-size: 12px;
+  font-weight: 700;
   color: #94a3b8;
-  margin-left: 4px;
 }
 
-.nurtured-card-sparks {
-  width: 30px;
-  height: 30px;
+.nurtured-static-card .nurtured-icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
-/* Icon Box */
-.nurtured-icon-box {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: #eff3fe;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 16px 0 16px;
-  transition: all 0.3s ease;
-}
-
-/* Title & Description */
-.nurtured-card-title {
+.nurtured-static-card .nurtured-card-title {
   font-family: var(--font-heading);
-  font-size: 21px;
+  font-size: 16.5px;
   font-weight: 800;
   color: #0f172a;
-  margin: 0 0 10px;
+  margin: 0 0 8px 0;
   line-height: 1.3;
-  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.nurtured-card-desc {
-  font-size: 14px;
-  line-height: 1.6;
+.nurtured-static-card .nurtured-card-desc {
+  font-size: 13px;
+  line-height: 1.5;
   color: #55627a;
-  margin: 0 0 22px;
-  min-height: 66px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-/* Animation during skill change */
-.nurtured-anim-fade {
-  animation: nurturedFadeIn 0.3s ease forwards;
-}
-
-@keyframes nurturedFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Card Controls */
-.nurtured-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 4px;
-}
-
-.nurtured-dots {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.nurtured-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #dcd4f5;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.nurtured-dot.active {
-  background: #2b2158;
-  transform: scale(1.15);
-}
-
-.nurtured-next-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #eee9fb;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  color: #2b2158;
-}
-
-.nurtured-next-btn:hover {
-  background: #e3daf7;
-  transform: scale(1.05);
-}
-
-.nurtured-next-btn:active {
-  transform: scale(0.95);
+  margin: 0;
+  flex: 1;
 }
 
 /* ==========================================================================
@@ -3884,17 +3820,23 @@ textarea.form-control {
 }
 
 /* ==========================================================================
-   FREE ONE-DAY WORKSHOP AD BANNER (Home Page - Sized for Ad-conversion)
+   FREE ONE-DAY WORKSHOP AD BANNER (Home Page - Increased Width for High Impact)
    ========================================================================== */
 .workshop-ad-banner-section {
   margin: 16px auto 28px;
-  max-width: 860px;
+  max-width: 1060px;
   padding: 0 12px;
 }
 
 @media (min-width: 768px) {
   .workshop-ad-banner-section {
     margin: 22px auto 36px;
+    padding: 0 16px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .workshop-ad-banner-section {
     padding: 0;
   }
 }
@@ -3919,7 +3861,7 @@ textarea.form-control {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
-  max-height: 380px;
+  max-height: 420px;
   object-fit: cover;
   display: block;
 }
@@ -3927,7 +3869,7 @@ textarea.form-control {
 @media (min-width: 992px) {
   .workshop-ad-banner-img {
     aspect-ratio: 21 / 9;
-    max-height: 340px;
+    max-height: 380px;
   }
 }
 
@@ -4173,6 +4115,282 @@ textarea.form-control {
   flex-wrap: wrap;
   padding-top: 16px;
   border-top: 1px solid var(--border-light);
+}
+
+/* ==========================================================================
+   DEDICATED DESKTOP UI DESIGN SYSTEM (min-width: 992px)
+   Elevates widescreen desktop experience to a world-class education portal.
+   Does NOT alter mobile styles.
+   ========================================================================== */
+@media (min-width: 992px) {
+  /* 1. Desktop Container & Layout */
+  .app-container {
+    max-width: 1260px;
+    padding: 0 28px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    letter-spacing: -0.025em;
+  }
+
+  .section-subtitle {
+    font-size: 15.5px;
+  }
+
+  .section-intro-text {
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 780px;
+  }
+
+  /* 2. Desktop Hero Banner */
+  .hero-section {
+    min-height: 500px;
+    height: 520px;
+    max-height: 540px;
+    border-radius: 24px;
+    margin: 18px 0 32px 0;
+    box-shadow: 0 12px 36px rgba(14, 22, 40, 0.18);
+  }
+
+  .hero-overlay-content {
+    max-width: 740px;
+    padding: 48px 44px;
+  }
+
+  .hero-badge {
+    font-size: 12px;
+    padding: 5px 14px;
+    margin-bottom: 12px;
+  }
+
+  .hero-title {
+    font-size: 40px;
+    line-height: 1.18;
+    margin-bottom: 12px;
+  }
+
+  .hero-subtitle {
+    font-size: 16.5px;
+    line-height: 1.55;
+    margin-bottom: 24px;
+    max-width: 620px;
+  }
+
+  .hero-actions {
+    gap: 16px;
+  }
+
+  .hero-primary-btn,
+  .hero-secondary-btn {
+    padding: 13px 26px;
+    font-size: 14.5px;
+  }
+
+  /* 3. Desktop Value Pillars Horizontal Bar */
+  .value-pillars-microgrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 18px 24px;
+    margin: 16px 0 32px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+    border: 1px solid #e2e8f0;
+  }
+
+  .value-pillar-item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-align: left;
+    padding: 10px 14px;
+    border-radius: 12px;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .value-pillar-item:hover {
+    background: #f8fafc;
+    transform: translateY(-2px);
+  }
+
+  .value-pillar-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 24px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .value-pillar-label {
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    line-height: 1.25;
+  }
+
+  /* 4. Desktop Workshop Ad Banner */
+  .workshop-ad-banner-section {
+    max-width: 100%;
+    margin: 20px 0 36px;
+    padding: 0;
+  }
+
+  .workshop-ad-banner-card {
+    border-radius: 22px;
+    box-shadow: 0 10px 32px rgba(14, 22, 40, 0.12);
+  }
+
+  .workshop-ad-banner-img {
+    aspect-ratio: 24 / 9;
+    max-height: 360px;
+    object-fit: cover;
+  }
+
+  /* 5. Desktop Popular Courses & 3-Column Course Grid */
+  .cards-grid,
+  .home-courses-section .cards-grid,
+  .home-services-section .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .edueme-card {
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  }
+
+  .edueme-card-media-wrap {
+    height: 235px;
+  }
+
+  /* 6. Desktop 4-Column Stats Strip */
+  .edueme-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  .edueme-stat-card {
+    padding: 22px 20px;
+    gap: 16px;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+  }
+
+  .edueme-stat-num {
+    font-size: 32px;
+  }
+
+  .edueme-stat-label {
+    font-size: 13.5px;
+  }
+
+  /* 7. Desktop 3-Column Side-by-Side Testimonials Showcase */
+  .testimonials-mobile-section {
+    margin: 32px 0 40px;
+    padding: 24px 0 28px;
+  }
+
+  .testimonials-mascot-row {
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 0 4px;
+  }
+
+  .testimonials-coverflow-stage {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    height: auto;
+    perspective: none;
+    position: static;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .testimonial-card-item {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 210px !important;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06) !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 18px 20px 16px !important;
+  }
+
+  .testimonial-card-item:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1) !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  .testimonials-dots-wrap {
+    display: none !important;
+  }
+
+  /* 8. Desktop Nurtured Skills Section */
+  .nurtured-skills-reference-section {
+    padding: 40px 44px;
+    margin: 36px 0 44px;
+    border-radius: 28px;
+  }
+
+  /* 9. Desktop Inner Page Heroes (About Us, Courses, Services, Events, Contact) */
+  .inner-page-hero {
+    height: 380px;
+    max-height: 420px;
+    border-radius: 24px;
+    margin: 16px 0 36px 0;
+  }
+
+  .hero-content-pill {
+    max-width: 720px;
+    padding: 36px 44px;
+  }
+
+  .hero-content-pill h1 {
+    font-size: 38px;
+  }
+
+  .hero-content-pill p {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  /* 10. Desktop Team & Events Grids */
+  .team-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .events-clean-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .app-container {
+    max-width: 1320px;
+    padding: 0 32px;
+  }
+
+  .hero-section {
+    height: 540px;
+    max-height: 580px;
+  }
+
+  .cards-grid,
+  .home-courses-section .cards-grid,
+  .home-services-section .cards-grid {
+    gap: 32px;
+  }
 }
 
 

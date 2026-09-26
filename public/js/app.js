@@ -787,7 +787,7 @@ async function renderHomeView() {
         </div>
       </section>
 
-      <!-- NURTURED SKILLS (Exact Reference Image 1 Match: Lavender BG, Robot Illustration & Medium White Card) -->
+      <!-- NURTURED SKILLS (Static 4-Card Grid with Lavender Accent & Robot Mascot) -->
       <section class="nurtured-skills-reference-section">
         <!-- Decorative organic wave SVG in bottom left -->
         <svg class="nurtured-decor-wave" viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -804,7 +804,6 @@ async function renderHomeView() {
 
           <!-- Robot Character with Sparks -->
           <div class="nurtured-robot-wrap">
-            <!-- Sparks above robot head -->
             <svg class="nurtured-sparks-robot" viewBox="0 0 32 32" fill="none">
               <line x1="8" y1="24" x2="3" y2="12" stroke="#8b7bc9" stroke-width="2.8" stroke-linecap="round"/>
               <line x1="22" y1="24" x2="22" y2="8" stroke="#8b7bc9" stroke-width="2.8" stroke-linecap="round"/>
@@ -813,55 +812,23 @@ async function renderHomeView() {
           </div>
         </div>
 
-        <!-- Single Medium-Sized White Rounded Card -->
-        <div class="nurtured-white-card" id="nurturedCard">
-          <div class="nurtured-card-top">
-            <div class="nurtured-step-counter">
-              <span class="nurtured-step-current" id="nurturedStepNum">01</span>
-              <span class="nurtured-step-total">/ 04</span>
+        <!-- Static 4-Skill Cards Grid (Completely static, no moving carousel) -->
+        <div class="nurtured-static-grid">
+          ${nurturedSkillsData.map(item => `
+            <div class="nurtured-static-card">
+              <div class="nurtured-card-top">
+                <div class="nurtured-step-counter">
+                  <span class="nurtured-step-current">${item.step}</span>
+                  <span class="nurtured-step-total">/ 04</span>
+                </div>
+                <div class="nurtured-icon-box" style="background-color: ${item.iconBg};">
+                  ${item.iconSvg}
+                </div>
+              </div>
+              <h3 class="nurtured-card-title">${item.title}</h3>
+              <p class="nurtured-card-desc">${item.desc}</p>
             </div>
-            <!-- Spark accents on top right of white card -->
-            <div class="nurtured-card-sparks">
-              <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
-                <line x1="8" y1="8" x2="3" y2="2" stroke="#a594e0" stroke-width="2.8" stroke-linecap="round"/>
-                <line x1="16" y1="12" x2="25" y2="6" stroke="#a594e0" stroke-width="2.8" stroke-linecap="round"/>
-                <line x1="20" y1="20" x2="26" y2="22" stroke="#a594e0" stroke-width="2.8" stroke-linecap="round"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Skill Icon Pill -->
-          <div class="nurtured-icon-box" id="nurturedIconBox">
-            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <line x1="16" y1="3" x2="16" y2="6" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="6" y1="7" x2="8.5" y2="9.5" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="26" y1="7" x2="23.5" y2="9.5" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="2" y1="17" x2="5" y2="17" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="27" y1="17" x2="30" y2="17" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-              <path d="M11 17c0-2.8 2.2-5 5-5s5 2.2 5 5c0 2-1 3.5-2 4.5v1.5h-6V21.5C12 20.5 11 19 11 17z" fill="#f59e0b"/>
-              <path d="M14 26h4" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-
-          <!-- Skill Title & Description -->
-          <h3 class="nurtured-card-title" id="nurturedCardTitle">Build Confidence</h3>
-          <p class="nurtured-card-desc" id="nurturedCardDesc">Children learn to bring their ideas to light, realize their power to invent, and believe in themselves.</p>
-
-          <!-- Card Footer Controls -->
-          <div class="nurtured-card-footer">
-            <div class="nurtured-dots" id="nurturedDots">
-              <span class="nurtured-dot active" data-index="0" aria-label="Skill 1"></span>
-              <span class="nurtured-dot" data-index="1" aria-label="Skill 2"></span>
-              <span class="nurtured-dot" data-index="2" aria-label="Skill 3"></span>
-              <span class="nurtured-dot" data-index="3" aria-label="Skill 4"></span>
-            </div>
-            <button class="nurtured-next-btn" id="nurturedNextBtn" aria-label="Next Skill">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2e1065" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </button>
-          </div>
+          `).join('')}
         </div>
       </section>
 

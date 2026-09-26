@@ -730,17 +730,6 @@
       "imageUrl": "/assets/hero_robotics.jpg",
       "displayOrder": 1,
       "status": "active"
-    },
-    {
-      "id": "banner-2",
-      "badge": "Hands-on School Tech Labs",
-      "title": "Prayogshala Tech Labs & Experiential Learning",
-      "subtitle": "Empowering 5000+ students across 50+ schools with state-of-the-art microcontrollers, robotics, and IIT Hyderabad associated standards.",
-      "ctaText": "Discover Tech Labs",
-      "ctaLink": "/services/tech-labs-prayogshala",
-      "imageUrl": "/assets/brochure/img_6.jpg",
-      "displayOrder": 2,
-      "status": "active"
     }
   ],
   "teamMembers": [
@@ -861,8 +850,9 @@
       "subServiceId": null,
       "subServiceName": null,
       "message": "Interested in offline weekend batch",
-      "status": "new",
-      "createdAt": "2026-09-18T19:29:18.824Z"
+      "status": "contacted",
+      "createdAt": "2026-09-18T19:29:18.824Z",
+      "updatedAt": "2026-09-26T19:32:42.365Z"
     },
     {
       "id": "lead-1789723057599",

@@ -1159,6 +1159,8 @@ const initialData = {
   ]
 };
 
+const BACKUP_FILE = path.join(__dirname, 'db.backup.json');
+
 class Database {
   constructor() {
     this.init();
@@ -1166,6 +1168,12 @@ class Database {
 
   init() {
     if (!fs.existsSync(DB_FILE)) {
+      if (fs.existsSync(BACKUP_FILE)) {
+        try {
+          fs.copyFileSync(BACKUP_FILE, DB_FILE);
+          return;
+        } catch (e) {}
+      }
       this.save(initialData);
     }
   }
@@ -1178,14 +1186,30 @@ class Database {
       const content = fs.readFileSync(DB_FILE, 'utf8');
       return JSON.parse(content);
     } catch (e) {
-      console.error('Error reading db.json, returning initial seed data', e);
+      console.warn('Warning: db.json was unreadable. Attempting backup restore...', e.message);
+      if (fs.existsSync(BACKUP_FILE)) {
+        try {
+          const backupContent = fs.readFileSync(BACKUP_FILE, 'utf8');
+          const parsed = JSON.parse(backupContent);
+          fs.writeFileSync(DB_FILE, backupContent, 'utf8');
+          return parsed;
+        } catch (err) {}
+      }
       return initialData;
     }
   }
 
   save(data) {
     try {
-      fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf8');
+      const jsonString = JSON.stringify(data, null, 2);
+      // Write to temp file first for atomic safety
+      const tempFile = DB_FILE + '.tmp';
+      fs.writeFileSync(tempFile, jsonString, 'utf8');
+      fs.renameSync(tempFile, DB_FILE);
+      // Keep a rotating backup
+      try {
+        fs.writeFileSync(BACKUP_FILE, jsonString, 'utf8');
+      } catch (be) {}
       return true;
     } catch (e) {
       console.error('Error writing to db.json', e);
@@ -1207,3 +1231,4 @@ class Database {
 }
 
 module.exports = new Database();
+

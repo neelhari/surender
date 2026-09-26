@@ -175,6 +175,187 @@
     .data-table tr:hover td {
       background: #f8fafc;
     }
+    /* Modern Horizontal Row System */
+    .modern-list-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .modern-row-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .modern-row-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+      border-color: #cbd5e1;
+    }
+    .modern-row-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      min-width: 0;
+    }
+    .modern-row-thumb {
+      width: 80px;
+      height: 56px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #0e1628;
+      flex-shrink: 0;
+      border: 1px solid #e2e8f0;
+    }
+    .modern-row-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #f1f5f9;
+      flex-shrink: 0;
+      border: 1px solid #e2e8f0;
+    }
+    .modern-row-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .modern-row-title {
+      font-family: var(--font-heading);
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #0e1628;
+      line-height: 1.3;
+      margin: 0;
+    }
+    .modern-row-meta {
+      font-size: 13px;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .modern-row-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .modern-status-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .modern-status-badge.active {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .modern-status-badge.upcoming {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .modern-status-badge.past {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+    .modern-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modern-btn-edit {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .modern-btn-edit:hover {
+      background: #dcfce7;
+      border-color: #86efac;
+      transform: translateY(-1px);
+    }
+    .modern-btn-delete {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 7px 11px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .modern-btn-delete:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      transform: translateY(-1px);
+    }
+    /* Hub Sub-nav Bar */
+    .hub-subnav-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+      width: fit-content;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .hub-subnav-btn {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .hub-subnav-btn:hover {
+      color: #0e1628;
+    }
+    .hub-subnav-btn.active {
+      background: #0e1628;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(14, 22, 40, 0.15);
+    }
+    .hub-subview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
     /* Modal */
     .admin-modal {
       position: fixed;
@@ -285,13 +466,10 @@
         <li class="admin-nav-item"><a href="#dashboard" class="active" onclick="switchAdminTab('dashboard')">📊 Dashboard</a></li>
         <li class="admin-nav-item"><a href="#leads" onclick="switchAdminTab('leads')">📥 Leads & Enquiries</a></li>
         <li class="admin-nav-item"><a href="#courses" onclick="switchAdminTab('courses')">🎓 Courses</a></li>
-        <li class="admin-nav-item"><a href="#events" onclick="switchAdminTab('events')">📅 Events & Workshops</a></li>
         <li class="admin-nav-item"><a href="#services" onclick="switchAdminTab('services')">🔬 Services & Sub-Services</a></li>
-        <li class="admin-nav-item"><a href="#gallery" onclick="switchAdminTab('gallery')">📸 Gallery</a></li>
+        <li class="admin-nav-item"><a href="#events" onclick="switchAdminTab('events')">📅 Events & Media Hub</a></li>
         <li class="admin-nav-item"><a href="#team" onclick="switchAdminTab('team')">👥 Team Members</a></li>
-        <li class="admin-nav-item"><a href="#banners" onclick="switchAdminTab('banners')">🖼️ Home Banners</a></li>
         <li class="admin-nav-item"><a href="#settings" onclick="switchAdminTab('settings')">⚙️ Site Settings</a></li>
-        <li class="admin-nav-item"><a href="#seo" onclick="switchAdminTab('seo')">🔍 SEO Metadata</a></li>
         <li class="admin-nav-item" style="margin-top: 20px;"><a href="/" target="_blank" style="color: #38bdf8;">🌐 View Live Site &rarr;</a></li>
       </ul>
       <div style="padding: 16px; border-top: 1px solid rgba(255,255,255,0.08);">
@@ -307,7 +485,7 @@
       <header class="admin-topbar">
         <div style="display: flex; align-items: center; gap: 12px;">
           <button id="mobile-sidebar-toggle" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--primary-navy);">☰</button>
-          <div style="font-weight: 700; color: var(--primary-navy); font-size: 15px;" id="current-tab-title">Admin Dashboard</div>
+          <div style="font-weight: 700; color: var(--primary-navy); font-size: 15px;" id="current-tab-title">Dashboard Overview</div>
         </div>
         <div style="display: flex; align-items: center; gap: 14px;">
           <div style="font-size: 13px; color: var(--text-muted);">Signed in as: <strong style="color: var(--primary-navy);">admin@edueme.com</strong></div>
@@ -329,248 +507,131 @@
 
           <div class="kpi-grid" id="dashboard-kpis"></div>
 
-          <!-- RECENT LEADS TABLE (Screen 14 Reference) -->
-          <div class="table-card">
-            <div class="table-toolbar">
-              <strong style="color: var(--primary-navy);">Recent Inquiries & Leads</strong>
-              <button class="action-btn action-btn-email" onclick="exportLeadsCSV()">📥 Export Leads CSV</button>
-            </div>
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Name</th>
-                    <th>Source / Interest</th>
-                    <th>Contact</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="recent-leads-tbody"></tbody>
-              </table>
-            </div>
+          <div class="table-toolbar" style="border-radius: 12px 12px 0 0; background: #ffffff; border: 1px solid #e2e8f0; border-bottom: none;">
+            <strong style="color: var(--primary-navy); font-size: 15px;">Recent Inquiries & Leads</strong>
+            <button class="action-btn action-btn-email" onclick="exportLeadsCSV()">📥 Export Leads CSV</button>
           </div>
+          <div class="modern-list-wrap" id="recent-leads-list" style="margin-top: 0;"></div>
         </section>
 
-        <!-- TAB 2: LEADS MANAGEMENT (Screen 17 Reference) -->
+        <!-- TAB 2: LEADS MANAGEMENT -->
         <section id="tab-leads" style="display: none;">
           <div class="admin-header-row">
             <div>
               <h2 class="admin-title">Leads & Enquiries Management</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">View, filter, update status, and export captured leads</p>
+              <p style="font-size: 13px; color: var(--text-muted);">View student & school inquiries with direct 1-click WhatsApp and Phone call actions</p>
             </div>
             <button class="header-cta-btn" onclick="exportLeadsCSV()">📥 Export CSV / Excel</button>
           </div>
 
-          <div class="table-card">
-            <div class="table-toolbar">
-              <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px;">
-                <input type="text" id="leads-search-input" class="form-control" placeholder="Search by name, phone, email, course..." style="max-width: 320px;">
-                <select id="leads-filter-status" class="form-control" style="max-width: 160px;">
-                  <option value="all">All Statuses</option>
-                  <option value="new">New</option>
-                  <option value="contacted">Contacted</option>
-                  <option value="converted">Converted</option>
-                </select>
-                <select id="leads-filter-source" class="form-control" style="max-width: 160px;">
-                  <option value="all">All Sources</option>
-                  <option value="course">Course</option>
-                  <option value="service">Service</option>
-                  <option value="sub-service">Sub-Service</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Date & Time</th>
-                    <th>Full Name</th>
-                    <th>Contact Info</th>
-                    <th>Interested Course / Service</th>
-                    <th>Message</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="all-leads-tbody"></tbody>
-              </table>
+          <div class="table-toolbar" style="border-radius: 12px; background: #ffffff; border: 1px solid #e2e8f0; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; gap: 10px; flex: 1; flex-wrap: wrap;">
+              <input type="text" id="leads-search-input" class="form-control" placeholder="🔍 Search by name, phone, course..." style="max-width: 320px;" oninput="loadLeads()">
+              <select id="leads-filter-status" class="form-control" style="max-width: 160px;" onchange="loadLeads()">
+                <option value="all">All Statuses</option>
+                <option value="new">New</option>
+                <option value="contacted">Contacted</option>
+                <option value="converted">Converted</option>
+              </select>
+              <select id="leads-filter-source" class="form-control" style="max-width: 160px;" onchange="loadLeads()">
+                <option value="all">All Sources</option>
+                <option value="course">Course Inquiries</option>
+                <option value="service">School Services</option>
+                <option value="sub-service">Sub-Services</option>
+              </select>
             </div>
           </div>
+
+          <div class="modern-list-wrap" id="all-leads-list"></div>
         </section>
 
-        <!-- TAB 3: COURSES MANAGEMENT (Screen 15 Reference) -->
+        <!-- TAB 3: COURSES MANAGEMENT -->
         <section id="tab-courses" style="display: none;">
           <div class="admin-header-row">
             <div>
-              <h2 class="admin-title">Manage Courses</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">Add, edit, reorder, or toggle active courses</p>
+              <h2 class="admin-title">Courses Management</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Add, edit, reorder, or toggle active robotics and STEM courses</p>
             </div>
             <button class="header-cta-btn" onclick="openAddCourseModal()">+ Add New Course</button>
           </div>
-          <div class="table-card">
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Duration & Level</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-courses-tbody"></tbody>
-              </table>
-            </div>
-          </div>
+
+          <div class="modern-list-wrap" id="admin-courses-list"></div>
         </section>
 
-        <!-- TAB: EVENTS & WORKSHOPS MANAGEMENT -->
-        <section id="tab-events" style="display: none;">
-          <div class="admin-header-row">
-            <div>
-              <h2 class="admin-title">Events & Workshops Management</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">Manage upcoming and past workshop events, cover images, multi-photo galleries, and dedicated event page descriptions</p>
-            </div>
-            <button class="header-cta-btn" onclick="openAddEventModal()">+ Add New Event</button>
-          </div>
-          <div class="table-card">
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Cover Image</th>
-                    <th>Event Title & Slug</th>
-                    <th>Category & Type</th>
-                    <th>Date & Timings</th>
-                    <th>Gallery Photos</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-events-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- TAB 4: SERVICES & SUB-SERVICES (Screen 16 Reference & Correction 1) -->
+        <!-- TAB 4: SERVICES & SUB-SERVICES -->
         <section id="tab-services" style="display: none;">
           <div class="admin-header-row">
             <div>
-              <h2 class="admin-title">Manage Services & Sub-Services</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">Manage programs, workshops, tech labs, and modular sub-services</p>
+              <h2 class="admin-title">Services & Sub-Services Management</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Manage turnkey Prayogshala tech labs, teacher workshops, and institutional programs</p>
             </div>
             <div style="display: flex; gap: 8px;">
               <button class="action-btn action-btn-wa" onclick="openAddSubServiceModal()">+ Add Sub-Service</button>
               <button class="header-cta-btn" onclick="openAddServiceModal()">+ Add New Service</button>
             </div>
           </div>
-          <div class="table-card">
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Service</th>
-                    <th>Duration</th>
-                    <th>Sub-Services Count</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-services-tbody"></tbody>
-              </table>
-            </div>
-          </div>
+
+          <div class="modern-list-wrap" id="admin-services-list"></div>
         </section>
 
-        <!-- TAB 5: GALLERY MANAGEMENT (Correction 2 Approved) -->
-        <section id="tab-gallery" style="display: none;">
+        <!-- TAB 5: EVENTS & MEDIA HUB (Combined Switchable Hub for Events, Gallery & Banners) -->
+        <section id="tab-events" style="display: none;">
           <div class="admin-header-row">
             <div>
-              <h2 class="admin-title">Gallery Management</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">Add, edit, delete, categorize, or reorder showcase photos</p>
+              <h2 class="admin-title">Events & Media Hub</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Manage upcoming workshop events, showcase photo galleries, and home hero banners in one unified place</p>
             </div>
-            <button class="header-cta-btn" onclick="openAddGalleryModal()">+ Add Gallery Photo</button>
           </div>
-          <div class="table-card">
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Thumbnail</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>Order</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-gallery-tbody"></tbody>
-              </table>
+
+          <!-- Switchable Hub Sub-Nav Pills -->
+          <div class="hub-subnav-bar">
+            <button class="hub-subnav-btn active" id="hub-btn-events" onclick="switchMediaHubSubTab('events')">📅 Events & Workshops</button>
+            <button class="hub-subnav-btn" id="hub-btn-gallery" onclick="switchMediaHubSubTab('gallery')">📸 Photo Gallery</button>
+            <button class="hub-subnav-btn" id="hub-btn-banners" onclick="switchMediaHubSubTab('banners')">🖼️ Home Banners</button>
+          </div>
+
+          <!-- 1. Events Sub-View -->
+          <div id="hub-view-events" class="hub-subview">
+            <div class="hub-subview-header">
+              <span style="font-weight: 700; color: var(--primary-navy); font-size: 15px;">Published Events & Workshops</span>
+              <button class="header-cta-btn" onclick="openAddEventModal()">+ Add New Event</button>
             </div>
+            <div class="modern-list-wrap" id="admin-events-list"></div>
+          </div>
+
+          <!-- 2. Gallery Sub-View -->
+          <div id="hub-view-gallery" class="hub-subview" style="display: none;">
+            <div class="hub-subview-header">
+              <span style="font-weight: 700; color: var(--primary-navy); font-size: 15px;">Photo Gallery Showcase</span>
+              <button class="header-cta-btn" onclick="openAddGalleryModal()">+ Add Gallery Photo</button>
+            </div>
+            <div class="modern-list-wrap" id="admin-gallery-list"></div>
+          </div>
+
+          <!-- 3. Banners Sub-View -->
+          <div id="hub-view-banners" class="hub-subview" style="display: none;">
+            <div class="hub-subview-header">
+              <span style="font-weight: 700; color: var(--primary-navy); font-size: 15px;">Home Hero Banners</span>
+              <button class="header-cta-btn" onclick="openAddBannerModal()">+ Add Hero Banner</button>
+            </div>
+            <div class="modern-list-wrap" id="admin-banners-list"></div>
           </div>
         </section>
 
-        <!-- TAB 6: TEAM MEMBERS (Correction 3 Approved) -->
+        <!-- TAB 6: TEAM MEMBERS -->
         <section id="tab-team" style="display: none;">
           <div class="admin-header-row">
             <div>
               <h2 class="admin-title">Team & Mentors Management</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">Manage leadership, scientists, and educators shown on About Us</p>
+              <p style="font-size: 13px; color: var(--text-muted);">Manage leadership, scientists, and educators shown on the About Us page</p>
             </div>
             <button class="header-cta-btn" onclick="openAddTeamModal()">+ Add Team Member</button>
           </div>
-          <div class="table-card">
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Photo</th>
-                    <th>Name</th>
-                    <th>Role / Designation</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-team-tbody"></tbody>
-              </table>
-            </div>
-          </div>
+
+          <div class="modern-list-wrap" id="admin-team-list"></div>
         </section>
 
-        <!-- TAB 7: HOME BANNERS (Correction 4 Approved) -->
-        <section id="tab-banners" style="display: none;">
-          <div class="admin-header-row">
-            <div>
-              <h2 class="admin-title">Home Banners & Content</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">Control hero banners, badge texts, CTAs, and images dynamically</p>
-            </div>
-            <button class="header-cta-btn" onclick="openAddBannerModal()">+ Add Hero Banner</button>
-          </div>
-          <div class="table-card">
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Banner Image</th>
-                    <th>Badge & Title</th>
-                    <th>CTA</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-banners-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- TAB 8: SETTINGS -->
+        <!-- TAB 7: SETTINGS -->
         <section id="tab-settings" style="display: none;">
           <div class="admin-header-row">
             <div>
@@ -578,7 +639,7 @@
               <p style="font-size: 13px; color: var(--text-muted);">Official phone numbers, WhatsApp alerts, admin emails, and office address</p>
             </div>
           </div>
-          <div class="table-card" style="padding: 24px;">
+          <div class="table-card" style="padding: 24px; border-radius: 16px;">
             <form id="settings-form">
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
                 <div class="form-group">
@@ -634,32 +695,6 @@
 
               <button type="submit" class="hero-primary-btn" style="margin-top: 16px;">Save Site Settings</button>
             </form>
-          </div>
-        </section>
-
-        <!-- TAB 9: SEO MANAGEMENT -->
-        <section id="tab-seo" style="display: none;">
-          <div class="admin-header-row">
-            <div>
-              <h2 class="admin-title">SEO Metadata Management</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">Manage titles, descriptions, and keywords per route</p>
-            </div>
-          </div>
-          <div class="table-card">
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Route</th>
-                    <th>Meta Title</th>
-                    <th>Meta Description</th>
-                    <th>Keywords</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-seo-tbody"></tbody>
-              </table>
-            </div>
           </div>
         </section>
       </main>

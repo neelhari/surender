@@ -119,10 +119,10 @@ async function adminLogout() {
 }
 
 // --------------------------------------------------------------------------
-// TAB SWITCHING
+// TAB SWITCHING & SUB-TAB SWITCHING
 // --------------------------------------------------------------------------
 function switchAdminTab(tabName) {
-  const tabs = ['dashboard', 'leads', 'courses', 'events', 'services', 'gallery', 'team', 'banners', 'settings', 'seo'];
+  const tabs = ['dashboard', 'leads', 'courses', 'services', 'events', 'team', 'settings'];
   tabs.forEach(t => {
     const section = document.getElementById(`tab-${t}`);
     if (section) section.style.display = (t === tabName) ? 'block' : 'none';
@@ -140,19 +140,29 @@ function switchAdminTab(tabName) {
     dashboard: 'Dashboard Overview',
     leads: 'Leads & Enquiries',
     courses: 'Courses Management',
-    events: 'Events & Workshops Management',
     services: 'Services & Sub-Services',
-    gallery: 'Gallery Showcase',
+    events: 'Events & Media Hub',
     team: 'Team & Mentors',
-    banners: 'Home Banners',
-    settings: 'Site Settings',
-    seo: 'SEO Metadata'
+    settings: 'Site Settings'
   };
-  document.getElementById('current-tab-title').textContent = titles[tabName] || 'Admin Panel';
+  const titleEl = document.getElementById('current-tab-title');
+  if (titleEl) {
+    titleEl.textContent = titles[tabName] || 'Admin Panel';
+  }
 
   // Close mobile sidebar if open
   document.getElementById('admin-sidebar')?.classList.remove('open');
 }
+
+function switchMediaHubSubTab(subTab) {
+  ['events', 'gallery', 'banners'].forEach(s => {
+    const view = document.getElementById(`hub-view-${s}`);
+    const btn = document.getElementById(`hub-btn-${s}`);
+    if (view) view.style.display = (s === subTab) ? 'block' : 'none';
+    if (btn) btn.classList.toggle('active', s === subTab);
+  });
+}
+window.switchMediaHubSubTab = switchMediaHubSubTab;
 
 // Mobile sidebar controls
 document.getElementById('mobile-sidebar-toggle')?.addEventListener('click', () => {
@@ -169,18 +179,17 @@ async function loadAllAdminData() {
   await Promise.all([
     loadLeads(),
     loadCourses(),
-    loadAdminEvents(),
     loadServices(),
+    loadAdminEvents(),
     loadGallery(),
     loadTeam(),
     loadBanners(),
-    loadSettings(),
-    loadSEO()
+    loadSettings()
   ]);
 }
 
 // --------------------------------------------------------------------------
-// 1. LEADS & DASHBOARD (Screens 14 & 17)
+// 1. LEADS & DASHBOARD
 // --------------------------------------------------------------------------
 async function loadLeads() {
   const search = document.getElementById('leads-search-input')?.value || '';
@@ -229,72 +238,98 @@ function renderDashboardKPIs() {
 }
 
 function renderRecentLeads() {
-  const tbody = document.getElementById('recent-leads-tbody');
-  if (!tbody) return;
+  const container = document.getElementById('recent-leads-list');
+  if (!container) return;
 
   const recent = adminState.leads.slice(0, 5);
   if (recent.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 20px;">No leads received yet.</td></tr>`;
+    container.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 24px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1;">No leads received yet.</div>';
     return;
   }
 
-  tbody.innerHTML = recent.map(l => {
+  container.innerHTML = recent.map(l => {
     const target = l.courseName || l.subServiceName || l.serviceName || 'General Enquiry';
     const dateStr = new Date(l.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+    const cleanPhone = (l.phone || '').replace(/[^0-9]/g, '');
+    const waLink = `https://wa.me/${cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone}?text=Hi%20${encodeURIComponent(l.fullName || '')},%20greetings%20from%20Edueme%20Research%20Labs!`;
+
     return `
-      <tr>
-        <td><strong>${dateStr}</strong></td>
-        <td><strong>${l.fullName}</strong></td>
-        <td><span class="meta-pill">${l.sourceType}</span> ${target}</td>
-        <td><a href="tel:${l.phone}" style="color: var(--accent-blue);">${l.phone}</a></td>
-        <td>
-          <span class="status-pill status-${l.status}">${l.status}</span>
-        </td>
-        <td>
-          <button class="action-btn action-btn-call" onclick="switchAdminTab('leads')">Manage</button>
-        </td>
-      </tr>
+      <div class="modern-row-card">
+        <div class="modern-row-left">
+          <div class="modern-row-info">
+            <div class="modern-row-title">${l.fullName} <span style="font-weight: 500; font-size: 13px; color: #64748b;">(${dateStr})</span></div>
+            <div class="modern-row-meta">
+              <span>🎯 <strong>${target}</strong></span>
+              <span>•</span>
+              <span>📞 <a href="tel:${l.phone}" style="color: var(--accent-blue); font-weight: 600;">${l.phone}</a></span>
+              ${l.email ? `<span>•</span><span>✉️ ${l.email}</span>` : ''}
+            </div>
+            ${l.message ? `<div style="font-size: 12.5px; color: #475569; margin-top: 2px;">💬 "${l.message}"</div>` : ''}
+          </div>
+        </div>
+        <div class="modern-row-right">
+          <select class="form-control" style="padding: 5px 8px; font-size: 12px; width: 110px; font-weight: 600;" onchange="updateLeadStatus('${l.id}', this.value)">
+            <option value="new" ${l.status === 'new' ? 'selected' : ''}>🟡 New</option>
+            <option value="contacted" ${l.status === 'contacted' ? 'selected' : ''}>🔵 Contacted</option>
+            <option value="converted" ${l.status === 'converted' ? 'selected' : ''}>🟢 Converted</option>
+          </select>
+          <div class="modern-actions-group">
+            <a href="${waLink}" target="_blank" class="action-btn action-btn-wa" title="Chat on WhatsApp" style="text-decoration: none;">💬 WhatsApp</a>
+            <a href="tel:${l.phone}" class="action-btn action-btn-call" title="Direct Phone Call" style="text-decoration: none;">📞 Call</a>
+          </div>
+        </div>
+      </div>
     `;
   }).join('');
 }
 
 function renderAllLeadsTable() {
-  const tbody = document.getElementById('all-leads-tbody');
-  if (!tbody) return;
+  const container = document.getElementById('all-leads-list');
+  if (!container) return;
 
   if (adminState.leads.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 30px;">No leads matching search criteria.</td></tr>`;
+    container.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 32px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1;">No leads matching search or filter criteria.</div>';
     return;
   }
 
-  tbody.innerHTML = adminState.leads.map(l => {
+  container.innerHTML = adminState.leads.map(l => {
     const target = l.courseName || l.subServiceName || l.serviceName || 'General Enquiry';
     const dateFormatted = new Date(l.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    const cleanPhone = (l.phone || '').replace(/[^0-9]/g, '');
+    const waLink = `https://wa.me/${cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone}?text=Hi%20${encodeURIComponent(l.fullName || '')},%20greetings%20from%20Edueme%20Research%20Labs!`;
 
     return `
-      <tr>
-        <td style="white-space: nowrap; font-size: 12px; color: var(--text-muted);">${dateFormatted}</td>
-        <td><strong>${l.fullName}</strong></td>
-        <td style="font-size: 12px;">
-          <div>📞 <a href="tel:${l.phone}" style="color: var(--accent-blue);">${l.phone}</a></div>
-          <div>✉️ <a href="mailto:${l.email}" style="color: var(--text-muted);">${l.email}</a></div>
-        </td>
-        <td>
-          <span class="meta-pill" style="margin-bottom: 2px;">${l.sourceType}</span>
-          <div style="font-weight: 600; font-size: 12px; color: var(--primary-navy);">${target}</div>
-        </td>
-        <td style="font-size: 12px; max-width: 200px;">${l.message || '—'}</td>
-        <td>
-          <select class="form-control" style="padding: 4px 8px; font-size: 12px; width: 110px;" onchange="updateLeadStatus('${l.id}', this.value)">
-            <option value="new" ${l.status === 'new' ? 'selected' : ''}>New</option>
-            <option value="contacted" ${l.status === 'contacted' ? 'selected' : ''}>Contacted</option>
-            <option value="converted" ${l.status === 'converted' ? 'selected' : ''}>Converted</option>
+      <div class="modern-row-card">
+        <div class="modern-row-left">
+          <div class="modern-row-info">
+            <div class="modern-row-title">
+              ${l.fullName}
+              <span class="meta-pill" style="margin-left: 6px; font-size: 11px;">${l.sourceType}</span>
+            </div>
+            <div class="modern-row-meta">
+              <span>🎯 <strong>${target}</strong></span>
+              <span>•</span>
+              <span>📞 <a href="tel:${l.phone}" style="color: var(--accent-blue); font-weight: 600;">${l.phone}</a></span>
+              ${l.email ? `<span>•</span><span>✉️ ${l.email}</span>` : ''}
+              <span>•</span>
+              <span style="color: #94a3b8;">📅 ${dateFormatted}</span>
+            </div>
+            ${l.message ? `<div style="font-size: 12.5px; color: #475569; margin-top: 4px; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid #e2e8f0;">💬 "${l.message}"</div>` : ''}
+          </div>
+        </div>
+        <div class="modern-row-right">
+          <select class="form-control" style="padding: 6px 10px; font-size: 12.5px; width: 120px; font-weight: 700;" onchange="updateLeadStatus('${l.id}', this.value)">
+            <option value="new" ${l.status === 'new' ? 'selected' : ''}>🟡 New</option>
+            <option value="contacted" ${l.status === 'contacted' ? 'selected' : ''}>🔵 Contacted</option>
+            <option value="converted" ${l.status === 'converted' ? 'selected' : ''}>🟢 Converted</option>
           </select>
-        </td>
-        <td>
-          <button onclick="deleteLead('${l.id}')" style="background: none; border: none; color: #ef4444; font-size: 16px; cursor: pointer;" title="Delete Lead">🗑️</button>
-        </td>
-      </tr>
+          <div class="modern-actions-group">
+            <a href="${waLink}" target="_blank" class="action-btn action-btn-wa" title="Chat on WhatsApp" style="text-decoration: none;">💬 WhatsApp</a>
+            <a href="tel:${l.phone}" class="action-btn action-btn-call" title="Direct Phone Call" style="text-decoration: none;">📞 Call</a>
+            <button class="modern-btn-delete" onclick="deleteLead('${l.id}')" title="Delete Lead">🗑️ Delete</button>
+          </div>
+        </div>
+      </div>
     `;
   }).join('');
 }
@@ -392,23 +427,39 @@ async function loadCourses() {
 }
 
 function renderCoursesTable() {
-  const tbody = document.getElementById('admin-courses-tbody');
-  if (!tbody) return;
+  const container = document.getElementById('admin-courses-list');
+  if (!container) return;
 
-  tbody.innerHTML = adminState.courses.map(c => `
-    <tr>
-      <td><img src="${c.image || '/assets/crop_course_ref.jpg'}" style="width: 50px; height: 38px; border-radius: 4px; object-fit: cover;" onerror="this.src='/assets/crop_course_ref.jpg'"></td>
-      <td><strong>${c.title}</strong><div style="font-size: 11px; color: #64748b;">${c.slug} (Order: ${c.displayOrder || 1})</div></td>
-      <td><span class="meta-pill">${c.category}</span></td>
-      <td>${c.duration} <span style="color: #94a3b8;">(${c.level})</span></td>
-      <td>
-        <span class="status-pill status-${c.status}">${c.status}</span>
-      </td>
-      <td>
-        <button class="action-btn action-btn-call" onclick="openEditCourseModal('${c.id}')">✏️ Edit</button>
-        <button class="action-btn" style="color: #ef4444;" onclick="deleteCourse('${c.id}')">🗑️</button>
-      </td>
-    </tr>
+  if (adminState.courses.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 32px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1;">No courses found. Click "+ Add New Course" to add one.</div>';
+    return;
+  }
+
+  container.innerHTML = adminState.courses.map(c => `
+    <div class="modern-row-card">
+      <div class="modern-row-left">
+        <img class="modern-row-thumb" src="${c.image || '/assets/crop_course_ref.jpg'}" alt="${c.title}" onerror="this.src='/assets/crop_course_ref.jpg'">
+        <div class="modern-row-info">
+          <div class="modern-row-title">${c.title}</div>
+          <div class="modern-row-meta">
+            <span class="meta-pill">${c.category}</span>
+            <span>•</span>
+            <span>⏱️ ${c.duration}</span>
+            <span>•</span>
+            <span>🎯 ${c.level}</span>
+            <span>•</span>
+            <span>Order #${c.displayOrder || 1}</span>
+          </div>
+        </div>
+      </div>
+      <div class="modern-row-right">
+        <span class="modern-status-badge ${c.status === 'active' ? 'active' : 'past'}">${c.status === 'active' ? '● Active' : '○ Inactive'}</span>
+        <div class="modern-actions-group">
+          <button class="modern-btn-edit" onclick="openEditCourseModal('${c.id}')">✏️ Edit</button>
+          <button class="modern-btn-delete" onclick="deleteCourse('${c.id}')">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>
   `).join('');
 }
 
@@ -704,47 +755,44 @@ async function loadAdminEvents() {
 }
 
 function renderAdminEventsTable() {
-  const tbody = document.getElementById('admin-events-tbody');
-  if (!tbody) return;
+  const container = document.getElementById('admin-events-list');
+  if (!container) return;
 
   if (!adminState.events || adminState.events.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 24px;">No events created yet. Click "+ Add New Event" to get started.</td></tr>';
+    container.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 32px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1;">No events created yet. Click "+ Add New Event" to get started.</div>';
     return;
   }
 
-  tbody.innerHTML = adminState.events.map(ev => {
+  container.innerHTML = adminState.events.map(ev => {
     const photoCount = (ev.photos && ev.photos.length) || 0;
-    const typeClass = ev.type === 'upcoming' ? 'status-active' : 'status-completed';
-    const typeLabel = ev.type === 'upcoming' ? 'Upcoming' : 'Past Event';
+    const isUpcoming = ev.type === 'upcoming';
 
     return `
-      <tr>
-        <td>
-          <img src="${ev.image || '/assets/events_hero.jpg'}" style="width: 54px; height: 38px; border-radius: 6px; object-fit: cover; border: 1px solid #e2e8f0;" onerror="this.src='/assets/events_hero.jpg'">
-        </td>
-        <td>
-          <strong>${ev.title}</strong>
-          <div style="font-size: 11px; color: #64748b; font-family: monospace;">/events/${ev.slug}</div>
-        </td>
-        <td>
-          <span class="meta-pill" style="margin-bottom: 3px; display: inline-block;">${ev.category || 'Workshop'}</span>
-          <div><span class="status-pill ${typeClass}" style="font-size: 11px; padding: 2px 6px;">${typeLabel}</span></div>
-        </td>
-        <td style="font-size: 12px;">
-          <div><strong>📅 ${ev.date || 'TBD'}</strong></div>
-          <div style="color: #64748b;">⏰ ${ev.timings || '8:30 AM to 5:30 PM'}</div>
-        </td>
-        <td style="font-size: 12px; color: #475569;">
-          <strong>${photoCount}</strong> photo(s)
-        </td>
-        <td>
-          <span class="status-pill status-${ev.status || 'active'}">${ev.status || 'active'}</span>
-        </td>
-        <td>
-          <button class="action-btn action-btn-call" onclick="openEditEventModal('${ev.id}')">✏️ Edit</button>
-          <button class="action-btn" style="color: #ef4444;" onclick="deleteEvent('${ev.id}')" title="Delete Event">🗑️</button>
-        </td>
-      </tr>
+      <div class="modern-row-card">
+        <div class="modern-row-left">
+          <img class="modern-row-thumb" src="${ev.image || '/assets/events_hero.jpg'}" alt="${ev.title}" onerror="this.src='/assets/events_hero.jpg'">
+          <div class="modern-row-info">
+            <div class="modern-row-title">${ev.title}</div>
+            <div class="modern-row-meta">
+              <span class="meta-pill">${ev.category || 'Workshop'}</span>
+              <span>•</span>
+              <span>📅 ${ev.date || 'TBD'}</span>
+              <span>•</span>
+              <span>⏰ ${ev.timings || '8:30 AM to 5:30 PM'}</span>
+              <span>•</span>
+              <span>📸 ${photoCount} Photo(s)</span>
+            </div>
+          </div>
+        </div>
+        <div class="modern-row-right">
+          <span class="modern-status-badge ${isUpcoming ? 'upcoming' : 'past'}">${isUpcoming ? '📅 Upcoming' : '🏁 Past Event'}</span>
+          <span class="modern-status-badge ${ev.status === 'active' ? 'active' : 'past'}">${ev.status === 'active' ? '● Active' : '○ Inactive'}</span>
+          <div class="modern-actions-group">
+            <button class="modern-btn-edit" onclick="openEditEventModal('${ev.id}')">✏️ Edit</button>
+            <button class="modern-btn-delete" onclick="deleteEvent('${ev.id}')" title="Delete Event">🗑️ Delete</button>
+          </div>
+        </div>
+      </div>
     `;
   }).join('');
 }
@@ -1052,33 +1100,38 @@ async function loadServices() {
 }
 
 function renderServicesTable() {
-  const tbody = document.getElementById('admin-services-tbody');
-  if (!tbody) return;
+  const container = document.getElementById('admin-services-list');
+  if (!container) return;
 
-  tbody.innerHTML = adminState.services.map(s => `
-    <tr>
-      <td>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <img src="${s.image || '/assets/crop_service_ref.jpg'}" style="width: 44px; height: 34px; border-radius: 4px; object-fit: cover;" onerror="this.src='/assets/crop_service_ref.jpg'">
-          <div>
-            <strong>${s.title}</strong>
-            <div style="font-size: 11px; color: #64748b;">${s.slug} (Order: ${s.displayOrder || 1})</div>
+  if (adminState.services.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 32px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1;">No services found. Click "+ Add New Service" to add one.</div>';
+    return;
+  }
+
+  container.innerHTML = adminState.services.map(s => `
+    <div class="modern-row-card">
+      <div class="modern-row-left">
+        <img class="modern-row-thumb" src="${s.image || '/assets/crop_service_ref.jpg'}" alt="${s.title}" onerror="this.src='/assets/crop_service_ref.jpg'">
+        <div class="modern-row-info">
+          <div class="modern-row-title">${s.title}</div>
+          <div class="modern-row-meta">
+            <span>⏱️ ${s.duration}</span>
+            <span>•</span>
+            <span style="font-weight: 700; color: var(--accent-blue);">📦 ${s.subServices?.length || 0} Sub-Services</span>
+            <span>•</span>
+            <span>Order #${s.displayOrder || 1}</span>
           </div>
         </div>
-      </td>
-      <td>${s.duration}</td>
-      <td>
-        <span class="meta-pill" style="font-weight: 700;">${s.subServices?.length || 0} Sub-Services</span>
-        <button class="action-btn action-btn-wa" style="display: inline-block; margin-left: 6px; padding: 2px 6px; font-size: 11px;" onclick="openManageSubServicesModal('${s.id}')">Manage &rarr;</button>
-      </td>
-      <td>
-        <span class="status-pill status-${s.status}">${s.status}</span>
-      </td>
-      <td>
-        <button class="action-btn action-btn-call" onclick="openEditServiceModal('${s.id}')">✏️ Edit</button>
-        <button class="action-btn" style="color: #ef4444;" onclick="deleteService('${s.id}')">🗑️</button>
-      </td>
-    </tr>
+      </div>
+      <div class="modern-row-right">
+        <button class="action-btn action-btn-wa" onclick="openManageSubServicesModal('${s.id}')">⚙️ Manage Sub-Services (${s.subServices?.length || 0})</button>
+        <span class="modern-status-badge ${s.status === 'active' ? 'active' : 'past'}">${s.status === 'active' ? '● Active' : '○ Inactive'}</span>
+        <div class="modern-actions-group">
+          <button class="modern-btn-edit" onclick="openEditServiceModal('${s.id}')">✏️ Edit</button>
+          <button class="modern-btn-delete" onclick="deleteService('${s.id}')">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>
   `).join('');
 }
 
@@ -1433,21 +1486,35 @@ async function loadGallery() {
 }
 
 function renderGalleryTable() {
-  const tbody = document.getElementById('admin-gallery-tbody');
-  if (!tbody) return;
+  const container = document.getElementById('admin-gallery-list');
+  if (!container) return;
 
-  tbody.innerHTML = adminState.gallery.map(g => `
-    <tr>
-      <td><img src="${g.imageUrl}" style="width: 50px; height: 38px; border-radius: 4px; object-fit: cover;"></td>
-      <td><strong>${g.title}</strong></td>
-      <td><span class="meta-pill">${g.category}</span></td>
-      <td><span class="status-pill status-${g.status}">${g.status}</span></td>
-      <td>${g.displayOrder || 1}</td>
-      <td>
-        <button class="action-btn action-btn-call" onclick="openEditGalleryModal('${g.id}')">✏️</button>
-        <button class="action-btn" style="color: #ef4444;" onclick="deleteGalleryItem('${g.id}')">🗑️</button>
-      </td>
-    </tr>
+  if (adminState.gallery.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 32px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1;">No gallery photos yet. Click "+ Add Gallery Photo" to add one.</div>';
+    return;
+  }
+
+  container.innerHTML = adminState.gallery.map(g => `
+    <div class="modern-row-card">
+      <div class="modern-row-left">
+        <img class="modern-row-thumb" src="${g.imageUrl}" alt="${g.title}" onerror="this.src='/assets/brochure/img_7.jpg'">
+        <div class="modern-row-info">
+          <div class="modern-row-title">${g.title}</div>
+          <div class="modern-row-meta">
+            <span class="meta-pill">${g.category}</span>
+            <span>•</span>
+            <span>Order #${g.displayOrder || 1}</span>
+          </div>
+        </div>
+      </div>
+      <div class="modern-row-right">
+        <span class="modern-status-badge ${g.status === 'active' ? 'active' : 'past'}">${g.status === 'active' ? '● Active' : '○ Inactive'}</span>
+        <div class="modern-actions-group">
+          <button class="modern-btn-edit" onclick="openEditGalleryModal('${g.id}')">✏️ Edit</button>
+          <button class="modern-btn-delete" onclick="deleteGalleryItem('${g.id}')">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>
   `).join('');
 }
 
@@ -1584,20 +1651,34 @@ async function loadTeam() {
 }
 
 function renderTeamTable() {
-  const tbody = document.getElementById('admin-team-tbody');
-  if (!tbody) return;
+  const container = document.getElementById('admin-team-list');
+  if (!container) return;
 
-  tbody.innerHTML = adminState.team.map(t => `
-    <tr>
-      <td><img src="${t.image}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"></td>
-      <td><strong>${t.name}</strong></td>
-      <td><span class="meta-pill" style="color: var(--accent-blue); font-weight: 600;">${t.role}</span></td>
-      <td><span class="status-pill status-${t.status}">${t.status}</span></td>
-      <td>
-        <button class="action-btn action-btn-call" onclick="openEditTeamModal('${t.id}')">✏️</button>
-        <button class="action-btn" style="color: #ef4444;" onclick="deleteTeamMember('${t.id}')">🗑️</button>
-      </td>
-    </tr>
+  if (adminState.team.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 32px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1;">No team members found. Click "+ Add Team Member" to add one.</div>';
+    return;
+  }
+
+  container.innerHTML = adminState.team.map(t => `
+    <div class="modern-row-card">
+      <div class="modern-row-left">
+        <img class="modern-row-avatar" src="${t.image}" alt="${t.name}" onerror="this.src='/assets/brochure/img_11.jpg'">
+        <div class="modern-row-info">
+          <div class="modern-row-title">${t.name}</div>
+          <div class="modern-row-meta">
+            <span style="color: var(--accent-blue); font-weight: 700;">${t.role}</span>
+            ${t.bio ? `<span>•</span><span style="max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${t.bio}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <div class="modern-row-right">
+        <span class="modern-status-badge ${t.status === 'active' ? 'active' : 'past'}">${t.status === 'active' ? '● Active' : '○ Inactive'}</span>
+        <div class="modern-actions-group">
+          <button class="modern-btn-edit" onclick="openEditTeamModal('${t.id}')">✏️ Edit</button>
+          <button class="modern-btn-delete" onclick="deleteTeamMember('${t.id}')">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>
   `).join('');
 }
 
@@ -1724,25 +1805,34 @@ async function loadBanners() {
 }
 
 function renderBannersTable() {
-  const tbody = document.getElementById('admin-banners-tbody');
-  if (!tbody) return;
+  const container = document.getElementById('admin-banners-list');
+  if (!container) return;
 
-  tbody.innerHTML = adminState.banners.map(b => `
-    <tr>
-      <td><img src="${b.imageUrl}" style="width: 70px; height: 42px; border-radius: 4px; object-fit: cover;"></td>
-      <td>
-        <span class="section-badge" style="font-size: 10px;">${b.badge}</span>
-        <div style="font-weight: 700; color: var(--primary-navy);">${b.title}</div>
-      </td>
-      <td>
-        <span class="meta-pill">${b.ctaText} &rarr; ${b.ctaLink}</span>
-      </td>
-      <td><span class="status-pill status-${b.status}">${b.status}</span></td>
-      <td>
-        <button class="action-btn action-btn-call" onclick="openEditBannerModal('${b.id}')">✏️</button>
-        <button class="action-btn" style="color: #ef4444;" onclick="deleteBanner('${b.id}')">🗑️</button>
-      </td>
-    </tr>
+  if (adminState.banners.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 32px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1;">No banners found. Click "+ Add Hero Banner" to add one.</div>';
+    return;
+  }
+
+  container.innerHTML = adminState.banners.map(b => `
+    <div class="modern-row-card">
+      <div class="modern-row-left">
+        <img class="modern-row-thumb" style="width: 100px; height: 56px;" src="${b.imageUrl}" alt="${b.title}" onerror="this.src='/assets/brochure/img_7.jpg'">
+        <div class="modern-row-info">
+          <div class="modern-row-title">${b.title}</div>
+          <div class="modern-row-meta">
+            ${b.badge ? `<span class="section-badge" style="font-size: 10.5px; padding: 2px 8px;">${b.badge}</span><span>•</span>` : ''}
+            <span>CTA: <strong>${b.ctaText || 'Explore'}</strong> &rarr; ${b.ctaLink || '/'}</span>
+          </div>
+        </div>
+      </div>
+      <div class="modern-row-right">
+        <span class="modern-status-badge ${b.status === 'active' ? 'active' : 'past'}">${b.status === 'active' ? '● Active' : '○ Inactive'}</span>
+        <div class="modern-actions-group">
+          <button class="modern-btn-edit" onclick="openEditBannerModal('${b.id}')">✏️ Edit</button>
+          <button class="modern-btn-delete" onclick="deleteBanner('${b.id}')">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>
   `).join('');
 }
 
@@ -1937,85 +2027,6 @@ document.getElementById('settings-form')?.addEventListener('submit', async (e) =
   }
 });
 
-async function loadSEO() {
-  try {
-    const res = await fetch('/api/seo');
-    adminState.seo = await res.json();
-    renderSEOTable();
-  } catch (e) {}
-}
-
-function renderSEOTable() {
-  const tbody = document.getElementById('admin-seo-tbody');
-  if (!tbody) return;
-
-  tbody.innerHTML = adminState.seo.map(s => `
-    <tr>
-      <td><strong>${s.pageRoute}</strong></td>
-      <td style="max-width: 200px;">${s.metaTitle}</td>
-      <td style="max-width: 250px; font-size: 12px; color: var(--text-muted);">${s.metaDescription}</td>
-      <td style="font-size: 12px;">${s.keywords || '—'}</td>
-      <td>
-        <button class="action-btn action-btn-call" onclick="openEditSEOModal('${s.pageRoute}')">✏️ Edit</button>
-      </td>
-    </tr>
-  `).join('');
-}
-
-function openEditSEOModal(route) {
-  const s = adminState.seo.find(item => item.pageRoute === route);
-  if (!s) return;
-
-  const body = `
-    <form id="modal-seo-form">
-      <div class="form-group">
-        <label class="form-label">Page Route</label>
-        <input type="text" class="form-control" value="${s.pageRoute}" disabled>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Meta Title *</label>
-        <input type="text" id="seo-title" class="form-control" value="${s.metaTitle}" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Meta Description</label>
-        <textarea id="seo-desc" class="form-control" rows="3">${s.metaDescription || ''}</textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Keywords (comma separated)</label>
-        <input type="text" id="seo-keywords" class="form-control" value="${s.keywords || ''}">
-      </div>
-    </form>
-  `;
-  const footer = `
-    <button class="hero-secondary-btn" onclick="closeAdminModal()">Cancel</button>
-    <button class="hero-primary-btn" onclick="saveSEO('${s.pageRoute}')">Save Metadata</button>
-  `;
-  openAdminModal('Edit SEO for: ' + s.pageRoute, body, footer);
-}
-
-async function saveSEO(pageRoute) {
-  const payload = {
-    pageRoute,
-    metaTitle: document.getElementById('seo-title').value.trim(),
-    metaDescription: document.getElementById('seo-desc').value.trim(),
-    keywords: document.getElementById('seo-keywords').value.trim()
-  };
-
-  const res = await fetch('/api/seo', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${currentToken}`
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (res.ok) {
-    closeAdminModal();
-    showAdminToast('SEO updated');
-    loadSEO();
-  }
-}
 
 // -------------------------------------------------------------
 // INITIALIZATION

@@ -916,7 +916,7 @@ app.post('/api/upload', requireAdmin, (req, res) => {
       else if (mime.includes('gif')) ext = '.gif';
       buffer = Buffer.from(matches[2], 'base64');
     } else {
-      buffer = Buffer.from(data, 'base64');
+      buffer = Buffer.from(raw, 'base64');
     }
 
     const safeName = (filename ? filename.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() : 'upload') + '_' + Date.now() + ext;
