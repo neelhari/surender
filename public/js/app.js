@@ -566,11 +566,10 @@ async function renderHomeView() {
       <!-- POPULAR COURSES SECTION (Featuring Top 5 Main Courses) -->
       <section class="home-courses-section">
         <div class="section-center-group">
-          <!-- Pencil-Art Mascot Illustration -->
+          <!-- Mascot Illustration with Subtle Color Accent -->
           <div class="courses-pencil-robot-container">
             <div class="courses-pencil-robot-art">
-              <img src="/assets/robot_pencil_body.png" alt="Edueme Mascot Robot" class="pencil-robot-body" loading="lazy">
-              <img src="/assets/robot_pencil_hand.png" alt="Edueme Mascot Robot Waving Hand" class="pencil-robot-hand" loading="lazy">
+              <img src="/assets/robot_color_mascot.png" alt="Edueme Mascot Robot" class="pencil-robot-body" loading="lazy">
             </div>
           </div>
 

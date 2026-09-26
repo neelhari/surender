@@ -1458,18 +1458,18 @@ button, input, select, textarea {
   }
 }
 
-/* Pencil-Art Robot Decoration (Popular Courses) */
+/* Pencil-Art / Color Robot Decoration (Popular Courses) */
 .courses-pencil-robot-container {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  margin: 0 auto 8px auto;
+  margin: 0 auto 6px auto;
   width: 100%;
-  max-width: 320px;
+  max-width: 280px;
   position: relative;
   z-index: 2;
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(24px);
   transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
 }
@@ -1481,60 +1481,37 @@ button, input, select, textarea {
 
 @media (min-width: 768px) {
   .courses-pencil-robot-container {
-    max-width: 360px;
-    margin-bottom: 12px;
+    max-width: 320px;
+    margin-bottom: 10px;
   }
 }
 
 .courses-pencil-robot-art {
   position: relative;
   width: 100%;
-  aspect-ratio: 450 / 175;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   overflow: visible;
 }
 
 .pencil-robot-body {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
+  height: auto;
+  max-height: 160px;
   object-fit: contain;
   pointer-events: none;
   z-index: 1;
+  display: block;
+  animation: robotGentleFloat 4s ease-in-out infinite;
 }
 
-.pencil-robot-hand {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-  z-index: 2;
-  transform-origin: 61.8% 87.4%;
-  animation: robotPencilHandWave 2.6s ease-in-out infinite;
-}
-
-@keyframes robotPencilHandWave {
+@keyframes robotGentleFloat {
   0%, 100% {
-    transform: rotate(0deg);
+    transform: translateY(0);
   }
-  15% {
-    transform: rotate(-6deg);
-  }
-  30% {
-    transform: rotate(7deg);
-  }
-  45% {
-    transform: rotate(-6deg);
-  }
-  60% {
-    transform: rotate(5deg);
-  }
-  75%, 95% {
-    transform: rotate(0deg);
+  50% {
+    transform: translateY(-5px);
   }
 }
 
@@ -1702,8 +1679,8 @@ button, input, select, textarea {
 .testimonials-coverflow-stage {
   position: relative;
   width: 100%;
-  height: 136px;
-  margin: 4px 0 12px 0;
+  height: 168px;
+  margin: 6px 0 14px 0;
   perspective: 900px;
   overflow: visible;
   user-select: none;
@@ -1714,24 +1691,24 @@ button, input, select, textarea {
 
 @media (min-width: 768px) {
   .testimonials-coverflow-stage {
-    height: 142px;
-    max-width: 580px;
+    height: 178px;
+    max-width: 660px;
     margin-left: auto;
     margin-right: auto;
   }
 }
 
-/* Shorter, Compact Floating Coverflow Card Item */
+/* Floating Coverflow Card Item (Enlarged & Roomier) */
 .testimonial-card-item {
   position: absolute;
   left: 50%;
   top: 0;
-  width: clamp(232px, 68vw, 264px);
-  height: 134px;
+  width: clamp(275px, 78vw, 325px);
+  height: 164px;
   background: #ffffff;
   border: 1px solid rgba(2, 132, 199, 0.18);
-  border-radius: 16px;
-  padding: 9px 13px 8px;
+  border-radius: 18px;
+  padding: 12px 16px 11px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1750,13 +1727,13 @@ button, input, select, textarea {
   opacity: 1;
   z-index: 10;
   pointer-events: auto;
-  box-shadow: 0 14px 28px -4px rgba(14, 55, 105, 0.22), 0 4px 10px -2px rgba(14, 55, 105, 0.1);
+  box-shadow: 0 16px 32px -4px rgba(14, 55, 105, 0.2), 0 6px 14px -2px rgba(14, 55, 105, 0.08);
   border-color: rgba(2, 132, 199, 0.45);
 }
 
 /* 2. Previous Left Card (Partially visible behind on the left) */
 .testimonial-card-item.card-prev {
-  transform: translateX(calc(-50% - 74px)) translateZ(-45px) scale(0.85) rotateY(6deg);
+  transform: translateX(calc(-50% - 88px)) translateZ(-45px) scale(0.86) rotateY(6deg);
   opacity: 0.52;
   z-index: 5;
   pointer-events: auto;
@@ -1765,7 +1742,7 @@ button, input, select, textarea {
 
 /* 3. Next Right Card (Partially visible behind on the right) */
 .testimonial-card-item.card-next {
-  transform: translateX(calc(-50% + 74px)) translateZ(-45px) scale(0.85) rotateY(-6deg);
+  transform: translateX(calc(-50% + 88px)) translateZ(-45px) scale(0.86) rotateY(-6deg);
   opacity: 0.52;
   z-index: 5;
   pointer-events: auto;
@@ -1782,13 +1759,15 @@ button, input, select, textarea {
 
 @media (min-width: 768px) {
   .testimonial-card-item {
-    height: 140px;
+    width: 350px;
+    height: 174px;
+    padding: 14px 18px 13px;
   }
   .testimonial-card-item.card-prev {
-    transform: translateX(calc(-50% - 110px)) translateZ(-45px) scale(0.88) rotateY(5deg);
+    transform: translateX(calc(-50% - 130px)) translateZ(-45px) scale(0.88) rotateY(5deg);
   }
   .testimonial-card-item.card-next {
-    transform: translateX(calc(-50% + 110px)) translateZ(-45px) scale(0.88) rotateY(-5deg);
+    transform: translateX(calc(-50% + 130px)) translateZ(-45px) scale(0.88) rotateY(-5deg);
   }
 }
 
@@ -1796,31 +1775,31 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
 .testimonial-stars {
   color: #f59e0b;
-  font-size: 10.5px;
-  letter-spacing: 1.2px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
 }
 
 .testimonial-quote-icon {
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1;
   color: #7dd3fc;
   font-family: Georgia, serif;
 }
 
-/* Shorter quote text (strictly 2 lines) */
+/* Roomier quote text (3 clean readable lines) */
 .testimonial-quote-text {
-  font-size: 11px;
-  line-height: 1.34;
+  font-size: 12.5px;
+  line-height: 1.42;
   color: #334155;
-  margin: 0 0 5px 0;
+  margin: 0 0 6px 0;
   font-style: normal;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1828,21 +1807,21 @@ button, input, select, textarea {
 .testimonial-author-row {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 9px;
   border-top: 1px solid #f1f5f9;
-  padding-top: 5px;
+  padding-top: 7px;
 }
 
 .testimonial-author-avatar {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #f0fdfa;
   border: 1px solid #ccfbf1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 14px;
   flex-shrink: 0;
 }
 
@@ -1852,21 +1831,21 @@ button, input, select, textarea {
 }
 
 .testimonial-author-info h4 {
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--primary-navy);
   margin: 0;
-  line-height: 1.15;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .testimonial-author-info p {
-  font-size: 9.5px;
+  font-size: 10.5px;
   color: var(--text-muted);
-  margin: 1px 0 0;
-  line-height: 1.15;
+  margin: 2px 0 0;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1997,14 +1976,14 @@ button, input, select, textarea {
 
 .edueme-stat-card {
   background: #ffffff;
-  border: 1.5px solid #2dd4bf;
+  border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 14px 12px;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 4px 14px rgba(45, 212, 191, 0.08), 0 2px 5px rgba(0, 0, 0, 0.02);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   box-sizing: border-box;
 }
 
@@ -2024,7 +2003,8 @@ button, input, select, textarea {
 
 .edueme-stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(45, 212, 191, 0.18);
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
 }
 
 .edueme-stat-icon-wrap {
@@ -3904,33 +3884,51 @@ textarea.form-control {
 }
 
 /* ==========================================================================
-   FREE ONE-DAY WORKSHOP AD BANNER (Home Page)
+   FREE ONE-DAY WORKSHOP AD BANNER (Home Page - Sized for Ad-conversion)
    ========================================================================== */
 .workshop-ad-banner-section {
-  margin: 16px 0 28px;
+  margin: 16px auto 28px;
+  max-width: 860px;
+  padding: 0 12px;
+}
+
+@media (min-width: 768px) {
+  .workshop-ad-banner-section {
+    margin: 22px auto 36px;
+    padding: 0;
+  }
 }
 
 .workshop-ad-banner-card {
   display: block;
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(14, 22, 40, 0.12);
+  box-shadow: 0 8px 24px rgba(14, 22, 40, 0.12);
   border: 1px solid var(--border-color);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   text-decoration: none;
+  background: #ffffff;
 }
 
 .workshop-ad-banner-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(14, 22, 40, 0.18);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(14, 22, 40, 0.18);
 }
 
 .workshop-ad-banner-img {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
+  max-height: 380px;
   object-fit: cover;
   display: block;
+}
+
+@media (min-width: 992px) {
+  .workshop-ad-banner-img {
+    aspect-ratio: 21 / 9;
+    max-height: 340px;
+  }
 }
 
 /* ==========================================================================
