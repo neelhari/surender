@@ -19,14 +19,38 @@ app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 // Serve static assets from public/
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Simple secure session token store for Admin
-let activeTokens = new Set(['demo-admin-token-2026']);
+// Secure Stateless HMAC Token generator & validator for Admin Session (Works across restarts & Vercel)
+const ADMIN_SECRET = process.env.SUPABASE_SECRET_KEY || 'edueme-admin-secret-key-2026';
+
+function generateAdminToken(email) {
+  const payload = `${email}:${Date.now()}`;
+  const signature = crypto.createHmac('sha256', ADMIN_SECRET).update(payload).digest('hex');
+  return `adm_${Buffer.from(payload).toString('base64url')}.${signature}`;
+}
+
+function verifyAdminToken(token) {
+  if (!token) return false;
+  if (token === 'demo-admin-token-2026') return true;
+  if (token.startsWith('adm_')) {
+    try {
+      const parts = token.substring(4).split('.');
+      if (parts.length !== 2) return false;
+      const [b64, signature] = parts;
+      const payload = Buffer.from(b64, 'base64url').toString('utf8');
+      const expectedSignature = crypto.createHmac('sha256', ADMIN_SECRET).update(payload).digest('hex');
+      return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
+    } catch (e) {
+      return false;
+    }
+  }
+  return false;
+}
 
 // Helper: Authentication Middleware
 function requireAdmin(req, res, next) {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : req.query.token;
-  if (!token || !activeTokens.has(token)) {
+  if (!token || !verifyAdminToken(token)) {
     return res.status(401).json({ error: 'Unauthorized. Please login to continue.' });
   }
   next();
@@ -109,36 +133,37 @@ app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body;
   // Default credentials for Edueme Admin
   if ((email === 'admin@edueme.com' || email === 'admin@eduemeresearchlabs.com') && password === 'admin123') {
-    const token = 'token-' + crypto.randomUUID();
-    activeTokens.add(token);
+    const token = generateAdminToken(email);
     return res.json({ success: true, token, user: { email, name: 'Edueme Administrator' } });
   }
   return res.status(401).json({ success: false, error: 'Invalid email or password. Use admin@edueme.com / admin123' });
 });
 
 app.post('/api/auth/logout', (req, res) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : req.body.token;
-  if (token) activeTokens.delete(token);
   res.json({ success: true });
 });
 
 app.get('/api/auth/check', (req, res) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : req.query.token;
-  if (token && activeTokens.has(token)) {
+  if (token && verifyAdminToken(token)) {
     return res.json({ authenticated: true, user: { email: 'admin@edueme.com', name: 'Edueme Administrator' } });
   }
   res.json({ authenticated: false });
 });
 
 // -------------------------------------------------------------
-// COURSES API
+// COURSES API (Cloud-First with Local Cache Fallback)
 // -------------------------------------------------------------
-app.get('/api/courses', (req, res) => {
+app.get('/api/courses', async (req, res) => {
   const all = req.query.all === 'true';
   const category = req.query.category;
-  let list = db.get('courses');
+  
+  let list = await supabaseService.getCoursesFromCloud();
+  if (!list || list.length === 0) {
+    list = db.get('courses');
+  }
+
   if (!all) {
     list = list.filter(c => c.status === 'active');
   }
@@ -149,16 +174,20 @@ app.get('/api/courses', (req, res) => {
   res.json(list);
 });
 
-app.get('/api/courses/:identifier', (req, res) => {
+app.get('/api/courses/:identifier', async (req, res) => {
   const { identifier } = req.params;
-  const list = db.get('courses');
+  let list = await supabaseService.getCoursesFromCloud();
+  if (!list || list.length === 0) list = db.get('courses');
+  
   const course = list.find(c => c.slug === identifier || c.id === identifier);
   if (!course) return res.status(404).json({ error: 'Course not found' });
   res.json(course);
 });
 
-app.post('/api/courses', requireAdmin, (req, res) => {
-  const courses = db.get('courses');
+app.post('/api/courses', requireAdmin, async (req, res) => {
+  let courses = await supabaseService.getCoursesFromCloud();
+  if (!courses || courses.length === 0) courses = db.get('courses');
+
   const newCourse = {
     id: 'course-' + Date.now(),
     title: req.body.title || 'Untitled Course',
@@ -175,18 +204,22 @@ app.post('/api/courses', requireAdmin, (req, res) => {
     displayOrder: parseInt(req.body.displayOrder, 10) || courses.length + 1,
     createdAt: new Date().toISOString()
   };
+
+  await supabaseService.upsertCourseInCloud(newCourse);
   courses.push(newCourse);
   db.set('courses', courses);
   res.status(201).json(newCourse);
 });
 
-app.put('/api/courses/:id', requireAdmin, (req, res) => {
+app.put('/api/courses/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
-  const courses = db.get('courses');
+  let courses = await supabaseService.getCoursesFromCloud();
+  if (!courses || courses.length === 0) courses = db.get('courses');
+
   const index = courses.findIndex(c => c.id === id);
   if (index === -1) return res.status(404).json({ error: 'Course not found' });
 
-  courses[index] = {
+  const updatedCourse = {
     ...courses[index],
     title: req.body.title !== undefined ? req.body.title : courses[index].title,
     slug: req.body.slug !== undefined ? req.body.slug : courses[index].slug,
@@ -202,55 +235,20 @@ app.put('/api/courses/:id', requireAdmin, (req, res) => {
     displayOrder: req.body.displayOrder !== undefined ? parseInt(req.body.displayOrder, 10) : courses[index].displayOrder,
     updatedAt: new Date().toISOString()
   };
+
+  courses[index] = updatedCourse;
+  await supabaseService.upsertCourseInCloud(updatedCourse);
   db.set('courses', courses);
-  res.json(courses[index]);
+  res.json(updatedCourse);
 });
 
-app.delete('/api/courses/:id', requireAdmin, (req, res) => {
+app.delete('/api/courses/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
+  await supabaseService.deleteCourseInCloud(id);
   let courses = db.get('courses');
   courses = courses.filter(c => c.id !== id);
   db.set('courses', courses);
   res.json({ success: true });
-});
-
-// -------------------------------------------------------------
-// IMAGE UPLOAD API (For Admin Course & Service Card Images)
-// -------------------------------------------------------------
-app.post('/api/upload', requireAdmin, (req, res) => {
-  try {
-    const { imageBase64, filename } = req.body;
-    if (!imageBase64) return res.status(400).json({ error: 'No image data provided' });
-
-    const matches = imageBase64.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
-    if (!matches || matches.length !== 3) {
-      return res.status(400).json({ error: 'Invalid base64 image data' });
-    }
-
-    const mimeType = matches[1];
-    const dataBuffer = Buffer.from(matches[2], 'base64');
-    let ext = 'jpg';
-    if (mimeType.includes('png')) ext = 'png';
-    else if (mimeType.includes('webp')) ext = 'webp';
-    else if (mimeType.includes('svg')) ext = 'svg';
-
-    const safeBase = filename ? filename.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 30) : 'upload';
-    const safeName = `${safeBase}_${Date.now()}.${ext}`;
-
-    const uploadsDir = path.join(__dirname, 'public', 'assets', 'uploads');
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
-    }
-
-    const filePath = path.join(uploadsDir, safeName);
-    fs.writeFileSync(filePath, dataBuffer);
-
-    const publicUrl = `/assets/uploads/${safeName}`;
-    res.json({ success: true, url: publicUrl });
-  } catch (err) {
-    console.error('Upload error:', err);
-    res.status(500).json({ error: 'Failed to upload image' });
-  }
 });
 
 // -------------------------------------------------------------

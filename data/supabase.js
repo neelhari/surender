@@ -21,15 +21,11 @@ if (SUPABASE_URL && SUPABASE_KEY) {
     console.error('❌ Failed to initialize Supabase client:', err.message);
   }
 } else {
-  console.warn('⚠️ Supabase credentials not found in environment variables. Falling back to local db.');
+  console.warn('⚠️ Supabase credentials not found in environment variables.');
 }
 
 /**
  * Upload an image buffer directly to Supabase Storage bucket 'edueme_uploads'
- * @param {Buffer} buffer - Binary file buffer
- * @param {string} fileName - Destination filename
- * @param {string} mimeType - Mime type of file
- * @returns {Promise<string|null>} - Public URL or null
  */
 async function uploadToSupabaseStorage(buffer, fileName, mimeType = 'image/jpeg') {
   if (!supabase) return null;
@@ -60,29 +56,287 @@ async function uploadToSupabaseStorage(buffer, fileName, mimeType = 'image/jpeg'
   }
 }
 
-/**
- * Save / sync a collection to Supabase store
- */
-async function syncToSupabase(key, data) {
+// -------------------------------------------------------------
+// CLOUD COURSES CRUD
+// -------------------------------------------------------------
+async function getCoursesFromCloud() {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('courses')
+      .select('*')
+      .order('display_order', { ascending: true });
+    
+    if (error || !data) return null;
+    return data.map(c => ({
+      id: c.id,
+      title: c.title,
+      slug: c.slug,
+      category: c.category,
+      shortDescription: c.short_description || '',
+      description: c.description || '',
+      duration: c.duration || '',
+      level: c.level || '',
+      mode: c.mode || '',
+      image: c.image || '',
+      highlights: Array.isArray(c.highlights) ? c.highlights : [],
+      status: c.status || 'active',
+      displayOrder: c.display_order || 0,
+      createdAt: c.created_at,
+      updatedAt: c.updated_at
+    }));
+  } catch (e) {
+    return null;
+  }
+}
+
+async function upsertCourseInCloud(c) {
+  if (!supabase) return false;
+  try {
+    const row = {
+      id: c.id,
+      title: c.title,
+      slug: c.slug,
+      category: c.category,
+      short_description: c.shortDescription || '',
+      description: c.description || '',
+      duration: c.duration || '',
+      level: c.level || '',
+      mode: c.mode || '',
+      image: c.image || '',
+      highlights: c.highlights || [],
+      status: c.status || 'active',
+      display_order: c.displayOrder || 0,
+      updated_at: new Date().toISOString()
+    };
+    const { error } = await supabase.from('courses').upsert(row);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function deleteCourseInCloud(id) {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase.from('courses').delete().eq('id', id);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+// -------------------------------------------------------------
+// CLOUD SERVICES CRUD
+// -------------------------------------------------------------
+async function getServicesFromCloud() {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('services')
+      .select('*')
+      .order('display_order', { ascending: true });
+    
+    if (error || !data) return null;
+    return data.map(s => ({
+      id: s.id,
+      title: s.title,
+      slug: s.slug,
+      tagline: s.tagline || '',
+      description: s.description || '',
+      icon: s.icon || '',
+      image: s.image || '',
+      features: s.features || [],
+      status: s.status || 'active',
+      displayOrder: s.display_order || 0,
+      createdAt: s.created_at,
+      updatedAt: s.updated_at
+    }));
+  } catch (e) {
+    return null;
+  }
+}
+
+async function upsertServiceInCloud(s) {
+  if (!supabase) return false;
+  try {
+    const row = {
+      id: s.id,
+      title: s.title,
+      slug: s.slug,
+      tagline: s.tagline || '',
+      description: s.description || '',
+      icon: s.icon || '',
+      image: s.image || '',
+      features: s.features || [],
+      status: s.status || 'active',
+      display_order: s.displayOrder || 0,
+      updated_at: new Date().toISOString()
+    };
+    const { error } = await supabase.from('services').upsert(row);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+// -------------------------------------------------------------
+// CLOUD EVENTS CRUD
+// -------------------------------------------------------------
+async function getEventsFromCloud() {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .order('display_order', { ascending: true });
+    
+    if (error || !data) return null;
+    return data.map(ev => ({
+      id: ev.id,
+      title: ev.title,
+      slug: ev.slug,
+      category: ev.category || '',
+      type: ev.type || 'past',
+      date: ev.date || '',
+      timings: ev.timings || '',
+      location: ev.location || '',
+      shortDescription: ev.short_description || '',
+      description: ev.description || '',
+      image: ev.image || '',
+      photos: ev.photos || [],
+      status: ev.status || 'active',
+      displayOrder: ev.display_order || 0,
+      createdAt: ev.created_at,
+      updatedAt: ev.updated_at
+    }));
+  } catch (e) {
+    return null;
+  }
+}
+
+async function upsertEventInCloud(ev) {
+  if (!supabase) return false;
+  try {
+    const row = {
+      id: ev.id,
+      title: ev.title,
+      slug: ev.slug,
+      category: ev.category || '',
+      type: ev.type || 'past',
+      date: ev.date || '',
+      timings: ev.timings || '',
+      location: ev.location || '',
+      short_description: ev.shortDescription || '',
+      description: ev.description || '',
+      image: ev.image || '',
+      photos: ev.photos || [],
+      status: ev.status || 'active',
+      display_order: ev.displayOrder || 0,
+      updated_at: new Date().toISOString()
+    };
+    const { error } = await supabase.from('events').upsert(row);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+// -------------------------------------------------------------
+// CLOUD LEADS CRUD
+// -------------------------------------------------------------
+async function getLeadsFromCloud() {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('leads')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error || !data) return null;
+    return data.map(l => ({
+      id: l.id,
+      fullName: l.full_name,
+      phone: l.phone,
+      email: l.email,
+      sourceType: l.source_type,
+      courseName: l.course_name,
+      serviceName: l.service_name,
+      subServiceName: l.sub_service_name,
+      message: l.message,
+      status: l.status || 'new',
+      priority: l.priority || 'Medium',
+      createdAt: l.created_at,
+      updatedAt: l.updated_at
+    }));
+  } catch (e) {
+    return null;
+  }
+}
+
+async function insertLeadToSupabase(lead) {
   if (!supabase) return false;
   try {
     const { error } = await supabase
+      .from('leads')
+      .insert([{
+        id: lead.id,
+        full_name: lead.fullName,
+        phone: lead.phone,
+        email: lead.email,
+        source_type: lead.sourceType,
+        course_name: lead.courseName || null,
+        service_name: lead.serviceName || null,
+        sub_service_name: lead.subServiceName || null,
+        message: lead.message || null,
+        status: lead.status || 'new',
+        priority: lead.priority || 'Medium',
+        created_at: lead.createdAt || new Date().toISOString()
+      }]);
+    return !error;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function updateLeadStatusInCloud(id, newStatus) {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase
+      .from('leads')
+      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function deleteLeadInCloud(id) {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase.from('leads').delete().eq('id', id);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+// -------------------------------------------------------------
+// GENERIC SYNC & FETCH
+// -------------------------------------------------------------
+async function syncToSupabase(key, data) {
+  if (!supabase) return false;
+  try {
+    await supabase
       .from('edueme_store')
       .upsert({ key, data, updated_at: new Date().toISOString() });
-    
-    if (error) {
-      // Table might not be created yet in SQL editor
-      return false;
-    }
     return true;
   } catch (err) {
     return false;
   }
 }
 
-/**
- * Fetch a collection from Supabase store
- */
 async function fetchFromSupabase(key) {
   if (!supabase) return null;
   try {
@@ -99,42 +353,21 @@ async function fetchFromSupabase(key) {
   }
 }
 
-/**
- * Record a lead directly in Supabase
- */
-async function insertLeadToSupabase(lead) {
-  if (!supabase) return false;
-  try {
-    const { error } = await supabase
-      .from('leads')
-      .insert([{
-        id: lead.id,
-        full_name: lead.fullName,
-        phone: lead.phone,
-        email: lead.email,
-        source_type: lead.sourceType,
-        course_name: lead.courseName || null,
-        service_name: lead.serviceName || null,
-        sub_service_name: lead.subServiceName || null,
-        message: lead.message || null,
-        status: lead.status || 'New',
-        priority: lead.priority || 'Medium',
-        created_at: lead.createdAt || new Date().toISOString()
-      }]);
-
-    if (!error) {
-      console.log(`✅ Lead ${lead.id} synced directly to Supabase "leads" table`);
-      return true;
-    }
-  } catch (err) {}
-  return false;
-}
-
 module.exports = {
   supabase,
   isConnected,
   uploadToSupabaseStorage,
+  getCoursesFromCloud,
+  upsertCourseInCloud,
+  deleteCourseInCloud,
+  getServicesFromCloud,
+  upsertServiceInCloud,
+  getEventsFromCloud,
+  upsertEventInCloud,
+  getLeadsFromCloud,
+  insertLeadToSupabase,
+  updateLeadStatusInCloud,
+  deleteLeadInCloud,
   syncToSupabase,
-  fetchFromSupabase,
-  insertLeadToSupabase
+  fetchFromSupabase
 };

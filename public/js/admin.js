@@ -644,23 +644,34 @@ async function saveCourse(editId) {
   const method = editId ? 'PUT' : 'POST';
   const url = editId ? `/api/courses/${editId}` : '/api/courses';
 
-  const res = await fetch(url, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${currentToken}`
-    },
-    body: JSON.stringify(payload)
-  });
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentToken}`
+        },
+        body: JSON.stringify(payload)
+      });
 
-  if (res.ok) {
-    closeAdminModal();
-    showAdminToast(editId ? 'Course updated' : 'Course created');
-    loadCourses();
-  } else {
-    alert('Failed to save course');
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        closeAdminModal();
+        showAdminToast(editId ? 'Course updated successfully!' : 'Course created successfully!');
+        await loadCourses();
+      } else {
+        if (res.status === 401) {
+          alert('Admin session expired. Please sign in again.');
+          showLoginView();
+        } else {
+          alert(data.error || 'Failed to save course. Please check required fields.');
+        }
+      }
+    } catch (err) {
+      alert('Network or server error while saving course: ' + err.message);
+    }
   }
-}
 
 async function deleteCourse(id) {
   if (!confirm('Are you sure you want to delete this course?')) return;
