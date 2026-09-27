@@ -14,6 +14,64 @@ let appState = {
 };
 
 // --------------------------------------------------------------------------
+// 12 OFFICIAL PARTNER INSTITUTIONS DATA
+// --------------------------------------------------------------------------
+const partnerSchoolsData = [
+  { id: 'arka', name: 'Arka International School', logo: '/assets/schools/arka.png' },
+  { id: 'basilwood_ghatkesar', name: 'Basilwood (Ghatkesar)', logo: '/assets/schools/basilwood_ghatkesar.png' },
+  { id: 'basilwood_shamshabad', name: 'Basilwood (Shamshabad)', logo: '/assets/schools/basilwood_shamshabad.png' },
+  { id: 'brookfield', name: 'Brookfield International', logo: '/assets/schools/brookfield.png' },
+  { id: 'edify', name: 'Edify School', logo: '/assets/schools/edify.png' },
+  { id: 'fortune_butterfly', name: 'Fortune Butterfly School', logo: '/assets/schools/fortune_butterfly.png' },
+  { id: 'gateway', name: 'Gateway International', logo: '/assets/schools/gateway.png' },
+  { id: 'genesis', name: 'Genesis International', logo: '/assets/schools/genesis.png' },
+  { id: 'mv_raman', name: 'M.V. Raman High School', logo: '/assets/schools/mv_raman.png' },
+  { id: 'meluha', name: 'Meluha International', logo: '/assets/schools/meluha.png' },
+  { id: 'sujatha', name: 'Sujatha High School', logo: '/assets/schools/sujatha.png' },
+  { id: 'takshasila', name: 'Takshasila School', logo: '/assets/schools/takshasila.png' }
+];
+
+function renderPartnerSchoolsSection(trackId = 'partnerSchoolsTrack') {
+  return `
+    <section class="partner-schools-spotlight-section">
+      <div class="partner-schools-header">
+        <span class="schools-kicker">Trusted by 20+ Institutions</span>
+        <h3 class="schools-title">Partner Institutions</h3>
+        <p class="schools-subtitle">Leading partner schools and academies across Telangana.</p>
+      </div>
+      <p class="section-intro-text" style="padding: 0 16px; margin-bottom: 8px;">
+        Recognized by leading educational institutions across Telangana for curriculum excellence, turnkey lab setups, and certified mentor training.
+      </p>
+
+      <div class="schools-scroll-wrapper">
+        <button type="button" class="schools-scroll-arrow prev" onclick="scrollSchoolsTrack(-1, '${trackId}')" aria-label="Previous schools">&#8249;</button>
+        
+        <div class="schools-scroll-track" id="${trackId}">
+          ${partnerSchoolsData.map((school) => `
+            <div class="school-category-item" title="${school.name}">
+              <div class="school-logo-disc">
+                <img src="${school.logo}" alt="${school.name}" loading="lazy" onerror="this.onerror=null; this.src='/assets/schools/${school.id}.webp';">
+              </div>
+              <span class="school-label-name">${school.name}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <button type="button" class="schools-scroll-arrow next" onclick="scrollSchoolsTrack(1, '${trackId}')" aria-label="Next schools">&#8250;</button>
+      </div>
+    </section>
+  `;
+}
+
+function scrollSchoolsTrack(direction, trackId = 'partnerSchoolsTrack') {
+  const track = document.getElementById(trackId);
+  if (!track) return;
+  const scrollAmount = 260 * direction;
+  track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+}
+
+
+// --------------------------------------------------------------------------
 // NOTIFICATION TOAST
 // --------------------------------------------------------------------------
 function showToast(message, duration = 3500) {
@@ -766,6 +824,9 @@ async function renderHomeView() {
         </div>
       </section>
 
+      <!-- PARTNER INSTITUTIONS (All 12 Active Schools in Category Scroll) -->
+      ${renderPartnerSchoolsSection('homeSchoolsTrack')}
+
       <!-- PROGRAMS & SERVICES SECTION (Style matching reference: centered heading, subheading, quote, light tint) -->
       <section class="home-services-section">
         <div class="section-center-group">
@@ -936,48 +997,8 @@ async function renderAboutView() {
         </div>
       </section>
 
-      <!-- PARTNER INSTITUTIONS SPOTLIGHT CAROUSEL (Also in About Us) -->
-      <section class="partner-schools-spotlight-section" style="border-radius: var(--radius-md); margin-bottom: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
-        <div class="partner-schools-header">
-          <span class="schools-kicker">Trusted by 20+ Institutions</span>
-          <h3 class="schools-title">Partner Institutions</h3>
-          <p class="schools-subtitle">Leading partner schools and academies across Telangana.</p>
-        </div>
-        <p class="section-intro-text" style="padding: 0 16px; margin-bottom: 14px;">Recognized by leading educational institutions across Telangana for curriculum excellence, turnkey lab setups, and certified mentor training.</p>
-
-        <div class="schools-spotlight-carousel" id="aboutSchoolsSpotlightCarousel">
-          <div class="school-spotlight-item active" data-index="0" data-name="Samskar The Life School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_1.png" alt="Samskar The Life School" loading="lazy">
-            </div>
-          </div>
-          <div class="school-spotlight-item" data-index="1" data-name="Arka International School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_2.png" alt="Arka International School" loading="lazy">
-            </div>
-          </div>
-          <div class="school-spotlight-item" data-index="2" data-name="Sri Veda The Universe School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_3.png" alt="Sri Veda The Universe School" loading="lazy">
-            </div>
-          </div>
-          <div class="school-spotlight-item" data-index="3" data-name="Mount Carmel Global School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_4.png" alt="Mount Carmel Global School" loading="lazy">
-            </div>
-          </div>
-          <div class="school-spotlight-item" data-index="4" data-name="Samartha School">
-            <div class="school-logo-disc">
-              <img src="/assets/schools/school_5.png" alt="Samartha School" loading="lazy">
-            </div>
-          </div>
-        </div>
-
-        <!-- Dynamic active school label -->
-        <div class="school-active-indicator" id="aboutSchoolActiveName">
-          <span class="school-active-badge">✓ Samskar The Life School</span>
-        </div>
-      </section>
+      <!-- PARTNER INSTITUTIONS (All 12 Active Schools in Category Scroll) -->
+      ${renderPartnerSchoolsSection('aboutSchoolsTrack')}
 
       <!-- PUBLICATIONS & BOOKS (Brochure Pages 12 & 13) -->
       <div class="detail-card" style="margin-bottom: 20px;">
@@ -1049,8 +1070,6 @@ async function renderAboutView() {
       </section>
     </div>
   `;
-
-  initSchoolsSpotlight('aboutSchoolsSpotlightCarousel', 'aboutSchoolActiveName');
 }
 
 // --------------------------------------------------------------------------
