@@ -1226,9 +1226,19 @@ class Database {
     const data = this.load();
     data[entity] = value;
     this.save(data);
+
+    // Asynchronously push changes to Supabase cloud
+    try {
+      const supabaseService = require('./supabase');
+      if (supabaseService && supabaseService.isConnected) {
+        supabaseService.syncToSupabase(entity, value).catch(() => {});
+      }
+    } catch (e) {}
+
     return data[entity];
   }
 }
 
 module.exports = new Database();
+
 

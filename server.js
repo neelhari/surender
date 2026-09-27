@@ -1,12 +1,15 @@
+require('dotenv').config();
 const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const crypto = require('crypto');
 const db = require('./data/db');
+const supabaseService = require('./data/supabase');
 
 const app = express();
 const PORT = process.env.PORT || 3005;
+
 
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
@@ -738,6 +741,13 @@ app.post('/api/leads', (req, res) => {
   leads.unshift(newLead);
   db.set('leads', leads);
 
+  // Sync lead to Supabase PostgreSQL database
+  try {
+    supabaseService.insertLeadToSupabase(newLead);
+  } catch (err) {
+    console.warn('Supabase lead sync note:', err.message);
+  }
+
   // Trigger real-time automatic WhatsApp & Email alerts
   try {
     dispatchNotifications(newLead);
@@ -889,42 +899,70 @@ app.put('/api/seo', requireAdmin, (req, res) => {
 });
 
 // -------------------------------------------------------------
-// IMAGE UPLOAD API (Base64 file upload helper for Admin)
+// SUPABASE HEALTH & STATUS API
 // -------------------------------------------------------------
-app.post('/api/upload', requireAdmin, (req, res) => {
+app.get('/api/supabase/status', async (req, res) => {
+  try {
+    const isReady = supabaseService && supabaseService.isConnected;
+    res.json({
+      connected: isReady,
+      url: process.env.SUPABASE_URL || null,
+      storageBucket: 'edueme_uploads'
+    });
+  } catch (err) {
+    res.status(500).json({ connected: false, error: err.message });
+  }
+});
+
+// -------------------------------------------------------------
+// IMAGE UPLOAD API (Supabase Storage with Local Disk Fallback)
+// -------------------------------------------------------------
+app.post('/api/upload', requireAdmin, async (req, res) => {
   try {
     const raw = req.body.data || req.body.imageBase64;
     const filename = req.body.filename;
     if (!raw) return res.status(400).json({ error: 'No image data provided' });
 
-    // Ensure uploads directory exists
-    const uploadsDir = path.join(__dirname, 'public', 'assets', 'uploads');
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
-    }
-
     // Match base64 prefix
     const matches = raw.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     let buffer;
     let ext = '.jpg';
+    let mimeType = 'image/jpeg';
 
     if (matches && matches.length === 3) {
-      const mime = matches[1];
-      if (mime.includes('png')) ext = '.png';
-      else if (mime.includes('webp')) ext = '.webp';
-      else if (mime.includes('svg')) ext = '.svg';
-      else if (mime.includes('gif')) ext = '.gif';
+      mimeType = matches[1];
+      if (mimeType.includes('png')) ext = '.png';
+      else if (mimeType.includes('webp')) ext = '.webp';
+      else if (mimeType.includes('svg')) ext = '.svg';
+      else if (mimeType.includes('gif')) ext = '.gif';
       buffer = Buffer.from(matches[2], 'base64');
     } else {
       buffer = Buffer.from(raw, 'base64');
     }
 
     const safeName = (filename ? filename.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() : 'upload') + '_' + Date.now() + ext;
+
+    // 1. Attempt upload to Supabase Object Storage first
+    try {
+      const supabaseUrl = await supabaseService.uploadToSupabaseStorage(buffer, safeName, mimeType);
+      if (supabaseUrl) {
+        console.log(`☁️ Uploaded successfully to Supabase Storage: ${supabaseUrl}`);
+        return res.json({ success: true, url: supabaseUrl, storage: 'supabase' });
+      }
+    } catch (sErr) {
+      console.warn('Supabase storage upload attempt failed, using local disk fallback:', sErr.message);
+    }
+
+    // 2. Fallback to Local Disk
+    const uploadsDir = path.join(__dirname, 'public', 'assets', 'uploads');
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
     const filePath = path.join(uploadsDir, safeName);
     fs.writeFileSync(filePath, buffer);
 
     const publicUrl = `/assets/uploads/${safeName}`;
-    res.json({ success: true, url: publicUrl });
+    res.json({ success: true, url: publicUrl, storage: 'local' });
   } catch (err) {
     console.error('Upload error:', err);
     res.status(500).json({ error: 'Failed to save uploaded file' });
