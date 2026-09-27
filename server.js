@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const crypto = require('crypto');
+const sharp = require('sharp');
 const db = require('./data/db');
 const supabaseService = require('./data/supabase');
 
@@ -940,11 +941,33 @@ app.post('/api/upload', requireAdmin, async (req, res) => {
       buffer = Buffer.from(raw, 'base64');
     }
 
-    const safeName = (filename ? filename.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() : 'upload') + '_' + Date.now() + ext;
+    let finalBuffer = buffer;
+    let finalExt = ext;
+    let finalMime = mimeType;
+
+    // Automatic Smart Compression: Convert raster images to optimized WebP (max 1920px, quality 82)
+    if (['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].includes(mimeType) || ext === '.jpg' || ext === '.png') {
+      try {
+        const compressed = await sharp(buffer)
+          .resize({ width: 1920, height: 1920, fit: 'inside', withoutEnlargement: true })
+          .webp({ quality: 82, effort: 4 })
+          .toBuffer();
+        
+        finalBuffer = compressed;
+        finalExt = '.webp';
+        finalMime = 'image/webp';
+        console.log(`⚡ Image compressed: original ${buffer.length} bytes ➔ optimized ${finalBuffer.length} bytes`);
+      } catch (optErr) {
+        console.warn('Image optimization fallback to original buffer:', optErr.message);
+      }
+    }
+
+    const baseName = filename ? filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() : 'upload';
+    const safeName = `${baseName}_${Date.now()}${finalExt}`;
 
     // 1. Attempt upload to Supabase Object Storage first
     try {
-      const supabaseUrl = await supabaseService.uploadToSupabaseStorage(buffer, safeName, mimeType);
+      const supabaseUrl = await supabaseService.uploadToSupabaseStorage(finalBuffer, safeName, finalMime);
       if (supabaseUrl) {
         console.log(`☁️ Uploaded successfully to Supabase Storage: ${supabaseUrl}`);
         return res.json({ success: true, url: supabaseUrl, storage: 'supabase' });
@@ -959,7 +982,7 @@ app.post('/api/upload', requireAdmin, async (req, res) => {
       fs.mkdirSync(uploadsDir, { recursive: true });
     }
     const filePath = path.join(uploadsDir, safeName);
-    fs.writeFileSync(filePath, buffer);
+    fs.writeFileSync(filePath, finalBuffer);
 
     const publicUrl = `/assets/uploads/${safeName}`;
     res.json({ success: true, url: publicUrl, storage: 'local' });
