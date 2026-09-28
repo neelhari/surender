@@ -624,10 +624,10 @@ async function renderHomeView() {
       <!-- POPULAR COURSES SECTION (Featuring Top 5 Main Courses) -->
       <section class="home-courses-section">
         <div class="section-center-group">
-          <!-- Mascot Illustration with Subtle Color Accent -->
+          <!-- Mascot Illustration with Pure Transparent Cutout -->
           <div class="courses-pencil-robot-container">
             <div class="courses-pencil-robot-art">
-              <img src="/assets/robot_color_mascot.png" alt="Edueme Mascot Robot" class="pencil-robot-body" loading="lazy">
+              <img src="/assets/robot_mascot_transparent.png" alt="Edueme Mascot Robot" class="pencil-robot-body" loading="lazy">
             </div>
           </div>
 
@@ -1029,28 +1029,29 @@ async function renderAboutView() {
         </div>
       </div>
 
-      <!-- DYNAMIC TEAM MEMBERS (Correction 3 Approved) -->
+      <!-- DYNAMIC SCHOOL PRINCIPALS & LEADERSHIP -->
       <section class="section-spacing">
         <div class="section-header">
-          <span class="section-eyebrow">Leadership & Mentors</span>
-          <h2 class="section-title">Scientific & Academic Team</h2>
-          <p class="section-subtitle">Researchers and physicists driving experiential learning.</p>
+          <span class="section-eyebrow">Partner School Leadership</span>
+          <h2 class="section-title">School Principals & Educational Leaders</h2>
+          <p class="section-subtitle">Visionary heads of schools partnering with Edueme to advance STEM & Robotics.</p>
         </div>
-        <p class="section-intro-text">Led by research scientists, mechatronics engineers, and STEM educators with deep academic and industry backgrounds, our team ensures every student receives authentic mentorship.</p>
+        <p class="section-intro-text">Working in close collaboration with school principals and directors to bring future-ready robotics labs, AI curriculum, and hands-on maker education directly to students.</p>
 
         ${team.length === 0 ? `
           <div class="empty-state">
-            <div class="empty-state-icon">👥</div>
-            <div class="empty-state-title">No Team Members Listed</div>
+            <div class="empty-state-icon">🏫</div>
+            <div class="empty-state-title">No School Leaders Listed</div>
           </div>
         ` : `
           <div class="team-grid">
             ${team.map(m => `
-              <div class="team-card">
-                <img src="${m.image || '/assets/brochure/img_11.jpg'}" alt="${m.name}" class="team-avatar">
+              <div class="team-card school-leader-card">
+                <div class="leader-logo-wrap">
+                  <img src="${m.image || '/assets/logo_e_mark.png'}" alt="${m.role}" class="school-logo-avatar" loading="lazy">
+                </div>
                 <h4 class="team-name">${m.name}</h4>
                 <div class="team-role">${m.role}</div>
-                <p class="team-bio">${m.bio}</p>
               </div>
             `).join('')}
           </div>

@@ -734,39 +734,120 @@
   ],
   "teamMembers": [
     {
-      "id": "team-1",
-      "name": "Dr. K. Srinivas",
-      "role": "Lead Robotics & Embedded Scientist",
-      "bio": "15+ years of research experience in Mechatronics and STEM curriculum. Spearheaded component-based robotics integration across 50+ schools.",
-      "image": "/assets/srv_teacher.jpg",
+      "id": "school-lead-1",
+      "name": "M. Divya Maru",
+      "role": "Arka International School",
+      "bio": "",
+      "image": "/assets/schools/arka.webp",
       "displayOrder": 1,
       "status": "active"
     },
     {
-      "id": "team-2",
-      "name": "Ananya Deshmukh",
-      "role": "AI & Machine Learning Specialist",
-      "bio": "Specialist in Python computer vision, cognitive systems, and youth-oriented machine learning pedagogy.",
-      "image": "/assets/course_ai_python.jpg",
+      "id": "school-lead-2",
+      "name": "Swathi",
+      "role": "Arka International School, Zaheerabad",
+      "bio": "",
+      "image": "/assets/schools/arka.webp",
       "displayOrder": 2,
       "status": "active"
     },
     {
-      "id": "team-3",
-      "name": "Vikram Verma",
-      "role": "Head of Hardware & Maker Labs",
-      "bio": "Hardware architect specializing in Arduino, ESP32 telemetry, UAV avionics, and Prayogshala lab setups.",
-      "image": "/assets/course_iot_esp32.jpg",
+      "id": "school-lead-3",
+      "name": "Sanjana Varma",
+      "role": "Basilwoods School, Shamshabad",
+      "bio": "",
+      "image": "/assets/schools/basilwood_shamshabad.webp",
       "displayOrder": 3,
       "status": "active"
     },
     {
-      "id": "team-4",
-      "name": "Pooja Sharma",
-      "role": "Director of Teacher Training & Outreach",
-      "bio": "Leading the professional development of school educators to champion hands-on STEM across classrooms.",
-      "image": "/assets/srv_yearend.jpg",
+      "id": "school-lead-4",
+      "name": "Rashmi Jaiswal",
+      "role": "Basilwoods Nature School, Ghatkesar",
+      "bio": "",
+      "image": "/assets/schools/basilwood_ghatkesar.webp",
       "displayOrder": 4,
+      "status": "active"
+    },
+    {
+      "id": "school-lead-5",
+      "name": "Parmila Singh",
+      "role": "Brookfield International School, Shamshabad",
+      "bio": "",
+      "image": "/assets/schools/brookfield.webp",
+      "displayOrder": 5,
+      "status": "active"
+    },
+    {
+      "id": "school-lead-6",
+      "name": "Lakshmi Asha Rajiv Nair",
+      "role": "Edify World School, Attapur",
+      "bio": "",
+      "image": "/assets/schools/edify.webp",
+      "displayOrder": 6,
+      "status": "active"
+    },
+    {
+      "id": "school-lead-7",
+      "name": "Dr. Nampally Sanjeev",
+      "role": "Fortune Butterfly",
+      "bio": "",
+      "image": "/assets/schools/fortune_butterfly.webp",
+      "displayOrder": 7,
+      "status": "active"
+    },
+    {
+      "id": "school-lead-8",
+      "name": "Ambili; Rajashekar Reddy",
+      "role": "Gateway International High School, Budvel",
+      "bio": "",
+      "image": "/assets/schools/gateway.webp",
+      "displayOrder": 8,
+      "status": "active"
+    },
+    {
+      "id": "school-lead-9",
+      "name": "Raja Reddy; Sarawathi",
+      "role": "Genesis School, Kukatpally",
+      "bio": "",
+      "image": "/assets/schools/genesis.webp",
+      "displayOrder": 9,
+      "status": "active"
+    },
+    {
+      "id": "school-lead-10",
+      "name": "Nagender",
+      "role": "Meluha International School, Gandipet",
+      "bio": "",
+      "image": "/assets/schools/meluha.webp",
+      "displayOrder": 10,
+      "status": "active"
+    },
+    {
+      "id": "school-lead-11",
+      "name": "Ancy Sridhar",
+      "role": "MV Raman High School, Atmakur",
+      "bio": "",
+      "image": "/assets/schools/mv_raman.webp",
+      "displayOrder": 11,
+      "status": "active"
+    },
+    {
+      "id": "school-lead-12",
+      "name": "S. Madhulatha",
+      "role": "Sujatha School, Moinabad",
+      "bio": "",
+      "image": "/assets/schools/sujatha.webp",
+      "displayOrder": 12,
+      "status": "active"
+    },
+    {
+      "id": "school-lead-13",
+      "name": "Tanupreeth Kaur",
+      "role": "Takshasila Public School",
+      "bio": "",
+      "image": "/assets/schools/takshasila.webp",
+      "displayOrder": 13,
       "status": "active"
     }
   ],
