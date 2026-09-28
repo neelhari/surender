@@ -949,15 +949,22 @@ async function renderAboutView() {
 
       <!-- ABOUT STORY & PHILOSOPHY (From Edueme Brochure) -->
       <div class="detail-card" style="margin-top: 4px; margin-bottom: 20px;">
-        <div class="section-header" style="margin-bottom: 12px;">
+        <div class="section-header" style="margin-bottom: 16px;">
           <span class="section-eyebrow">Pioneering STEM Education</span>
           <h2 class="section-title">About Edueme Research Labs</h2>
           <p class="section-subtitle">Bridging the gap between classroom theory and real-world technology.</p>
         </div>
-        <p class="section-intro-text" style="margin-bottom: 14px;">The pace of technical development in the modern world is accelerating more quickly than before. Adaptation and the acquisition of new competencies and skills are crucial in this continuously changing world. All citizens—young and old—are impacted by the advancement of digital technology and the digitalization of society.</p>
-        <p class="section-intro-text" style="margin-bottom: 14px;">Everyday life is greatly influenced by the use of mobile phones, laptops, tablets, and other technologies that serve both social and entertainment purposes. For everyone to be able to engage the digital generation in the educational process, they must learn to adapt to a changing world and build their digital competencies.</p>
-        <p class="section-intro-text" style="margin-bottom: 14px;">Our future generation is now in need to learn about these machines to be future ready, same like in the past where Indian Schools between 1970 and 1990 used to have Occupational Courses for their students to be ready for 21st century. We at Edueme take extensive care of providing Work-Oriented learning opportunities to our students to make them ready for 2nd half of 21st century.</p>
-        <p class="section-intro-text" style="margin-bottom: 0;">Our team includes research scientists, innovators, Physicists, who has extensive knowledge and rich experience in the areas of Robotics, Mechanical Design, Machine Learning, Artificial Intelligence. We are the first in India to introduce component based robotics from 3rd standard.</p>
+        <div class="about-story-grid">
+          <div class="about-story-text">
+            <p class="section-intro-text" style="margin-bottom: 14px;">The pace of technical development in the modern world is accelerating more quickly than before. Adaptation and the acquisition of new competencies and skills are crucial in this continuously changing world. All citizens—young and old—are impacted by the advancement of digital technology and the digitalization of society.</p>
+            <p class="section-intro-text" style="margin-bottom: 14px;">Everyday life is greatly influenced by the use of mobile phones, laptops, tablets, and other technologies that serve both social and entertainment purposes. For everyone to be able to engage the digital generation in the educational process, they must learn to adapt to a changing world and build their digital competencies.</p>
+            <p class="section-intro-text" style="margin-bottom: 14px;">Our future generation is now in need to learn about these machines to be future ready, same like in the past where Indian Schools between 1970 and 1990 used to have Occupational Courses for their students to be ready for 21st century. We at Edueme take extensive care of providing Work-Oriented learning opportunities to our students to make them ready for 2nd half of 21st century.</p>
+            <p class="section-intro-text" style="margin-bottom: 0;">Our team includes research scientists, innovators, Physicists, who has extensive knowledge and rich experience in the areas of Robotics, Mechanical Design, Machine Learning, Artificial Intelligence. We are the first in India to introduce component based robotics from 3rd standard.</p>
+          </div>
+          <div class="about-story-emblem-wrap">
+            <img src="/assets/edueme_e_clean.png" alt="Edueme Logo" class="about-story-emblem-img" loading="lazy">
+          </div>
+        </div>
       </div>
 
       <!-- MISSION CARD -->

@@ -4434,4 +4434,74 @@ textarea.form-control {
   }
 }
 
+/* ==========================================================================
+   ABOUT STORY CARD WITH CLEAN EDUEME "e" LOGO
+   ========================================================================== */
+.about-story-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-story-text {
+  flex: 1 1 auto;
+}
+
+.about-story-emblem-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 12px auto 0 auto;
+  width: 100%;
+  max-width: 180px;
+}
+
+.about-story-emblem-img {
+  width: 100%;
+  max-width: 180px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 24px rgba(245, 166, 35, 0.28));
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+  user-select: none;
+}
+
+.about-story-emblem-img:hover {
+  transform: translateY(-4px) scale(1.05) rotate(2deg);
+  filter: drop-shadow(0 14px 30px rgba(245, 166, 35, 0.38));
+}
+
+@media (min-width: 860px) {
+  .about-story-grid {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding-right: 0;
+  }
+
+  .about-story-text {
+    flex: 1 1 65%;
+    max-width: 780px;
+    min-width: 0;
+  }
+
+  .about-story-emblem-wrap {
+    flex: 1 1 35%;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-story-emblem-img {
+    max-width: 215px;
+  }
+}
+
+
+
 
