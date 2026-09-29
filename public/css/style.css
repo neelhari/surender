@@ -1872,24 +1872,18 @@ button, input, select, textarea {
 }
 
 .testimonial-author-info h4 {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--primary-navy);
   margin: 0;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
 }
 
 .testimonial-author-info p {
-  font-size: 10.5px;
-  color: var(--text-muted);
+  font-size: 11px;
+  color: #64748b;
   margin: 2px 0 0;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
 }
 
 /* Pagination indicator dots */

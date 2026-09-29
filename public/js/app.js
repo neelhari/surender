@@ -768,59 +768,67 @@ async function renderHomeView() {
           <img src="/assets/robot_nurtured.png" alt="Edueme Mascot" class="testimonials-floating-robot" loading="lazy">
         </div>
 
-        <!-- Shorter, Compact Center-Focused Coverflow Stacked Cards -->
+        <!-- Shorter, Compact Center-Focused Coverflow Stacked Cards (Without Logo) -->
         <div class="testimonials-coverflow-stage" id="testimonialsStage">
-          <div class="testimonial-card-item card-active" data-index="0">
-            <div class="testimonial-card-header">
-              <span class="testimonial-stars">★★★★★</span>
-              <span class="testimonial-quote-icon">&ldquo;</span>
-            </div>
-            <p class="testimonial-quote-text">&ldquo;Edueme’s robotics training is exceptional. Instructors make complex electronics simple with actual robots.&rdquo;</p>
-            <div class="testimonial-author-row">
-              <div class="testimonial-author-avatar">👨‍🏫</div>
-              <div class="testimonial-author-info">
-                <h4>Jagadeesh</h4>
-                <p>Mount Carmel Global School</p>
+          ${[
+            {
+              stars: '★★★★★',
+              review: "Edueme’s robotics training is exceptional. Instructors make complex electronics simple with actual robots.",
+              principal: "M. Divya Maru",
+              school: "Arka International School"
+            },
+            {
+              stars: '★★★★★',
+              review: "Hands-on robotics kits and mentor guidance make technical concepts easy and engaging for our students.",
+              principal: "Swathi",
+              school: "Arka International School, Zaheerabad"
+            },
+            {
+              stars: '★★★★★',
+              review: "Edueme’s structured curriculum cultivates genuine problem-solving and maker skills across all grades.",
+              principal: "Sanjana Varma",
+              school: "Basilwoods School, Shamshabad"
+            },
+            {
+              stars: '★★★★★',
+              review: "Exceptional training methodology. The students love assembling real circuits and programming autonomous robots.",
+              principal: "Rashmi Jaiswal",
+              school: "Basilwoods Nature School, Ghatkesar"
+            },
+            {
+              stars: '★★★★★',
+              review: "Outstanding coaching and practical kits. Friendly mentors inspire real hardware innovation and curiosity.",
+              principal: "Parmila Singh",
+              school: "Brookfield International School, Shamshabad"
+            },
+            {
+              stars: '★★★★★',
+              review: "The experiential STEM modules gave our students a tremendous boost in computational thinking and creativity.",
+              principal: "Lakshmi Asha Rajiv Nair",
+              school: "Edify World School, Attapur"
+            }
+          ].map((r, idx, arr) => `
+            <div class="testimonial-card-item ${idx === 0 ? 'card-active' : (idx === 1 ? 'card-next' : (idx === arr.length - 1 ? 'card-prev' : 'card-hidden'))}" data-index="${idx}">
+              <div class="testimonial-card-header">
+                <span class="testimonial-stars">${r.stars}</span>
+                <span class="testimonial-quote-icon">&ldquo;</span>
+              </div>
+              <p class="testimonial-quote-text">&ldquo;${r.review}&rdquo;</p>
+              <div class="testimonial-author-row">
+                <div class="testimonial-author-info">
+                  <h4>${r.principal}</h4>
+                  <p>${r.school}</p>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div class="testimonial-card-item card-next" data-index="1">
-            <div class="testimonial-card-header">
-              <span class="testimonial-stars">★★★★★</span>
-              <span class="testimonial-quote-icon">&ldquo;</span>
-            </div>
-            <p class="testimonial-quote-text">&ldquo;Outstanding coaching and practical kits. Friendly mentors inspire real hardware innovation.&rdquo;</p>
-            <div class="testimonial-author-row">
-              <div class="testimonial-author-avatar">👨‍🏫</div>
-              <div class="testimonial-author-info">
-                <h4>Vamshi Mohan</h4>
-                <p>Samskar Global School</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="testimonial-card-item card-prev" data-index="2">
-            <div class="testimonial-card-header">
-              <span class="testimonial-stars">★★★★★</span>
-              <span class="testimonial-quote-icon">&ldquo;</span>
-            </div>
-            <p class="testimonial-quote-text">&ldquo;The Prayogshala lab setup transformed science learning from 3rd grade onwards.&rdquo;</p>
-            <div class="testimonial-author-row">
-              <div class="testimonial-author-avatar">👩‍🏫</div>
-              <div class="testimonial-author-info">
-                <h4>M. Divya</h4>
-                <p>Arka International School</p>
-              </div>
-            </div>
-          </div>
+          `).join('')}
         </div>
 
         <!-- Pagination Indicator Dots -->
         <div class="testimonials-dots-wrap" id="testimonialsDots">
-          <span class="testimonials-dot active" data-index="0"></span>
-          <span class="testimonials-dot" data-index="1"></span>
-          <span class="testimonials-dot" data-index="2"></span>
+          ${[0, 1, 2, 3, 4, 5].map(idx => `
+            <span class="testimonials-dot ${idx === 0 ? 'active' : ''}" data-index="${idx}"></span>
+          `).join('')}
         </div>
       </section>
 
@@ -918,20 +926,7 @@ async function renderHomeView() {
 // --------------------------------------------------------------------------
 async function renderAboutView() {
   const root = document.getElementById('app-root');
-  const [settings, team, gallery] = await Promise.all([
-    fetchSettings(),
-    fetch('/api/team').then(r => r.json()).catch(() => []),
-    fetch('/api/gallery').then(r => r.json()).catch(() => [])
-  ]);
-
-  const displayPhotos = (gallery && gallery.length > 0) ? gallery.slice(0, 6) : [
-    { title: 'Autonomous Mobile Robot Assembly', imageUrl: '/assets/hero_robotics.jpg' },
-    { title: 'Prayogshala Sensor Workbench', imageUrl: '/assets/srv_prayogshala.jpg' },
-    { title: 'Hands-on Hardware Workshops', imageUrl: '/assets/srv_workshop.jpg' },
-    { title: 'National Tech Summit Delegation', imageUrl: '/assets/srv_anveshana.jpg' },
-    { title: 'Annual Robotics Championship', imageUrl: '/assets/srv_competition.jpg' },
-    { title: 'Mechatronics & Drone Testing', imageUrl: '/assets/course_mechatronics.jpg' }
-  ];
+  const settings = await fetchSettings();
 
   root.innerHTML = `
     <div class="app-container" style="padding-top: 0;">
@@ -1008,7 +1003,7 @@ async function renderAboutView() {
       ${renderPartnerSchoolsSection('aboutSchoolsTrack')}
 
       <!-- PUBLICATIONS & BOOKS (Brochure Pages 12 & 13) -->
-      <div class="detail-card" style="margin-bottom: 20px;">
+      <div class="detail-card" style="margin-bottom: 28px;">
         <div class="section-header" style="margin-bottom: 10px;">
           <span class="section-eyebrow">Academic Publications</span>
           <h2 class="section-title">Robotics & AI Textbooks</h2>
@@ -1028,54 +1023,6 @@ async function renderAboutView() {
           </div>
         </div>
       </div>
-
-      <!-- DYNAMIC SCHOOL PRINCIPALS & LEADERSHIP -->
-      <section class="section-spacing">
-        <div class="section-header">
-          <span class="section-eyebrow">Partner School Leadership</span>
-          <h2 class="section-title">School Principals & Educational Leaders</h2>
-          <p class="section-subtitle">Visionary heads of schools partnering with Edueme to advance STEM & Robotics.</p>
-        </div>
-        <p class="section-intro-text">Working in close collaboration with school principals and directors to bring future-ready robotics labs, AI curriculum, and hands-on maker education directly to students.</p>
-
-        ${team.length === 0 ? `
-          <div class="empty-state">
-            <div class="empty-state-icon">🏫</div>
-            <div class="empty-state-title">No School Leaders Listed</div>
-          </div>
-        ` : `
-          <div class="team-grid">
-            ${team.map(m => `
-              <div class="team-card school-leader-card">
-                <div class="leader-logo-wrap">
-                  <img src="${m.image || '/assets/logo_e_mark.png'}" alt="${m.role}" class="school-logo-avatar" loading="lazy">
-                </div>
-                <h4 class="team-name">${m.name}</h4>
-                <div class="team-role">${m.role}</div>
-              </div>
-            `).join('')}
-          </div>
-        `}
-      </section>
-
-      <!-- CAMPUS & LAB MOMENTS (Photos Showcase) -->
-      <section class="section-spacing" style="margin-bottom: 28px;">
-        <div class="section-header">
-          <span class="section-eyebrow">Campus & Lab Moments</span>
-          <h2 class="section-title">Moments of Innovation</h2>
-          <p class="section-subtitle">Hands-on robotics workshops, tech labs, and student exhibitions.</p>
-        </div>
-        <p class="section-intro-text">Students at Edueme Research Labs work directly with real electronic components, breadboards, and microcontrollers, turning classroom concepts into working engineering inventions.</p>
-
-        <div class="gallery-grid" style="margin-top: 14px;">
-          ${displayPhotos.map(photo => `
-            <div class="gallery-card" onclick="openLightbox('${photo.imageUrl}', '${(photo.title || '').replace(/'/g, "\\'")}')" title="Click to view full size">
-              <img src="${photo.imageUrl}" alt="${photo.title}" loading="lazy">
-              <div class="gallery-caption">${photo.title}</div>
-            </div>
-          `).join('')}
-        </div>
-      </section>
     </div>
   `;
 }

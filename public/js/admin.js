@@ -122,7 +122,7 @@ async function adminLogout() {
 // TAB SWITCHING & SUB-TAB SWITCHING
 // --------------------------------------------------------------------------
 function switchAdminTab(tabName) {
-  const tabs = ['dashboard', 'leads', 'courses', 'services', 'events', 'team', 'settings'];
+  const tabs = ['dashboard', 'leads', 'courses', 'services', 'events', 'settings'];
   tabs.forEach(t => {
     const section = document.getElementById(`tab-${t}`);
     if (section) section.style.display = (t === tabName) ? 'block' : 'none';
@@ -141,8 +141,7 @@ function switchAdminTab(tabName) {
     leads: 'Leads & Enquiries',
     courses: 'Courses Management',
     services: 'Services & Sub-Services',
-    events: 'Events & Media Hub',
-    team: 'Team & Mentors',
+    events: 'Events & Banners Hub',
     settings: 'Site Settings'
   };
   const titleEl = document.getElementById('current-tab-title');
@@ -155,7 +154,7 @@ function switchAdminTab(tabName) {
 }
 
 function switchMediaHubSubTab(subTab) {
-  ['events', 'gallery', 'banners'].forEach(s => {
+  ['events', 'banners'].forEach(s => {
     const view = document.getElementById(`hub-view-${s}`);
     const btn = document.getElementById(`hub-btn-${s}`);
     if (view) view.style.display = (s === subTab) ? 'block' : 'none';
@@ -181,8 +180,6 @@ async function loadAllAdminData() {
     loadCourses(),
     loadServices(),
     loadAdminEvents(),
-    loadGallery(),
-    loadTeam(),
     loadBanners(),
     loadSettings()
   ]);
@@ -468,7 +465,7 @@ function openAddCourseModal() {
     <form id="modal-course-form">
       <div class="form-group">
         <label class="form-label">Course Title *</label>
-        <input type="text" id="c-title" class="form-control" required placeholder="e.g. Robotics with Embedded C" oninput="if(!document.getElementById('c-slug').dataset.touched) document.getElementById('c-slug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')">
+        <input type="text" id="c-title" class="form-control" required placeholder="e.g. Robotics with Electronics" oninput="if(!document.getElementById('c-slug').dataset.touched) document.getElementById('c-slug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')">
       </div>
       <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
         <div class="form-group">

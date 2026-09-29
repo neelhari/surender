@@ -179,7 +179,14 @@ app.get('/api/courses/:identifier', async (req, res) => {
   let list = await supabaseService.getCoursesFromCloud();
   if (!list || list.length === 0) list = db.get('courses');
   
-  const course = list.find(c => c.slug === identifier || c.id === identifier);
+  const course = list.find(c => 
+    c.slug === identifier || 
+    c.id === identifier ||
+    (identifier === 'robotics-with-embedded-c' && (c.slug === 'robotics-with-electronics' || c.id === 'course-1')) ||
+    (identifier === 'ai-with-python' && (c.slug === 'artificial-intelligence-ai' || c.id === 'course-2')) ||
+    (identifier === 'iot-with-embedded-c' && (c.slug === 'internet-of-things-iot' || c.id === 'course-3')) ||
+    (identifier === 'undergraduate-workshop' && (c.slug === 'free-one-day-workshop' || c.id === 'course-undergraduate-workshop'))
+  );
   if (!course) return res.status(404).json({ error: 'Course not found' });
   res.json(course);
 });

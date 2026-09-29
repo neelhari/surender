@@ -8,7 +8,7 @@ Built for STEM, Robotics, AI, and IoT education programs.
 ## 🚀 Features
 
 - **Mobile-First App Experience**: Edge-to-edge image-led hero, bottom app navigation, touch drawers, and responsive layouts.
-- **Pioneering Course Catalog**: Filterable courses (Robotics with Embedded C, AI with Python, IoT with ESP32, Machine Learning, Mechatronics) with batch enrolment tags and detailed syllabi.
+- **Pioneering Course Catalog**: Filterable courses (Robotics with Electronics, Artificial Intelligence(AI), Internet of Things(IoT), Machine Learning, Mechatronics, Free one Day workshop) with batch enrolment tags and detailed syllabi.
 - **Comprehensive Services & Sub-Services**:
   - Prayogshala (Component-based Tech Labs)
   - Hands-on Workshops

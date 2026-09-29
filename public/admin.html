@@ -467,8 +467,7 @@
         <li class="admin-nav-item"><a href="#leads" onclick="switchAdminTab('leads')">📥 Leads & Enquiries</a></li>
         <li class="admin-nav-item"><a href="#courses" onclick="switchAdminTab('courses')">🎓 Courses</a></li>
         <li class="admin-nav-item"><a href="#services" onclick="switchAdminTab('services')">🔬 Services & Sub-Services</a></li>
-        <li class="admin-nav-item"><a href="#events" onclick="switchAdminTab('events')">📅 Events & Media Hub</a></li>
-        <li class="admin-nav-item"><a href="#team" onclick="switchAdminTab('team')">👥 Team Members</a></li>
+        <li class="admin-nav-item"><a href="#events" onclick="switchAdminTab('events')">📅 Events & Banners</a></li>
         <li class="admin-nav-item"><a href="#settings" onclick="switchAdminTab('settings')">⚙️ Site Settings</a></li>
         <li class="admin-nav-item" style="margin-top: 20px;"><a href="/" target="_blank" style="color: #38bdf8;">🌐 View Live Site &rarr;</a></li>
       </ul>
@@ -574,19 +573,18 @@
           <div class="modern-list-wrap" id="admin-services-list"></div>
         </section>
 
-        <!-- TAB 5: EVENTS & MEDIA HUB (Combined Switchable Hub for Events, Gallery & Banners) -->
+        <!-- TAB 5: EVENTS & BANNERS HUB -->
         <section id="tab-events" style="display: none;">
           <div class="admin-header-row">
             <div>
-              <h2 class="admin-title">Events & Media Hub</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">Manage upcoming workshop events, showcase photo galleries, and home hero banners in one unified place</p>
+              <h2 class="admin-title">Events & Banners Hub</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">Manage upcoming workshop events and home hero banners</p>
             </div>
           </div>
 
           <!-- Switchable Hub Sub-Nav Pills -->
           <div class="hub-subnav-bar">
             <button class="hub-subnav-btn active" id="hub-btn-events" onclick="switchMediaHubSubTab('events')">📅 Events & Workshops</button>
-            <button class="hub-subnav-btn" id="hub-btn-gallery" onclick="switchMediaHubSubTab('gallery')">📸 Photo Gallery</button>
             <button class="hub-subnav-btn" id="hub-btn-banners" onclick="switchMediaHubSubTab('banners')">🖼️ Home Banners</button>
           </div>
 
@@ -599,16 +597,7 @@
             <div class="modern-list-wrap" id="admin-events-list"></div>
           </div>
 
-          <!-- 2. Gallery Sub-View -->
-          <div id="hub-view-gallery" class="hub-subview" style="display: none;">
-            <div class="hub-subview-header">
-              <span style="font-weight: 700; color: var(--primary-navy); font-size: 15px;">Photo Gallery Showcase</span>
-              <button class="header-cta-btn" onclick="openAddGalleryModal()">+ Add Gallery Photo</button>
-            </div>
-            <div class="modern-list-wrap" id="admin-gallery-list"></div>
-          </div>
-
-          <!-- 3. Banners Sub-View -->
+          <!-- 2. Banners Sub-View -->
           <div id="hub-view-banners" class="hub-subview" style="display: none;">
             <div class="hub-subview-header">
               <span style="font-weight: 700; color: var(--primary-navy); font-size: 15px;">Home Hero Banners</span>
@@ -616,19 +605,6 @@
             </div>
             <div class="modern-list-wrap" id="admin-banners-list"></div>
           </div>
-        </section>
-
-        <!-- TAB 6: TEAM MEMBERS -->
-        <section id="tab-team" style="display: none;">
-          <div class="admin-header-row">
-            <div>
-              <h2 class="admin-title">Team & Mentors Management</h2>
-              <p style="font-size: 13px; color: var(--text-muted);">Manage leadership, scientists, and educators shown on the About Us page</p>
-            </div>
-            <button class="header-cta-btn" onclick="openAddTeamModal()">+ Add Team Member</button>
-          </div>
-
-          <div class="modern-list-wrap" id="admin-team-list"></div>
         </section>
 
         <!-- TAB 7: SETTINGS -->
