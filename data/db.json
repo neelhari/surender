@@ -919,6 +919,22 @@
   ],
   "leads": [
     {
+      "id": "lead-1790713660665",
+      "fullName": "Audit Tester",
+      "phone": "9876543210",
+      "email": "audit.tester@example.com",
+      "sourceType": "course",
+      "courseId": "course-1",
+      "courseName": "Robotics with Electronics",
+      "serviceId": null,
+      "serviceName": null,
+      "subServiceId": null,
+      "subServiceName": null,
+      "message": "Automated Supabase & UI Audit Verification Lead",
+      "status": "new",
+      "createdAt": "2026-09-29T20:27:40.665Z"
+    },
+    {
       "id": "lead-1789759758824",
       "fullName": "Siddharth Rao",
       "phone": "+91 98765 12345",
@@ -1066,6 +1082,17 @@
     }
   ],
   "notifications": [
+    {
+      "id": "notif-1790713660821",
+      "leadId": "lead-1790713660665",
+      "timestamp": "2026-09-29T20:27:40.821Z",
+      "whatsAppRecipient": "+919059508050",
+      "whatsAppContent": "*NEW LEAD RECEIVED — EDUEME RESEARCH LABS*\n\n👤 *Name:* Audit Tester\n📞 *Phone:* 9876543210\n✉️ *Email:* audit.tester@example.com\n🎯 *Interest:* COURSE - Robotics with Electronics\n💬 *Message:* Automated Supabase & UI Audit Verification Lead\n📅 *Time:* 30/9/2026, 1:57:40 am\n\nView in Admin Panel: http://localhost:3005/admin",
+      "whatsAppStatus": "Dispatched",
+      "emailRecipient": "info@eduemeresearchlabs.com",
+      "emailSubject": "[New Lead] Audit Tester — Robotics with Electronics",
+      "emailStatus": "Dispatched"
+    },
     {
       "id": "notif-1789759758962",
       "leadId": "lead-1789759758824",

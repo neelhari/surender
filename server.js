@@ -259,12 +259,15 @@ app.delete('/api/courses/:id', requireAdmin, async (req, res) => {
 });
 
 // -------------------------------------------------------------
-// SERVICES & SUB-SERVICES API
+// SERVICES & SUB-SERVICES API (Cloud-First with Local Cache Fallback)
 // -------------------------------------------------------------
-app.get('/api/services', (req, res) => {
+app.get('/api/services', async (req, res) => {
   const all = req.query.all === 'true';
-  let services = db.get('services');
-  let subServices = db.get('subServices');
+  let services = await supabaseService.getServicesFromCloud();
+  if (!services || services.length === 0) services = db.get('services');
+
+  let subServices = await supabaseService.getSubServicesFromCloud();
+  if (!subServices || subServices.length === 0) subServices = db.get('subServices');
 
   if (!all) {
     services = services.filter(s => s.status === 'active');
@@ -283,19 +286,25 @@ app.get('/api/services', (req, res) => {
   res.json(nested);
 });
 
-app.get('/api/services/:identifier', (req, res) => {
+app.get('/api/services/:identifier', async (req, res) => {
   const { identifier } = req.params;
-  const services = db.get('services');
+  let services = await supabaseService.getServicesFromCloud();
+  if (!services || services.length === 0) services = db.get('services');
+
   const service = services.find(s => s.slug === identifier || s.id === identifier);
   if (!service) return res.status(404).json({ error: 'Service not found' });
 
-  let subServices = db.get('subServices');
+  let subServices = await supabaseService.getSubServicesFromCloud();
+  if (!subServices || subServices.length === 0) subServices = db.get('subServices');
+
   const linked = subServices.filter(sub => (sub.serviceId === service.id || sub.serviceSlug === service.slug) && sub.status === 'active');
   res.json({ ...service, subServices: linked });
 });
 
-app.post('/api/services', requireAdmin, (req, res) => {
-  const services = db.get('services');
+app.post('/api/services', requireAdmin, async (req, res) => {
+  let services = await supabaseService.getServicesFromCloud();
+  if (!services || services.length === 0) services = db.get('services');
+
   const newService = {
     id: 'srv-' + Date.now(),
     title: req.body.title || 'Untitled Service',
@@ -309,18 +318,22 @@ app.post('/api/services', requireAdmin, (req, res) => {
     displayOrder: parseInt(req.body.displayOrder, 10) || services.length + 1,
     createdAt: new Date().toISOString()
   };
+
+  await supabaseService.upsertServiceInCloud(newService);
   services.push(newService);
   db.set('services', services);
   res.status(201).json(newService);
 });
 
-app.put('/api/services/:id', requireAdmin, (req, res) => {
+app.put('/api/services/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
-  const services = db.get('services');
+  let services = await supabaseService.getServicesFromCloud();
+  if (!services || services.length === 0) services = db.get('services');
+
   const index = services.findIndex(s => s.id === id);
   if (index === -1) return res.status(404).json({ error: 'Service not found' });
 
-  services[index] = {
+  const updatedService = {
     ...services[index],
     title: req.body.title !== undefined ? req.body.title : services[index].title,
     slug: req.body.slug !== undefined ? req.body.slug : services[index].slug,
@@ -330,14 +343,19 @@ app.put('/api/services/:id', requireAdmin, (req, res) => {
     benefits: Array.isArray(req.body.benefits) ? req.body.benefits : (req.body.benefits ? req.body.benefits.split('\n').filter(Boolean) : services[index].benefits),
     image: req.body.image !== undefined ? req.body.image : services[index].image,
     status: req.body.status !== undefined ? req.body.status : services[index].status,
-    displayOrder: req.body.displayOrder !== undefined ? parseInt(req.body.displayOrder, 10) : services[index].displayOrder
+    displayOrder: req.body.displayOrder !== undefined ? parseInt(req.body.displayOrder, 10) : services[index].displayOrder,
+    updatedAt: new Date().toISOString()
   };
+
+  await supabaseService.upsertServiceInCloud(updatedService);
+  services[index] = updatedService;
   db.set('services', services);
-  res.json(services[index]);
+  res.json(updatedService);
 });
 
-app.delete('/api/services/:id', requireAdmin, (req, res) => {
+app.delete('/api/services/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
+  await supabaseService.deleteServiceInCloud(id);
   let services = db.get('services');
   services = services.filter(s => s.id !== id);
   db.set('services', services);
@@ -345,10 +363,13 @@ app.delete('/api/services/:id', requireAdmin, (req, res) => {
 });
 
 // Dedicated Sub-Service detail route: /services/:serviceSlug/:subServiceSlug
-app.get('/api/sub-services/:serviceSlug/:subServiceSlug', (req, res) => {
+app.get('/api/sub-services/:serviceSlug/:subServiceSlug', async (req, res) => {
   const { serviceSlug, subServiceSlug } = req.params;
-  const services = db.get('services');
-  const subServices = db.get('subServices');
+  let services = await supabaseService.getServicesFromCloud();
+  if (!services || services.length === 0) services = db.get('services');
+
+  let subServices = await supabaseService.getSubServicesFromCloud();
+  if (!subServices || subServices.length === 0) subServices = db.get('subServices');
 
   const service = services.find(s => s.slug === serviceSlug || s.id === serviceSlug);
   if (!service) return res.status(404).json({ error: 'Parent service not found' });
@@ -370,9 +391,13 @@ app.get('/api/sub-services/:serviceSlug/:subServiceSlug', (req, res) => {
   });
 });
 
-app.post('/api/sub-services', requireAdmin, (req, res) => {
-  const subServices = db.get('subServices');
-  const services = db.get('services');
+app.post('/api/sub-services', requireAdmin, async (req, res) => {
+  let subServices = await supabaseService.getSubServicesFromCloud();
+  if (!subServices || subServices.length === 0) subServices = db.get('subServices');
+
+  let services = await supabaseService.getServicesFromCloud();
+  if (!services || services.length === 0) services = db.get('services');
+
   const parent = services.find(s => s.id === req.body.serviceId || s.slug === req.body.serviceSlug);
 
   const newSub = {
@@ -386,20 +411,25 @@ app.post('/api/sub-services', requireAdmin, (req, res) => {
     modules: Array.isArray(req.body.modules) ? req.body.modules : (req.body.modules ? req.body.modules.split('\n').filter(Boolean) : []),
     image: req.body.image || (parent ? parent.image : '/assets/brochure/img_8.jpg'),
     status: req.body.status || 'active',
-    displayOrder: parseInt(req.body.displayOrder, 10) || subServices.length + 1
+    displayOrder: parseInt(req.body.displayOrder, 10) || subServices.length + 1,
+    createdAt: new Date().toISOString()
   };
+
+  await supabaseService.upsertSubServiceInCloud(newSub);
   subServices.push(newSub);
   db.set('subServices', subServices);
   res.status(201).json(newSub);
 });
 
-app.put('/api/sub-services/:id', requireAdmin, (req, res) => {
+app.put('/api/sub-services/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
-  const subServices = db.get('subServices');
+  let subServices = await supabaseService.getSubServicesFromCloud();
+  if (!subServices || subServices.length === 0) subServices = db.get('subServices');
+
   const index = subServices.findIndex(s => s.id === id);
   if (index === -1) return res.status(404).json({ error: 'Sub-service not found' });
 
-  subServices[index] = {
+  const updatedSub = {
     ...subServices[index],
     serviceId: req.body.serviceId || subServices[index].serviceId,
     serviceSlug: req.body.serviceSlug || subServices[index].serviceSlug,
@@ -410,14 +440,19 @@ app.put('/api/sub-services/:id', requireAdmin, (req, res) => {
     modules: Array.isArray(req.body.modules) ? req.body.modules : (req.body.modules ? req.body.modules.split('\n').filter(Boolean) : subServices[index].modules),
     image: req.body.image !== undefined ? req.body.image : subServices[index].image,
     status: req.body.status !== undefined ? req.body.status : subServices[index].status,
-    displayOrder: req.body.displayOrder !== undefined ? parseInt(req.body.displayOrder, 10) : subServices[index].displayOrder
+    displayOrder: req.body.displayOrder !== undefined ? parseInt(req.body.displayOrder, 10) : subServices[index].displayOrder,
+    updatedAt: new Date().toISOString()
   };
+
+  await supabaseService.upsertSubServiceInCloud(updatedSub);
+  subServices[index] = updatedSub;
   db.set('subServices', subServices);
-  res.json(subServices[index]);
+  res.json(updatedSub);
 });
 
-app.delete('/api/sub-services/:id', requireAdmin, (req, res) => {
+app.delete('/api/sub-services/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
+  await supabaseService.deleteSubServiceInCloud(id);
   let subServices = db.get('subServices');
   subServices = subServices.filter(s => s.id !== id);
   db.set('subServices', subServices);
@@ -425,18 +460,21 @@ app.delete('/api/sub-services/:id', requireAdmin, (req, res) => {
 });
 
 // -------------------------------------------------------------
-// HOME BANNERS API (Dynamically Manageable)
+// HOME BANNERS API (Cloud-First with Local Cache Fallback)
 // -------------------------------------------------------------
-app.get('/api/banners', (req, res) => {
+app.get('/api/banners', async (req, res) => {
   const all = req.query.all === 'true';
-  let banners = db.get('homeBanners');
+  let banners = await supabaseService.getBannersFromCloud();
+  if (!banners || banners.length === 0) banners = db.get('homeBanners');
   if (!all) banners = banners.filter(b => b.status === 'active');
   banners.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
   res.json(banners);
 });
 
-app.post('/api/banners', requireAdmin, (req, res) => {
-  const banners = db.get('homeBanners');
+app.post('/api/banners', requireAdmin, async (req, res) => {
+  let banners = await supabaseService.getBannersFromCloud();
+  if (!banners || banners.length === 0) banners = db.get('homeBanners');
+
   const newBanner = {
     id: 'banner-' + Date.now(),
     badge: req.body.badge || 'STEM Innovation',
@@ -446,20 +484,25 @@ app.post('/api/banners', requireAdmin, (req, res) => {
     ctaLink: req.body.ctaLink || '/courses',
     imageUrl: req.body.imageUrl || '/assets/brochure/img_7.jpg',
     displayOrder: parseInt(req.body.displayOrder, 10) || banners.length + 1,
-    status: req.body.status || 'active'
+    status: req.body.status || 'active',
+    createdAt: new Date().toISOString()
   };
+
+  await supabaseService.upsertBannerInCloud(newBanner);
   banners.push(newBanner);
   db.set('homeBanners', banners);
   res.status(201).json(newBanner);
 });
 
-app.put('/api/banners/:id', requireAdmin, (req, res) => {
+app.put('/api/banners/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
-  const banners = db.get('homeBanners');
+  let banners = await supabaseService.getBannersFromCloud();
+  if (!banners || banners.length === 0) banners = db.get('homeBanners');
+
   const index = banners.findIndex(b => b.id === id);
   if (index === -1) return res.status(404).json({ error: 'Banner not found' });
 
-  banners[index] = {
+  const updatedBanner = {
     ...banners[index],
     badge: req.body.badge !== undefined ? req.body.badge : banners[index].badge,
     title: req.body.title !== undefined ? req.body.title : banners[index].title,
@@ -470,12 +513,16 @@ app.put('/api/banners/:id', requireAdmin, (req, res) => {
     displayOrder: req.body.displayOrder !== undefined ? parseInt(req.body.displayOrder, 10) : banners[index].displayOrder,
     status: req.body.status !== undefined ? req.body.status : banners[index].status
   };
+
+  await supabaseService.upsertBannerInCloud(updatedBanner);
+  banners[index] = updatedBanner;
   db.set('homeBanners', banners);
-  res.json(banners[index]);
+  res.json(updatedBanner);
 });
 
-app.delete('/api/banners/:id', requireAdmin, (req, res) => {
+app.delete('/api/banners/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
+  await supabaseService.deleteBannerInCloud(id);
   let banners = db.get('homeBanners');
   banners = banners.filter(b => b.id !== id);
   db.set('homeBanners', banners);
@@ -593,13 +640,14 @@ app.delete('/api/gallery/:id', requireAdmin, (req, res) => {
 });
 
 // -------------------------------------------------------------
-// EVENTS API (Dynamically Manageable & Filterable)
+// EVENTS API (Cloud-First with Local Cache Fallback)
 // -------------------------------------------------------------
-app.get('/api/events', (req, res) => {
+app.get('/api/events', async (req, res) => {
   const all = req.query.all === 'true';
   const category = req.query.category;
   const status = req.query.status; // upcoming, past
-  let items = db.get('events') || [];
+  let items = await supabaseService.getEventsFromCloud();
+  if (!items || items.length === 0) items = db.get('events') || [];
   if (!all) items = items.filter(e => e.status === 'active' || e.status === 'upcoming' || e.status === 'completed');
   if (category && category !== 'All') {
     items = items.filter(e => e.category && e.category.toLowerCase() === category.toLowerCase());
@@ -611,16 +659,19 @@ app.get('/api/events', (req, res) => {
   res.json(items);
 });
 
-app.get('/api/events/:identifier', (req, res) => {
+app.get('/api/events/:identifier', async (req, res) => {
   const { identifier } = req.params;
-  const list = db.get('events') || [];
+  let list = await supabaseService.getEventsFromCloud();
+  if (!list || list.length === 0) list = db.get('events') || [];
   const event = list.find(e => e.slug === identifier || e.id === identifier);
   if (!event) return res.status(404).json({ error: 'Event not found' });
   res.json(event);
 });
 
-app.post('/api/events', requireAdmin, (req, res) => {
-  const events = db.get('events') || [];
+app.post('/api/events', requireAdmin, async (req, res) => {
+  let events = await supabaseService.getEventsFromCloud();
+  if (!events || events.length === 0) events = db.get('events') || [];
+
   const newEvent = {
     id: 'event-' + Date.now(),
     title: req.body.title || 'Untitled Event',
@@ -638,18 +689,22 @@ app.post('/api/events', requireAdmin, (req, res) => {
     displayOrder: parseInt(req.body.displayOrder, 10) || events.length + 1,
     createdAt: new Date().toISOString()
   };
+
+  await supabaseService.upsertEventInCloud(newEvent);
   events.push(newEvent);
   db.set('events', events);
   res.status(201).json(newEvent);
 });
 
-app.put('/api/events/:id', requireAdmin, (req, res) => {
+app.put('/api/events/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
-  const events = db.get('events') || [];
+  let events = await supabaseService.getEventsFromCloud();
+  if (!events || events.length === 0) events = db.get('events') || [];
+
   const index = events.findIndex(e => e.id === id);
   if (index === -1) return res.status(404).json({ error: 'Event not found' });
 
-  events[index] = {
+  const updatedEvent = {
     ...events[index],
     title: req.body.title !== undefined ? req.body.title : events[index].title,
     slug: req.body.slug !== undefined ? req.body.slug : events[index].slug,
@@ -666,12 +721,16 @@ app.put('/api/events/:id', requireAdmin, (req, res) => {
     displayOrder: req.body.displayOrder !== undefined ? parseInt(req.body.displayOrder, 10) : events[index].displayOrder,
     updatedAt: new Date().toISOString()
   };
+
+  await supabaseService.upsertEventInCloud(updatedEvent);
+  events[index] = updatedEvent;
   db.set('events', events);
-  res.json(events[index]);
+  res.json(updatedEvent);
 });
 
-app.delete('/api/events/:id', requireAdmin, (req, res) => {
+app.delete('/api/events/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
+  await supabaseService.deleteEventInCloud(id);
   let events = db.get('events') || [];
   events = events.filter(e => e.id !== id);
   db.set('events', events);
@@ -679,9 +738,9 @@ app.delete('/api/events/:id', requireAdmin, (req, res) => {
 });
 
 // -------------------------------------------------------------
-// LEADS & UNIFIED ENQUIRY API
+// LEADS & UNIFIED ENQUIRY API (Cloud-First with Local Sync)
 // -------------------------------------------------------------
-app.post('/api/leads', (req, res) => {
+app.post('/api/leads', async (req, res) => {
   const { fullName, phone, email, sourceType, courseId, serviceId, subServiceId, message } = req.body;
 
   // Validation
@@ -704,23 +763,27 @@ app.post('/api/leads', (req, res) => {
   // Resolve snapshotted titles
   let courseName = null;
   if (courseId) {
-    const course = db.get('courses').find(c => c.id === courseId || c.slug === courseId);
+    const courses = (await supabaseService.getCoursesFromCloud()) || db.get('courses');
+    const course = courses.find(c => c.id === courseId || c.slug === courseId);
     if (course) courseName = course.title;
   }
 
   let serviceName = null;
   if (serviceId) {
-    const service = db.get('services').find(s => s.id === serviceId || s.slug === serviceId);
+    const services = (await supabaseService.getServicesFromCloud()) || db.get('services');
+    const service = services.find(s => s.id === serviceId || s.slug === serviceId);
     if (service) serviceName = service.title;
   }
 
   let subServiceName = null;
   if (subServiceId) {
-    const sub = db.get('subServices').find(s => s.id === subServiceId || s.slug === subServiceId);
+    const subServices = (await supabaseService.getSubServicesFromCloud()) || db.get('subServices');
+    const sub = subServices.find(s => s.id === subServiceId || s.slug === subServiceId);
     if (sub) {
       subServiceName = sub.title;
       if (!serviceName && sub.serviceId) {
-        const parent = db.get('services').find(s => s.id === sub.serviceId);
+        const services = (await supabaseService.getServicesFromCloud()) || db.get('services');
+        const parent = services.find(s => s.id === sub.serviceId);
         if (parent) serviceName = parent.title;
       }
     }
@@ -749,7 +812,7 @@ app.post('/api/leads', (req, res) => {
 
   // Sync lead to Supabase PostgreSQL database
   try {
-    supabaseService.insertLeadToSupabase(newLead);
+    await supabaseService.insertLeadToSupabase(newLead);
   } catch (err) {
     console.warn('Supabase lead sync note:', err.message);
   }
@@ -768,9 +831,10 @@ app.post('/api/leads', (req, res) => {
   });
 });
 
-app.get('/api/leads', requireAdmin, (req, res) => {
+app.get('/api/leads', requireAdmin, async (req, res) => {
   const { status, source, search } = req.query;
-  let leads = db.get('leads');
+  let leads = await supabaseService.getLeadsFromCloud();
+  if (!leads || leads.length === 0) leads = db.get('leads');
 
   if (status && status !== 'all') {
     leads = leads.filter(l => l.status === status);
@@ -793,7 +857,7 @@ app.get('/api/leads', requireAdmin, (req, res) => {
   }
 
   // Summary counts for Admin Dashboard
-  const allLeads = db.get('leads');
+  const allLeads = (await supabaseService.getLeadsFromCloud()) || db.get('leads');
   const stats = {
     total: allLeads.length,
     new: allLeads.filter(l => l.status === 'new').length,
@@ -804,25 +868,28 @@ app.get('/api/leads', requireAdmin, (req, res) => {
   res.json({ stats, leads });
 });
 
-app.patch('/api/leads/:id/status', requireAdmin, (req, res) => {
+app.patch('/api/leads/:id/status', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   if (!['new', 'contacted', 'converted'].includes(status)) {
     return res.status(400).json({ error: 'Invalid status. Must be new, contacted, or converted.' });
   }
 
+  await supabaseService.updateLeadStatusInCloud(id, status);
+
   const leads = db.get('leads');
   const lead = leads.find(l => l.id === id);
-  if (!lead) return res.status(404).json({ error: 'Lead not found' });
-
-  lead.status = status;
-  lead.updatedAt = new Date().toISOString();
-  db.set('leads', leads);
-  res.json({ success: true, lead });
+  if (lead) {
+    lead.status = status;
+    lead.updatedAt = new Date().toISOString();
+    db.set('leads', leads);
+  }
+  res.json({ success: true, lead: lead || { id, status } });
 });
 
-app.delete('/api/leads/:id', requireAdmin, (req, res) => {
+app.delete('/api/leads/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
+  await supabaseService.deleteLeadInCloud(id);
   let leads = db.get('leads');
   leads = leads.filter(l => l.id !== id);
   db.set('leads', leads);
@@ -830,8 +897,9 @@ app.delete('/api/leads/:id', requireAdmin, (req, res) => {
 });
 
 // Leads Export (CSV / Excel compatible RFC 4180 stream)
-app.get('/api/leads/export', requireAdmin, (req, res) => {
-  const leads = db.get('leads');
+app.get('/api/leads/export', requireAdmin, async (req, res) => {
+  let leads = await supabaseService.getLeadsFromCloud();
+  if (!leads || leads.length === 0) leads = db.get('leads');
 
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename=edueme-leads-${new Date().toISOString().slice(0, 10)}.csv`);
@@ -866,15 +934,19 @@ app.get('/api/leads/export', requireAdmin, (req, res) => {
 });
 
 // -------------------------------------------------------------
-// SETTINGS & SEO API
+// SETTINGS & SEO API (Cloud-First with Local Fallback)
 // -------------------------------------------------------------
-app.get('/api/settings', (req, res) => {
-  res.json(db.get('settings'));
+app.get('/api/settings', async (req, res) => {
+  let settings = await supabaseService.getSettingsFromCloud();
+  if (!settings) settings = db.get('settings');
+  res.json(settings);
 });
 
-app.put('/api/settings', requireAdmin, (req, res) => {
-  const current = db.get('settings');
+app.put('/api/settings', requireAdmin, async (req, res) => {
+  let current = await supabaseService.getSettingsFromCloud();
+  if (!current) current = db.get('settings');
   const updated = { ...current, ...req.body, id: 'global_settings' };
+  await supabaseService.updateSettingsInCloud(updated);
   db.set('settings', updated);
   res.json(updated);
 });

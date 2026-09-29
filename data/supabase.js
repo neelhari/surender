@@ -180,6 +180,82 @@ async function upsertServiceInCloud(s) {
   }
 }
 
+async function deleteServiceInCloud(id) {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase.from('services').delete().eq('id', id);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+// -------------------------------------------------------------
+// CLOUD SUB-SERVICES CRUD
+// -------------------------------------------------------------
+async function getSubServicesFromCloud() {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('sub_services')
+      .select('*')
+      .order('display_order', { ascending: true });
+    
+    if (error || !data) return null;
+    return data.map(sub => ({
+      id: sub.id,
+      serviceId: sub.service_id,
+      serviceSlug: sub.service_slug,
+      title: sub.title,
+      slug: sub.slug,
+      description: sub.description || '',
+      detailedOverview: sub.detailed_overview || '',
+      modules: Array.isArray(sub.modules) ? sub.modules : [],
+      image: sub.image || '',
+      status: sub.status || 'active',
+      displayOrder: sub.display_order || 0,
+      createdAt: sub.created_at,
+      updatedAt: sub.updated_at
+    }));
+  } catch (e) {
+    return null;
+  }
+}
+
+async function upsertSubServiceInCloud(sub) {
+  if (!supabase) return false;
+  try {
+    const row = {
+      id: sub.id,
+      service_id: sub.serviceId || sub.service_id,
+      service_slug: sub.serviceSlug || sub.service_slug,
+      title: sub.title,
+      slug: sub.slug,
+      description: sub.description || '',
+      detailed_overview: sub.detailedOverview || sub.detailed_overview || '',
+      modules: Array.isArray(sub.modules) ? sub.modules : [],
+      image: sub.image || '',
+      status: sub.status || 'active',
+      display_order: sub.displayOrder || sub.display_order || 0,
+      updated_at: new Date().toISOString()
+    };
+    const { error } = await supabase.from('sub_services').upsert(row);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function deleteSubServiceInCloud(id) {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase.from('sub_services').delete().eq('id', id);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
 // -------------------------------------------------------------
 // CLOUD EVENTS CRUD
 // -------------------------------------------------------------
@@ -205,6 +281,7 @@ async function getEventsFromCloud() {
       description: ev.description || '',
       image: ev.image || '',
       photos: ev.photos || [],
+      highlights: ev.highlights || [],
       status: ev.status || 'active',
       displayOrder: ev.display_order || 0,
       createdAt: ev.created_at,
@@ -237,6 +314,98 @@ async function upsertEventInCloud(ev) {
     };
     const { error } = await supabase.from('events').upsert(row);
     return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function deleteEventInCloud(id) {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase.from('events').delete().eq('id', id);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+// -------------------------------------------------------------
+// CLOUD HOME BANNERS CRUD
+// -------------------------------------------------------------
+async function getBannersFromCloud() {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase
+      .from('home_banners')
+      .select('*')
+      .order('display_order', { ascending: true });
+    
+    if (error || !data) return null;
+    return data.map(b => ({
+      id: b.id,
+      badge: b.badge || '',
+      title: b.title || '',
+      subtitle: b.subtitle || '',
+      ctaText: b.cta_text || '',
+      ctaLink: b.cta_link || '',
+      imageUrl: b.image_url || '',
+      displayOrder: b.display_order || 0,
+      status: b.status || 'active',
+      createdAt: b.created_at
+    }));
+  } catch (e) {
+    return null;
+  }
+}
+
+async function upsertBannerInCloud(b) {
+  if (!supabase) return false;
+  try {
+    const row = {
+      id: b.id,
+      badge: b.badge || '',
+      title: b.title,
+      subtitle: b.subtitle || '',
+      cta_text: b.ctaText || b.cta_text || '',
+      cta_link: b.ctaLink || b.cta_link || '',
+      image_url: b.imageUrl || b.image_url || '',
+      display_order: b.displayOrder || b.display_order || 0,
+      status: b.status || 'active'
+    };
+    const { error } = await supabase.from('home_banners').upsert(row);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function deleteBannerInCloud(id) {
+  if (!supabase) return false;
+  try {
+    const { error } = await supabase.from('home_banners').delete().eq('id', id);
+    return !error;
+  } catch (e) {
+    return false;
+  }
+}
+
+// -------------------------------------------------------------
+// CLOUD SETTINGS CRUD (Synced via edueme_store)
+// -------------------------------------------------------------
+async function getSettingsFromCloud() {
+  if (!supabase) return null;
+  try {
+    const data = await fetchFromSupabase('settings');
+    return data || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function updateSettingsInCloud(settings) {
+  if (!supabase) return false;
+  try {
+    return await syncToSupabase('settings', settings);
   } catch (e) {
     return false;
   }
@@ -362,8 +531,18 @@ module.exports = {
   deleteCourseInCloud,
   getServicesFromCloud,
   upsertServiceInCloud,
+  deleteServiceInCloud,
+  getSubServicesFromCloud,
+  upsertSubServiceInCloud,
+  deleteSubServiceInCloud,
   getEventsFromCloud,
   upsertEventInCloud,
+  deleteEventInCloud,
+  getBannersFromCloud,
+  upsertBannerInCloud,
+  deleteBannerInCloud,
+  getSettingsFromCloud,
+  updateSettingsInCloud,
   getLeadsFromCloud,
   insertLeadToSupabase,
   updateLeadStatusInCloud,
