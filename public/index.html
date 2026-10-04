@@ -14,8 +14,44 @@
   <meta property="og:image" content="/assets/logo.png">
   <meta property="og:type" content="website">
 
-  <!-- Favicon using exact logo icon -->
-  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <!-- Transparent Golden Favicons (Google Search & Mobile Optimized) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+
+  <!-- Google Search Site Name & Organization Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://eduemeresearchlabs.com/#website",
+        "url": "https://eduemeresearchlabs.com",
+        "name": "Edueme",
+        "alternateName": ["Edueme Research Labs", "Edueme Labs"],
+        "description": "Future-ready STEM, Robotics, AI, and IoT education for schools and curious minds.",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://eduemeresearchlabs.com/#organization",
+        "name": "Edueme Research Labs",
+        "alternateName": "Edueme",
+        "url": "https://eduemeresearchlabs.com",
+        "logo": "https://eduemeresearchlabs.com/assets/favicon-512x512.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-9059508050",
+          "contactType": "customer service",
+          "areaServed": "IN",
+          "availableLanguage": ["English", "Telugu", "Hindi"]
+        }
+      }
+    ]
+  }
+  </script>
 
   <!-- Core Mobile-First Stylesheet -->
   <link rel="stylesheet" href="/css/style.css">
@@ -122,7 +158,6 @@
           <p style="margin-bottom: 8px; line-height: 1.4;">1-98/11/62, Arunodaya Colony, Sri Sai Nagar, Madhapur, Hyderabad, Telangana - 500081</p>
           <p style="margin-bottom: 4px;"><strong>Helpline:</strong> <a href="tel:+919059508050" style="color: #cbd5e1;">+91 90595 08050</a></p>
           <p style="margin-bottom: 4px;"><strong>Email:</strong> <a href="mailto:info@eduemeresearchlabs.com" style="color: #cbd5e1;">info@eduemeresearchlabs.com</a></p>
-          <p style="margin-top: 8px;"><a href="/admin" style="color: var(--accent-gold); font-weight: 600;">🔒 Staff / Admin Panel →</a></p>
         </div>
       </div>
       <div class="footer-bottom">

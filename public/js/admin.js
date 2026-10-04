@@ -3,7 +3,7 @@
  * Full CMS and Leads Management Engine
  */
 
-let currentToken = localStorage.getItem('edueme_admin_token') || 'demo-admin-token-2026';
+let currentToken = localStorage.getItem('edueme_admin_token') || '';
 let adminState = {
   stats: {},
   leads: [],
@@ -56,13 +56,21 @@ async function checkAuth() {
       headers: { 'Authorization': `Bearer ${currentToken}` }
     });
     const data = await res.json();
-    if (data.authenticated) {
+    if (res.ok && data.authenticated) {
       showAdminView();
+      if (data.user && data.user.email) {
+        const userDisplay = document.getElementById('admin-user-email');
+        if (userDisplay) userDisplay.textContent = data.user.email;
+      }
       loadAllAdminData();
     } else {
+      localStorage.removeItem('edueme_admin_token');
+      currentToken = '';
       showLoginView();
     }
   } catch (e) {
+    localStorage.removeItem('edueme_admin_token');
+    currentToken = '';
     showLoginView();
   }
 }
@@ -79,8 +87,10 @@ function showAdminView() {
 
 document.getElementById('login-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
+  const emailInput = document.getElementById('login-email');
+  const passwordInput = document.getElementById('login-password');
+  const email = emailInput ? emailInput.value.trim() : '';
+  const password = passwordInput ? passwordInput.value : '';
   const errDiv = document.getElementById('login-error');
 
   try {
@@ -93,16 +103,24 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     if (res.ok && data.success) {
       currentToken = data.token;
       localStorage.setItem('edueme_admin_token', currentToken);
-      errDiv.style.display = 'none';
+      if (errDiv) errDiv.style.display = 'none';
       showAdminView();
+      if (data.user && data.user.email) {
+        const userDisplay = document.getElementById('admin-user-email');
+        if (userDisplay) userDisplay.textContent = data.user.email;
+      }
       loadAllAdminData();
     } else {
-      errDiv.textContent = data.error || 'Invalid email or password';
-      errDiv.style.display = 'block';
+      if (errDiv) {
+        errDiv.textContent = data.error || 'Invalid email or password';
+        errDiv.style.display = 'block';
+      }
     }
   } catch (err) {
-    errDiv.textContent = 'Connection error. Please try again.';
-    errDiv.style.display = 'block';
+    if (errDiv) {
+      errDiv.textContent = 'Connection error. Please try again.';
+      errDiv.style.display = 'block';
+    }
   }
 });
 
@@ -114,7 +132,7 @@ async function adminLogout() {
     });
   } catch (e) {}
   localStorage.removeItem('edueme_admin_token');
-  currentToken = null;
+  currentToken = '';
   showLoginView();
 }
 

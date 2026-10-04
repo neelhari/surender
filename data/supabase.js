@@ -522,9 +522,36 @@ async function fetchFromSupabase(key) {
   }
 }
 
+async function authenticateAdmin(email, password) {
+  if (!supabase) return { success: false, error: 'Database service unavailable' };
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password: password
+    });
+
+    if (error || !data || !data.user) {
+      return { success: false, error: error ? error.message : 'Invalid credentials' };
+    }
+
+    return {
+      success: true,
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.user_metadata?.full_name || 'Edueme Administrator'
+      },
+      session: data.session
+    };
+  } catch (err) {
+    return { success: false, error: err.message || 'Authentication error' };
+  }
+}
+
 module.exports = {
   supabase,
   isConnected,
+  authenticateAdmin,
   uploadToSupabaseStorage,
   getCoursesFromCloud,
   upsertCourseInCloud,

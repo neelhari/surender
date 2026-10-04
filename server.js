@@ -30,7 +30,6 @@ function generateAdminToken(email) {
 
 function verifyAdminToken(token) {
   if (!token) return false;
-  if (token === 'demo-admin-token-2026') return true;
   if (token.startsWith('adm_')) {
     try {
       const parts = token.substring(4).split('.');
@@ -127,16 +126,35 @@ function dispatchNotifications(lead) {
 }
 
 // -------------------------------------------------------------
-// AUTHENTICATION ROUTES
+// AUTHENTICATION ROUTES (Supabase Cloud Auth)
 // -------------------------------------------------------------
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
-  // Default credentials for Edueme Admin
-  if ((email === 'admin@edueme.com' || email === 'admin@eduemeresearchlabs.com') && password === 'admin123') {
-    const token = generateAdminToken(email);
-    return res.json({ success: true, token, user: { email, name: 'Edueme Administrator' } });
+  if (!email || !password) {
+    return res.status(400).json({ success: false, error: 'Email and password are required' });
   }
-  return res.status(401).json({ success: false, error: 'Invalid email or password. Use admin@edueme.com / admin123' });
+
+  try {
+    const authResult = await supabaseService.authenticateAdmin(email, password);
+    if (authResult.success) {
+      const token = generateAdminToken(authResult.user.email);
+      return res.json({
+        success: true,
+        token,
+        user: {
+          email: authResult.user.email,
+          name: authResult.user.name || 'Edueme Administrator'
+        }
+      });
+    }
+    return res.status(401).json({
+      success: false,
+      error: authResult.error || 'Invalid credentials'
+    });
+  } catch (err) {
+    console.error('Auth login error:', err);
+    return res.status(500).json({ success: false, error: 'Login authentication failed' });
+  }
 });
 
 app.post('/api/auth/logout', (req, res) => {
@@ -147,9 +165,16 @@ app.get('/api/auth/check', (req, res) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : req.query.token;
   if (token && verifyAdminToken(token)) {
-    return res.json({ authenticated: true, user: { email: 'admin@edueme.com', name: 'Edueme Administrator' } });
+    try {
+      const parts = token.substring(4).split('.');
+      const payload = Buffer.from(parts[0], 'base64url').toString('utf8');
+      const email = payload.split(':')[0];
+      return res.json({ authenticated: true, user: { email, name: 'Edueme Administrator' } });
+    } catch (e) {
+      return res.json({ authenticated: true, user: { email: 'admin', name: 'Edueme Administrator' } });
+    }
   }
-  res.json({ authenticated: false });
+  res.status(401).json({ authenticated: false, error: 'Not authenticated' });
 });
 
 // -------------------------------------------------------------
