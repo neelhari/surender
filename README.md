@@ -63,10 +63,6 @@ Built for STEM, Robotics, AI, and IoT education programs.
    - **Public Website**: [http://localhost:3005](http://localhost:3005)
    - **Admin Panel**: [http://localhost:3005/admin](http://localhost:3005/admin)
 
-### Admin Default Credentials:
-- **Email**: `admin@edueme.com`
-- **Password**: `admin123`
-
 ---
 
 ## 🏢 Registered Office
