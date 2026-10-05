@@ -2380,8 +2380,8 @@ button, input, select, textarea {
 }
 
 .meta-grid-3 {
-  grid-template-columns: 1.15fr 1.35fr 1.15fr;
-  gap: 2px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
 }
 
 .meta-grid-2 {
@@ -2389,19 +2389,24 @@ button, input, select, textarea {
   gap: 12px;
 }
 
+.meta-grid-1 {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
 .edueme-meta-col {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   position: relative;
   padding: 0 4px;
   min-width: 0;
 }
 
-.meta-grid-3 .edueme-meta-col + .edueme-meta-col::before {
+.edueme-meta-grid .edueme-meta-col + .edueme-meta-col::before {
   content: '';
   position: absolute;
-  left: 0;
+  left: -6px;
   top: 10%;
   height: 80%;
   width: 1px;
@@ -2430,17 +2435,7 @@ button, input, select, textarea {
 }
 
 .service-meta-col {
-  gap: 10px;
-}
-
-.meta-grid-2 .service-meta-col + .service-meta-col::before {
-  content: '';
-  position: absolute;
-  left: -6px;
-  top: 10%;
-  height: 80%;
-  width: 1px;
-  background: #e2e8f0;
+  gap: 12px;
 }
 
 .service-icon-box {

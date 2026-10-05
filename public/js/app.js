@@ -165,18 +165,8 @@ function renderCourseCard(course) {
         <h3 class="edueme-card-title">${course.title}</h3>
         <p class="edueme-card-desc">${course.shortDescription || course.description || ''}</p>
         
-        <!-- 3-Column Metadata Row (Icons, Values, Labels) -->
-        <div class="edueme-meta-grid meta-grid-3">
-          <div class="edueme-meta-col">
-            <div class="edueme-meta-icon-wrap icon-blue">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            <div class="edueme-meta-data">
-              <span class="edueme-meta-val" title="${course.duration || '3 – 6 Months'}">${course.duration || '3 – 6 Months'}</span>
-              <span class="edueme-meta-lbl">Duration</span>
-            </div>
-          </div>
-
+        <!-- 2-Column Metadata Row (Level, Mode) -->
+        <div class="edueme-meta-grid meta-grid-2">
           <div class="edueme-meta-col">
             <div class="edueme-meta-icon-wrap icon-green">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
@@ -255,18 +245,8 @@ function renderServiceCard(service) {
         <h3 class="edueme-card-title">${service.title}</h3>
         <p class="edueme-card-desc">${service.shortDescription || service.description || ''}</p>
         
-        <!-- 2-Column Metadata Row (Dynamic sub-services count!) -->
-        <div class="edueme-meta-grid meta-grid-2">
-          <div class="edueme-meta-col service-meta-col">
-            <div class="service-icon-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            <div class="edueme-meta-data">
-              <span class="edueme-meta-val" title="${service.duration || '1 Week – 2 Weeks'}">${service.duration || '1 Week – 2 Weeks'}</span>
-              <span class="edueme-meta-lbl">Typical Duration</span>
-            </div>
-          </div>
-
+        <!-- Metadata Row (Dynamic sub-services count!) -->
+        <div class="edueme-meta-grid meta-grid-1">
           <div class="edueme-meta-col service-meta-col">
             <div class="service-icon-box">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -1160,7 +1140,6 @@ async function renderCourseDetailView(slug) {
       <!-- QUICK ACTION STRIP (Metadata & Direct CTA) -->
       <div class="detail-action-bar">
         <div class="detail-pills-row">
-          <span class="detail-info-pill">⏱️ ${course.duration || '3 – 6 Months'}</span>
           <span class="detail-info-pill">📊 ${course.level || 'Beginner to Advanced'}</span>
           <span class="detail-info-pill">📍 ${course.mode || 'Offline / Online'}</span>
         </div>
@@ -1287,8 +1266,7 @@ async function renderServiceDetailView(slug) {
       <!-- QUICK ACTION STRIP -->
       <div class="detail-action-bar">
         <div class="detail-pills-row">
-          <span class="detail-info-pill">⏱️ Typical Duration: ${service.duration || 'Flexible'}</span>
-          ${service.subServices && service.subServices.length > 0 ? `<span class="detail-info-pill">📦 ${service.subServices.length} Specialized Sub-Modules</span>` : ''}
+          ${service.subServices && service.subServices.length > 0 ? `<span class="detail-info-pill">📦 ${service.subServices.length} Specialized Sub-Modules</span>` : '<span class="detail-info-pill">🏫 Institutional Program</span>'}
         </div>
 
         <a href="/contact?type=service&id=${service.id}" class="detail-primary-cta" onclick="navigate(event, '/contact?type=service&id=${service.id}')">
@@ -1579,7 +1557,7 @@ async function renderContactView() {
               <select class="form-control" id="select-course">
                 <option value="">-- Choose Course --</option>
                 ${courses.map(c => `
-                  <option value="${c.id}" ${paramId === c.id || paramId === c.slug ? 'selected' : ''}>${c.title} (${c.duration})</option>
+                  <option value="${c.id}" ${paramId === c.id || paramId === c.slug ? 'selected' : ''}>${c.title}</option>
                 `).join('')}
               </select>
             </div>
@@ -1589,7 +1567,7 @@ async function renderContactView() {
               <select class="form-control" id="select-service">
                 <option value="">-- Choose Program / Service --</option>
                 ${services.map(s => `
-                  <option value="${s.id}" ${paramId === s.id || paramId === s.slug ? 'selected' : ''}>${s.title} (${s.duration})</option>
+                  <option value="${s.id}" ${paramId === s.id || paramId === s.slug ? 'selected' : ''}>${s.title}</option>
                 `).join('')}
               </select>
             </div>
